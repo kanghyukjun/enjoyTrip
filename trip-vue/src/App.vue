@@ -1,15 +1,13 @@
 <script setup>
-
+import { RouterView } from "vue-router";
+import SideNavBar from "./components/common/SideNavBar.vue";
 </script>
 
 <template>
-  <div>
-    <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+  <div class="flex flex-row">
+    <SideNavBar />
+    <RouterView />
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
