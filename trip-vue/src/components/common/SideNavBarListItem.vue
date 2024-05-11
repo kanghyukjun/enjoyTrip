@@ -1,23 +1,36 @@
 <script setup>
+import { ref } from "vue";
+
 defineProps({
   name: String,
   imgSrc: String,
 });
+
+const isHovered = ref(false);
+
+const mouseOver = () => {
+  isHovered.value = true;
+};
+
+const mouseOut = () => {
+  isHovered.value = false;
+};
 </script>
 
 <template>
   <li
-    class="mb-2 px-6 py-4 font-kor text-zinc-100 flex flex-row border-none hover:text-zinc-600 hover:bg-gray-100 hover:font-bold rounded rounded-lg"
+    @mouseover="mouseOver"
+    @mouseout="mouseOut"
+    class="mb-2 px-6 py-4 font-kor flex flex-row border-none rounded rounded-lg"
+    :class="{
+      'text-zinc-100': !isHovered,
+      'text-zinc-600': isHovered,
+      'bg-gray-100': isHovered,
+      'font-bold': isHovered,
+    }"
   >
     <span class="flex justify-center items-center">
-      <!-- <svg class="fill-current h-5 w-5" viewBox="0 0 24 24">
-        <path
-          d="M16 20h4v-4h-4m0-2h4v-4h-4m-6-2h4V4h-4m6
-                        4h4V4h-4m-6 10h4v-4h-4m-6 4h4v-4H4m0 10h4v-4H4m6
-                        4h4v-4h-4M4 8h4V4H4v4z"
-        ></path>
-      </svg> -->
-      <img :src="imgSrc" alt="noimg" />
+      <img :src="imgSrc" alt="noimg" :class="{ 'brightness-0': isHovered }" />
     </span>
     <a href="#">
       <span class="ml-2">{{ name }}</span>
