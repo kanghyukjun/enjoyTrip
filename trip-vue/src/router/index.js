@@ -9,6 +9,7 @@ import UserRegister from "@/components/login/UserRegister.vue";
 
 import UserPageView from "@/view/UserPageView.vue";
 import UserPageInfo from "@/components/userpage/UserPageInfo.vue";
+import UserPageInfoModify from "@/components/userpage/UserPageInfoModify.vue";
 import UserArticleList from "@/components/userpage/UserArticleList.vue";
 import UserTripList from "@/components/userpage/UserTripList.vue";
 
@@ -68,6 +69,11 @@ const router = createRouter({
           path: "triplists",
           name: "usertriplist",
           component: UserTripList,
+        },
+        {
+          path: "modify",
+          name: "modify",
+          component: UserPageInfoModify,
         },
       ],
     },
