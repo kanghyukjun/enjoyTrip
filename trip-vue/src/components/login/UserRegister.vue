@@ -1,25 +1,29 @@
 <script setup>
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
+
 import UserRegisterFormItem from "@/components/login/UserRegisterFormItem.vue";
+import { getUserIdExists } from "@/api/login.js";
 
-const isPasswordOkay = ref(false);
-
-// const nameChange = (value) => {
-//   console.log(`name: ${value}`);
-// };
-
-// const emailChange = (value) => {
-//   console.log(`email: ${value}`);
-// };
+const isPasswordLengthOkay = ref(false);
+const isIdLengthOkay = ref(false);
+const isIdDuplicated = ref(false);
 
 const passwordChange = (value) => {
-  isPasswordOkay.value = 5 <= value.length && value.length <= 16;
+  isPasswordLengthOkay.value = 5 <= value.length && value.length <= 16;
 };
 
-// const idChange = (value) => {
-//   console.log(`id: ${value}`);
-// };
+const idChange = (value) => {
+  if (value.length < 5 || value.length > 16) {
+    isIdLengthOkay.value = false;
+    isIdDuplicated.value = false;
+  } else {
+    isIdLengthOkay.value = true;
+    getUserIdExists(value, (response) => {
+      isIdDuplicated.value = response.data;
+    });
+  }
+};
 </script>
 
 <template>
@@ -42,7 +46,12 @@ const passwordChange = (value) => {
       <form class="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
         <div class="mb-4 flex flex-col gap-1">
           <UserRegisterFormItem label="아이디" @InputChangeEvent="idChange" />
-          <p class="ml-2 text-red-500 font-kor font text-sm">이미 존재하는 아이디 입니다</p>
+          <p class="ml-2 text-red-500 font-kor font text-sm" v-show="!isIdLengthOkay">
+            아이디는 5자리 이상 16자리 이하가 되어야 합니다
+          </p>
+          <p class="ml-2 text-red-500 font-kor font text-sm" v-show="isIdDuplicated">
+            이미 존재하는 아이디 입니다
+          </p>
         </div>
         <div class="mb-4 flex flex-col gap-1">
           <UserRegisterFormItem
@@ -50,7 +59,7 @@ const passwordChange = (value) => {
             type="password"
             @InputChangeEvent="passwordChange"
           />
-          <p class="ml-2 text-red-500 font-kor font text-sm" v-show="!isPasswordOkay">
+          <p class="ml-2 text-red-500 font-kor font text-sm" v-show="!isPasswordLengthOkay">
             비밀번호는 5자리 이상 16자리 이하가 되어야 합니다
           </p>
         </div>
