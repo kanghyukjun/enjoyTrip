@@ -30,7 +30,7 @@ import UserRegisterFormItem from "@/components/login/UserRegisterFormItem.vue";
           />
         </div>
         <button
-          class="mt-6 block w-full select-none rounded-lg bg-blue-400 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          class="mt-6 block w-full select-none rounded-lg bg-trip-color py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-trip-color transition-all hover:shadow-lg hover:shadow-trip-color focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           type="button"
           data-ripple-light="true"
         >
@@ -46,7 +46,7 @@ import UserRegisterFormItem from "@/components/login/UserRegisterFormItem.vue";
         >
           아직 계정이 없으신가요?
           <RouterLink
-            class="font-semibold text-blue-400 transition-colors hover:text-blue-700"
+            class="font-semibold text-trip-color transition-colors hover:text-orange-700"
             href="#"
             :to="{ name: 'register' }"
           >

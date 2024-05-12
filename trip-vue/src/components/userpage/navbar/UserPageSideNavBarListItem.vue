@@ -27,7 +27,7 @@ const mouseOut = () => {
       :class="{
         'text-zinc-600': !isHovered,
         'text-zinc-600': isHovered,
-        'bg-gray-100': isHovered,
+        'bg-gray-200': isHovered,
       }"
     >
       <span class="ml-2" :class="{ 'font-bold': isHovered }">{{ title }}</span>

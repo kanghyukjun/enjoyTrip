@@ -6,7 +6,11 @@ import UserPageSideNavBar from "@/components/userpage/navbar/UserPageSideNavBar.
 <template>
   <div class="flex flex-row border-none w-full h-full">
     <div class="flex justify-center items-center bg-zinc-100 border-none w-full h-full">
-      <RouterView />
+      <div
+        class="flex justify-center items-center h-[40rem] w-[60rem] bg-zinc-100 rounded-lg shadow-lg"
+      >
+        <RouterView />
+      </div>
     </div>
     <UserPageSideNavBar />
   </div>
