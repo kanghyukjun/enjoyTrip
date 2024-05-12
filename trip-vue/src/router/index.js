@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/view/HomeView.vue";
 import BoardView from "@/view/BoardView.vue";
+
 import TripSearchView from "@/view/TripSearchView.vue";
+import KakaoMapSearch from "@/components/search/KakaoMapSearch.vue";
 
 import UserLoginView from "@/view/UserLoginView.vue";
 import UserLogin from "@/components/login/UserLogin.vue";
@@ -30,6 +32,14 @@ const router = createRouter({
       path: "/search",
       name: "search",
       component: TripSearchView,
+      redirect: { name: "map" },
+      children: [
+        {
+          path: "",
+          name: "map",
+          component: KakaoMapSearch,
+        },
+      ],
     },
     {
       path: "/login",

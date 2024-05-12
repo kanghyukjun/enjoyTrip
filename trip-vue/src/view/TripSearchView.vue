@@ -1,7 +1,9 @@
-<script setup></script>
+<script setup>
+import { RouterView } from "vue-router";
+</script>
 
 <template>
-  <div>여행검색페이지</div>
+  <div class="flex flex-row justify-center items-center w-full h-full"><RouterView /></div>
 </template>
 
 <style scoped></style>
