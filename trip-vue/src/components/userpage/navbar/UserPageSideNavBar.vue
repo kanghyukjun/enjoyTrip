@@ -1,5 +1,5 @@
 <script setup>
-import UserPageSideNavBarList from "@/components/userpage/UserPageSideNavBarList.vue";
+import UserPageSideNavBarList from "@/components/userpage/navbar/UserPageSideNavBarList.vue";
 </script>
 
 <template>

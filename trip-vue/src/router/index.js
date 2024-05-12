@@ -8,6 +8,9 @@ import UserLogin from "@/components/login/UserLogin.vue";
 import UserRegister from "@/components/login/UserRegister.vue";
 
 import UserPageView from "@/view/UserPageView.vue";
+import UserPageInfo from "@/components/userpage/UserPageInfo.vue";
+import UserArticleList from "@/components/userpage/UserArticleList.vue";
+import UserTripList from "@/components/userpage/UserTripList.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,6 +52,24 @@ const router = createRouter({
       path: "/userpage",
       name: "userpage",
       component: UserPageView,
+      redirect: { name: "userinfo" },
+      children: [
+        {
+          path: "",
+          name: "userinfo",
+          component: UserPageInfo,
+        },
+        {
+          path: "articles",
+          name: "userarticle",
+          component: UserArticleList,
+        },
+        {
+          path: "triplists",
+          name: "usertriplist",
+          component: UserTripList,
+        },
+      ],
     },
   ],
 });

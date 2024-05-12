@@ -1,12 +1,12 @@
 <script setup>
-// import { RouterView } from "vue-router";
-import UserPageSideNavBar from "@/components/userpage/UserPageSideNavBar.vue";
+import { RouterView } from "vue-router";
+import UserPageSideNavBar from "@/components/userpage/navbar/UserPageSideNavBar.vue";
 </script>
 
 <template>
   <div class="flex flex-row border-none w-full h-full">
     <div class="flex justify-center items-center bg-zinc-100 border-none w-full h-full">
-      user page 화면입니다용
+      <RouterView />
     </div>
     <UserPageSideNavBar />
   </div>

@@ -4,6 +4,7 @@ import { RouterLink } from "vue-router";
 
 defineProps({
   title: String,
+  name: String,
 });
 
 const isHovered = ref(false);
@@ -18,7 +19,7 @@ const mouseOut = () => {
 </script>
 
 <template>
-  <router-link :to="{}">
+  <router-link :to="{ name }">
     <li
       @mouseover="mouseOver"
       @mouseout="mouseOut"
