@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/view/HomeView.vue";
+
 import BoardView from "@/view/BoardView.vue";
+import BoardList from "@/components/board/BoardList.vue";
 
 import TripSearchView from "@/view/TripSearchView.vue";
 import KakaoMapSearch from "@/components/search/KakaoMapSearch.vue";
@@ -27,6 +29,14 @@ const router = createRouter({
       path: "/board",
       name: "board",
       component: BoardView,
+      redirect: { name: "board-list" },
+      children: [
+        {
+          path: "",
+          name: "board-list",
+          component: BoardList,
+        },
+      ],
     },
     {
       path: "/search",
