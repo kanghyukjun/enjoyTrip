@@ -3,6 +3,8 @@ import HomeView from "@/view/HomeView.vue";
 
 import BoardView from "@/view/BoardView.vue";
 import BoardList from "@/components/board/BoardList.vue";
+import BoardDetail from "@/components/board/BoardDetail.vue";
+import BoardForm from "@/components/board/BoardForm.vue";
 
 import TripSearchView from "@/view/TripSearchView.vue";
 import KakaoMapSearch from "@/components/search/KakaoMapSearch.vue";
@@ -35,6 +37,21 @@ const router = createRouter({
           path: "",
           name: "board-list",
           component: BoardList,
+        },
+        {
+          path: "detail/:article",
+          name: "board-detail",
+          component: BoardDetail,
+        },
+        {
+          path: "update/:article",
+          name: "board-update",
+          component: BoardForm,
+        },
+        {
+          path: "write",
+          name: "board-write",
+          component: BoardForm,
         },
       ],
     },
