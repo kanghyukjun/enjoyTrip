@@ -56,7 +56,7 @@ const isLiked = ref(false);
 
 <template>
   <div
-    class="w-fit h-fit bg-zinc-100 shadow-sm rounded-2xl flex flex-col justify-center items-center font-kor text-gray-800"
+    class="w-[54rem] h-[40rem] bg-zinc-100 shadow-sm rounded-2xl flex flex-col justify-center items-center font-kor text-gray-800"
   >
     <div class="w-[54rem] h-[5rem] bg-trip-color flex flex-row items-center shadow-lg">
       <p class="font-extrabold text-3xl ml-5 text-gray-100 z-5">{{ object.title }}</p>

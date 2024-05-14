@@ -1,6 +1,14 @@
 <script setup>
+import { useRouter } from "vue-router";
 import BoardListItem from "@/components/board/BoardListItem.vue";
 import BoardListPageNavigation from "./BoardListPageNavigation.vue";
+import BoardButton from "./BoardButton.vue";
+
+const router = useRouter();
+
+const post = () => {
+  router.push({ name: "board-write" });
+};
 </script>
 
 <template>
@@ -55,6 +63,9 @@ import BoardListPageNavigation from "./BoardListPageNavigation.vue";
     <BoardListItem />
     <BoardListItem />
   </table>
+  <div class="w-[54rem] flex flex-row items-center justify-end mt-3">
+    <BoardButton title="글 등록" color="red" @click="post" />
+  </div>
   <div class="mt-10">
     <BoardListPageNavigation />
   </div>
