@@ -1,0 +1,21 @@
+server:
+  port: 80
+
+#ssafy 서버 사용 시 dev
+#개인 서버 사용 시 local
+spring:
+  application:
+    name: enjoytrip
+  profiles:
+    active: dev
+
+#MyBatis Setting
+mybatis:
+  type-aliases-package: com.ssafy.*.dto
+  mapper-locations: mapper/**/*.xml
+
+#log level Setting
+logging:
+  level:
+    root: info
+    com.ssafy: debug

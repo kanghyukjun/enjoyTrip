@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.trip.mapper.TripMapper">
+
+	<resultMap type="sidoResponseDto" id="sidoResponse">
+		<result column="sido_id" property="id"/>
+		<result column="sido_name" property="name"/>
+	</resultMap>
+
+	<resultMap type="gugunResponseDto" id="gugunResponse">
+		<result column="gugun_id" property="id"/>
+		<result column="gugun_name" property="name"/>
+	</resultMap>
+
+	<resultMap type="spotResponseDto" id="spotResponse">
+		<result column="tspot_id" property="id"/>
+		<result column="latitude" property="latitude"/>
+		<result column="longitude" property="longitude"/>
+	</resultMap>
+
+
+	<select id="searchSido" resultMap="sidoResponse">
+		select s.sido_id, s.sido_name
+		from sido s
+	</select>
+
+	<select id="searchGugun" parameterType="int" resultMap="gugunResponse">
+		select g.gugun_id, g.gugun_name
+		from gugun g
+		where g.sido_id = #{sidoCode}
+	</select>
+
+	<select id="searchSpot" parameterType="map" resultMap="spotResponse">
+		select t.tspot_id, t.latitude, t.longitude
+		from travel_spot t
+		where t.sido_id = #{sidoCode}
+		and t.gugun_id = #{gugunCode}
+		and t.tspot_type_id = #{spotType}
+	</select>
+</mapper>
