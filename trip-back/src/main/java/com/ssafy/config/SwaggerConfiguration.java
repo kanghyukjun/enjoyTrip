@@ -31,7 +31,7 @@ public class SwaggerConfiguration {
 	@Bean
 	public OpenAPI openAPI() {
 		Info info = new Info().title("EnjoyTrip API 명세서").description(
-						"<h3>SSAFY API Reference for Developers</h3>Swagger를 이용한 Board API<br><img src=\"/assets/img/ssafy_logo.png\" width=\"150\">")
+						"<h3>SSAFY API Reference for Developers</h3>EnjoyTrip API<br><img src=\"/assets/img/ssafy_logo.png\" width=\"150\">")
 				.version("v1").contact(new io.swagger.v3.oas.models.info.Contact().name("hissam")
 						.email("hissam@ssafy.com").url("http://edu.ssafy.com"));
 
@@ -40,7 +40,11 @@ public class SwaggerConfiguration {
 	
 	@Bean
 	public GroupedOpenApi tripApi() {
-		return GroupedOpenApi.builder().group("ssafy-trip").pathsToMatch("/trip/**").build();
+		return GroupedOpenApi.builder().group("enjoy-trip").pathsToMatch("/trip/**").build();
+	}
+	@Bean
+	public GroupedOpenApi userApi() {
+		return GroupedOpenApi.builder().group("enjoy-trip").pathsToMatch("/user/**").build();
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.ssafy.user.service;
 
-import com.ssafy.user.dto.UserLoginResponseDto;
+import com.ssafy.user.dto.UserModifyRequestDto;
+import com.ssafy.user.dto.UserResponseDto;
 import com.ssafy.user.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,18 +24,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserLoginResponseDto getUserById(int id) {
+    public UserResponseDto getUserById(int id) {
         try {
-            return userMapper.getUserLoginResponseDto(id);
+            return userMapper.getUser(id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public boolean getUserExistsByLoginId(String loginId) {
+    public boolean duplicateIdCheck(String loginId) {
         try {
             return userMapper.idCheck(loginId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void update(UserModifyRequestDto requestDto) {
+        try {
+            int id=3;
+            userMapper.updateUser(id, requestDto);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void delete(int userId) {
+        try {
+            userMapper.delete(userId);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

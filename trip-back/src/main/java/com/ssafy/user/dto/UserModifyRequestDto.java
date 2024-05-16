@@ -4,10 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class UserJoinRequestDto {
-
-    @Schema(title = "유저 로그인 아이디", example = "ssafy")
-    private String loginId;
+public class UserModifyRequestDto {
 
     @Schema(title = "유저 로그인 비밀번호", example = "1234")
     private String password;
