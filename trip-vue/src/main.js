@@ -1,5 +1,6 @@
 import "@/assets/style.css";
 import "@/assets/font.css";
+import "@/assets/scroll-bar.css";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
