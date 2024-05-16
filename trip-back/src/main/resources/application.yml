@@ -1,5 +1,5 @@
 server:
-  port: 80
+  port: 8080
 
 #ssafy 서버 사용 시 dev
 #개인 서버 사용 시 local

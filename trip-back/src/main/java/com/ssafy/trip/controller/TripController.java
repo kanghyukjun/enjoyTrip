@@ -34,7 +34,7 @@ public class TripController {
     @GetMapping("/spot")
     public ResponseEntity<?> searchSpot(@RequestParam("sido") int sidoCode,
                                         @RequestParam("gugun") int gugunCode,
-                                        @RequestParam("type") int spotType) throws Exception {
+                                        @RequestParam("type") List<String> spotType) throws Exception {
         List<SpotResponseDto> response = tripService.searchSpot(sidoCode, gugunCode, spotType);
         return ResponseEntity.ok(response);
     }
