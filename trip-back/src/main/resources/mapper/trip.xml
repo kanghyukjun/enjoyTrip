@@ -47,5 +47,11 @@
 				#{type}
 			</foreach>
             )
+		and s.tspot_title like concat('%', #{word}, '%')
+		order by
+		CASE WHEN s.tspot_title = #{word} THEN 1
+		WHEN s.tspot_title LIKE concat(#{word},'%') THEN 2
+		WHEN s.tspot_title LIKE concat('%',#{word}) THEN 3
+		ELSE 4 END, s.tspot_title ASC
 	</select>
 </mapper>

@@ -12,5 +12,5 @@ import java.util.List;
 public interface TripMapper {
     List<SidoResponseDto> searchSido() throws SQLException;
     List<GugunResponseDto> searchGugun(int sidoCode) throws SQLException;
-    List<SpotResponseDto> searchSpot(int sidoCode, int gugunCode, List<String> spotType) throws SQLException;
+    List<SpotResponseDto> searchSpot(int sidoCode, int gugunCode, List<String> spotType, String word) throws SQLException;
 }

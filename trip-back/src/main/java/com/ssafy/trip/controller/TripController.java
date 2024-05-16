@@ -66,8 +66,9 @@ public class TripController {
     })
     public ResponseEntity<?> searchSpot(@RequestParam("sido") int sidoCode,
                                         @RequestParam("gugun") int gugunCode,
-                                        @RequestParam("type") List<String> spotType) throws Exception {
-        List<SpotResponseDto> response = tripService.searchSpot(sidoCode, gugunCode, spotType);
+                                        @RequestParam("type") List<String> spotType,
+                                        @RequestParam("word") String word) throws Exception {
+        List<SpotResponseDto> response = tripService.searchSpot(sidoCode, gugunCode, spotType, word);
         return ResponseEntity.ok(response);
     }
 

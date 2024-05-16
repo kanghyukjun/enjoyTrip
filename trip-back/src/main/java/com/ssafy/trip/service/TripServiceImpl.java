@@ -28,7 +28,7 @@ public class TripServiceImpl implements TripService{
     }
 
     @Override
-    public List<SpotResponseDto> searchSpot(int sidoCode, int gugunCode, List<String> spotType) throws Exception{
-        return tripMapper.searchSpot(sidoCode, gugunCode, spotType);
+    public List<SpotResponseDto> searchSpot(int sidoCode, int gugunCode, List<String> spotType, String word) throws Exception{
+        return tripMapper.searchSpot(sidoCode, gugunCode, spotType, word);
     }
 }
