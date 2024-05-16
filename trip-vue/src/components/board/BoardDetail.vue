@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import BoardButton from "@/components/board/item/BoardButton.vue";
+import BoardButton from "@/components/common/item/VButton.vue";
 import { articleStore } from "@/stores/article";
 
 const store = articleStore();

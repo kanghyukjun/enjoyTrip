@@ -3,7 +3,7 @@ import { useRouter } from "vue-router";
 import { articleStore } from "@/stores/article";
 import BoardListItem from "@/components/board/item/BoardListItem.vue";
 import BoardListPageNavigation from "@/components/board/item/BoardListPageNavigation.vue";
-import BoardButton from "@/components/board/item/BoardButton.vue";
+import BoardButton from "@/components/common/item/VButton.vue";
 
 const router = useRouter();
 const store = articleStore();

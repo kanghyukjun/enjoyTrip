@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useRouter, useRoute, onBeforeRouteLeave } from "vue-router";
 import { articleStore } from "@/stores/article";
-import BoardButton from "@/components/board/item/BoardButton.vue";
+import BoardButton from "@/components/common/item/VButton.vue";
 
 const props = defineProps({
   type: String,

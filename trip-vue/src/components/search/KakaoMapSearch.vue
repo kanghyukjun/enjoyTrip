@@ -5,55 +5,58 @@ import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
 
 import { getSido, getGugun, getSpot } from "@/api/search";
 
-import VCheckbox from "./item/VCheckbox.vue";
-import VDropdown from "./item/VDropdown.vue";
-import SpotSearchItem from "./item/SpotSearchItem.vue";
+import VCheckbox from "@/components/common/item/VCheckbox.vue";
+import VDropdown from "@/components/common/item/VDropdown.vue";
+import SpotSearchItem from "@/components/search/item/SpotSearchItem.vue";
+import SpotSearchInfo from "@/components/search/SpotSearchInfo.vue";
+import SpotAddModal from "./SpotAddModal.vue";
+// import SpotAddModal from "@/components/search/SpotAddModal.vue";
 
-const coordinate = {
+const coordinate = ref({
   lat: 37.566826,
   lng: 126.9786567,
-};
+});
 
 const radioDatas = ref([
   {
     id: 12,
     name: "관광지",
-    checked: false,
+    checked: true,
   },
   {
     id: 14,
     name: "문화시설",
-    checked: false,
+    checked: true,
   },
   {
     id: 15,
     name: "축제공연행사",
-    checked: false,
+    checked: true,
   },
   {
     id: 25,
     name: "여행코스",
-    checked: false,
+    checked: true,
   },
   {
     id: 28,
     name: "레포츠",
-    checked: false,
+    checked: true,
   },
   {
     id: 32,
     name: "숙박",
-    checked: false,
+    checked: true,
   },
   {
     id: 38,
     name: "쇼핑",
-    checked: false,
+    checked: true,
   },
   {
     id: 39,
     name: "음식점",
-    checked: false,
+    checked: true,
   },
 ]);
 
@@ -119,12 +122,16 @@ const getList = () => {
     checkedTypes,
     (response) => {
       spots.value = response.data;
-      console.log(spots.value);
     },
     (error) => {
       console.log(error);
     }
   );
+};
+
+const showInfo = (spot) => {
+  coordinate.value.lat = spot.latitude;
+  coordinate.value.lng = spot.longitude;
 };
 </script>
 
@@ -139,7 +146,9 @@ const getList = () => {
           :lng="coordinate.lng"
           :draggable="true"
         >
-          <KakaoMapMarker :lat="coordinate.lat" :lng="coordinate.lng"></KakaoMapMarker>
+          <template v-for="spot in spots" :key="spot.id">
+            <KakaoMapMarker :lat="spot.latitude" :lng="spot.longitude" />
+          </template>
         </KakaoMap>
       </template>
     </div>
@@ -205,7 +214,7 @@ const getList = () => {
           <!-- 검색 결과가 없을 때 -->
           <p class="font-kor text-gray-700 text-xl mt-2">검색 결과가 없어요 :(</p>
           <p class="font-kor text-gray-700 text-sm mt-5">새로운 여행지 등록이 필요한가요?</p>
-          <RouterLink class="font-kor text-trip-color text-md">여행지 등록하기</RouterLink>
+          <RouterLink class="font-kor text-trip-color text-md mb-5">여행지 등록하기</RouterLink>
           <img class="opacity-60 w-[15rem]" src="/src/assets/no-content.png" />
         </div>
         <div
@@ -213,22 +222,19 @@ const getList = () => {
           class="prose w-[20rem] h-[40rem] rounded-md shadow-md overflow-y-auto align-middle"
         >
           <!-- 검색 결과 -->
-          <SpotSearchItem />
-          <SpotSearchItem />
-          <SpotSearchItem />
-          <SpotSearchItem />
-          <SpotSearchItem />
-          <SpotSearchItem />
-          <SpotSearchItem />
-          <SpotSearchItem />
-          <SpotSearchItem />
-          <SpotSearchItem />
-          <SpotSearchItem />
-          <SpotSearchItem />
-          <SpotSearchItem />
+          <SpotSearchItem
+            v-for="spot in spots"
+            :key="spot.id"
+            :spot="spot"
+            @click="showInfo(spot)"
+          />
         </div>
       </div>
     </div>
+    <!-- 마커 혹은 정보 클릭 시 정보 창 -->
+    <SpotSearchInfo />
+    <!-- 장소 추가 시 창 -->
+    <SpotAddModal />
   </div>
 </template>
 
