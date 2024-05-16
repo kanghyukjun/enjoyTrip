@@ -71,7 +71,7 @@ const regist = () => {
 
 <template>
   <div
-    class="w-[54rem] h-[40rem] shadow-sm bg-white rounded-2xl flex flex-col justify-start items-center font-kor text-gray-800 font-kor"
+    class="w-[54rem] h-[35rem] shadow-sm bg-white rounded-2xl flex flex-col justify-start items-center font-kor text-gray-800 font-kor"
   >
     <div class="w-[54rem] h-[7rem] bg-white flex flex-col justify-center items-center shadow-md">
       <!-- 타이틀 -->
@@ -84,10 +84,10 @@ const regist = () => {
         v-model="article.title"
       />
     </div>
-    <div class="w-[52rem] h-[30rem] flex flex-row items-center justify-center">
+    <div class="w-[52rem] h-[25rem] flex flex-row items-center justify-center">
       <!-- 본문 -->
       <textarea
-        class="description bg-gray-100 sec p-3 w-[50rem] h-[28rem] border border-gray-300 outline-none rounded-md transition-all focus:border-2 focus:border-trip-color focus:outline-0"
+        class="description bg-gray-100 sec p-3 w-[50rem] h-[23rem] border border-gray-300 outline-none rounded-md transition-all focus:border-2 focus:border-trip-color focus:outline-0"
         spellcheck="false"
         placeholder="본문"
         v-model="article.content"

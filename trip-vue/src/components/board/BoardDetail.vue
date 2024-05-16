@@ -51,7 +51,7 @@ const isLiked = ref(false);
 
 <template>
   <div
-    class="w-[54rem] h-[40rem] bg-zinc-100 shadow-sm rounded-2xl flex flex-col justify-center items-center font-kor text-gray-800"
+    class="w-[54rem] h-[35rem] bg-zinc-100 shadow-sm rounded-2xl flex flex-col justify-center items-center font-kor text-gray-800"
   >
     <div class="w-[54rem] h-[5rem] bg-trip-color flex flex-row items-center shadow-lg">
       <p class="font-extrabold text-3xl ml-5 text-gray-100 z-5">{{ article.title }}</p>
@@ -67,8 +67,8 @@ const isLiked = ref(false);
         <p>좋아요 {{ article.liked }}</p>
       </div>
     </div>
-    <div class="w-[54rem] h-[30rem] flex flex-row bg-white items-center justify-center">
-      <div class="w-[52rem] h-[28rem] flex flex-row items-start justify-start">
+    <div class="w-[54rem] h-[25rem] flex flex-row bg-white items-center justify-center">
+      <div class="w-[52rem] h-[23rem] flex flex-row items-start justify-start">
         <p class="mt-3">{{ article.content }}</p>
       </div>
     </div>

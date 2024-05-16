@@ -14,14 +14,14 @@ const post = () => {
 </script>
 
 <template>
-  <div class="w-[54rem] mt-10 mb-10 flex flex-col justify-start">
+  <div class="w-[54rem] mt-10 mb-5 flex flex-col justify-start">
     <p class="font-bold text-3xl font-kor text-gray-600">게시판</p>
     <p class="font-bold text-lg font-kor text-gray-600">
       여행지에 대한 의견을 자유롭게 나누어보세요
     </p>
   </div>
   <div class="flex flex-row w-[54rem] justify-end mb-3 mr-3">
-    <div class="relative flex items-center mt-4 md:mt-0">
+    <div class="relative flex items-center md:mt-0">
       <span class="absolute">
         <svg
           xmlns="http://www.w3.org/2000/svg"
