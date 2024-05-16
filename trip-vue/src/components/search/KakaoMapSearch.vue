@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink } from "vue-router";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
 
 import { getSido, getGugun, getSpot } from "@/api/search";
@@ -8,8 +8,8 @@ import { getSido, getGugun, getSpot } from "@/api/search";
 import VCheckbox from "@/components/common/item/VCheckbox.vue";
 import VDropdown from "@/components/common/item/VDropdown.vue";
 import SpotSearchItem from "@/components/search/item/SpotSearchItem.vue";
-import SpotSearchInfo from "@/components/search/SpotSearchInfo.vue";
-import SpotAddModal from "./SpotAddModal.vue";
+import SpotSearchInfo from "@/components/search/item/SpotSearchInfo.vue";
+// import SpotAddModal from "@/components/search/item/SpotAddModal.vue";
 // import SpotAddModal from "@/components/search/SpotAddModal.vue";
 
 const coordinate = ref({
@@ -68,6 +68,9 @@ const sido = ref([]);
 const gugun = ref([]);
 const keyword = ref("");
 const spots = ref([]);
+const spotDetail = ref({});
+
+const isSpotInfoShow = ref(false);
 
 let selectedSidoCode = 0;
 let selectedGugunCode = 0;
@@ -110,12 +113,12 @@ const typeChange = (id) => {
   type.checked = !type.checked;
 };
 
-const getList = () => {
+const getList = async () => {
   let checkedTypes = [];
   radioDatas.value.forEach((x) => {
     if (x.checked) checkedTypes.push(x.name);
   });
-  getSpot(
+  await getSpot(
     selectedSidoCode,
     selectedGugunCode,
     keyword.value,
@@ -132,7 +135,21 @@ const getList = () => {
 const showInfo = (spot) => {
   coordinate.value.lat = spot.latitude;
   coordinate.value.lng = spot.longitude;
+  isSpotInfoShow.value = true;
+  spotDetail.value = spot;
 };
+
+const hideInfo = () => {
+  isSpotInfoShow.value = false;
+};
+
+watch(
+  () => spots.value,
+  (newValue) => {
+    coordinate.value.lat = newValue[0].latitude;
+    coordinate.value.lng = newValue[0].longitude;
+  }
+);
 </script>
 
 <template>
@@ -145,16 +162,22 @@ const showInfo = (spot) => {
           :lat="coordinate.lat"
           :lng="coordinate.lng"
           :draggable="true"
+          @click="hideInfo"
         >
           <template v-for="spot in spots" :key="spot.id">
-            <KakaoMapMarker :lat="spot.latitude" :lng="spot.longitude" />
+            <KakaoMapMarker
+              class="z-20"
+              :lat="spot.latitude"
+              :lng="spot.longitude"
+              @onClickKakaoMapMarker="showInfo(spot)"
+            />
           </template>
         </KakaoMap>
       </template>
     </div>
     <!-- 지도 검색 Nav Bar -->
     <div
-      class="w-[25rem] bg-zinc-100 shadow-md rounded-xl flex flex-col items-center justify-center"
+      class="w-[25rem] h-full bg-zinc-100 shadow-md rounded-xl flex flex-col items-center justify-center"
     >
       <div class="w-[25rem] h-[4rem] flex justify-center items-center mt-10">
         <!-- 검색창 -->
@@ -206,10 +229,10 @@ const showInfo = (spot) => {
           <div class="flex-grow border-t border-gray-300"></div>
         </div>
       </div>
-      <div class="w-[20rem] h-[40rem] flex flex-col justify-center items-center mt-5">
+      <div class="w-[20rem] h-[30rem] flex flex-col justify-center items-center mt-5">
         <div
           v-show="spots.length == 0"
-          class="w-[20rem] h-[40rem] flex flex-col items-center justify-start"
+          class="w-[20rem] h-[30rem] flex flex-col items-center justify-start"
         >
           <!-- 검색 결과가 없을 때 -->
           <p class="font-kor text-gray-700 text-xl mt-2">검색 결과가 없어요 :(</p>
@@ -219,7 +242,7 @@ const showInfo = (spot) => {
         </div>
         <div
           v-show="spots.length > 0"
-          class="prose w-[20rem] h-[40rem] rounded-md shadow-md overflow-y-auto align-middle"
+          class="prose w-[20rem] h-[30rem] rounded-md shadow-md overflow-y-auto align-middle"
         >
           <!-- 검색 결과 -->
           <SpotSearchItem
@@ -232,9 +255,9 @@ const showInfo = (spot) => {
       </div>
     </div>
     <!-- 마커 혹은 정보 클릭 시 정보 창 -->
-    <SpotSearchInfo />
+    <SpotSearchInfo v-show="isSpotInfoShow" :spot="spotDetail" @close="hideInfo" />
     <!-- 장소 추가 시 창 -->
-    <SpotAddModal />
+    <!-- <SpotAddModal /> -->
   </div>
 </template>
 
