@@ -1,20 +1,15 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-import BoardButton from "./BoardButton.vue";
+import { useRouter, useRoute } from "vue-router";
+import BoardButton from "@/components/board/item/BoardButton.vue";
+import { articleStore } from "@/stores/article";
 
-// const route = useRoute();
+const store = articleStore();
+const route = useRoute();
 const router = useRouter();
-// const articleNo = route.params.article;
 
-const object = ref({
-  title: "안녕하세요 회원님들",
-  user: "강태경",
-  liked: 6,
-  hit: 624,
-  subject:
-    "안녕하세요 이번에 제가 여행을 가려고 하는데 어디로 가야할지 모르겠습니다 혹시 좋은 곳 아시는 곳 있으면 추천좀 해주세요들레히요레히요",
-});
+const articleNo = route.params.article;
+const article = store.getArticle(articleNo);
 
 const clickLike = () => {
   isLiked.value = !isLiked.value;
@@ -36,7 +31,7 @@ const moveUpdate = () => {
   router.push({
     name: "board-update",
     params: {
-      article: 1, // 수정 필요
+      article: articleNo, // 수정 필요
     },
   });
 };
@@ -59,20 +54,22 @@ const isLiked = ref(false);
     class="w-[54rem] h-[40rem] bg-zinc-100 shadow-sm rounded-2xl flex flex-col justify-center items-center font-kor text-gray-800"
   >
     <div class="w-[54rem] h-[5rem] bg-trip-color flex flex-row items-center shadow-lg">
-      <p class="font-extrabold text-3xl ml-5 text-gray-100 z-5">{{ object.title }}</p>
+      <p class="font-extrabold text-3xl ml-5 text-gray-100 z-5">{{ article.title }}</p>
     </div>
     <div
       class="w-[54rem] h-[3rem] flex flex-row shadow-lg bg-white items-center justify-between z-3"
     >
-      <div class="ml-5 font-bold">{{ object.user }}</div>
+      <div class="ml-5 font-bold">
+        <p>{{ article.user }}</p>
+      </div>
       <div class="mr-5 flex flex-row items-center gap-4">
-        <p>조회수 {{ object.hit }}</p>
-        <p>좋아요 {{ object.liked }}</p>
+        <p>조회수 {{ article.hit }}</p>
+        <p>좋아요 {{ article.liked }}</p>
       </div>
     </div>
     <div class="w-[54rem] h-[30rem] flex flex-row bg-white items-center justify-center">
       <div class="w-[52rem] h-[28rem] flex flex-row items-start justify-start">
-        {{ object.subject }}
+        <p class="mt-3">{{ article.content }}</p>
       </div>
     </div>
     <div class="w-[54rem] h-[2rem] flex flex-row bg-white items-center justify-end">

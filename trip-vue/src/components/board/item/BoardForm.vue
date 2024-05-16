@@ -1,14 +1,30 @@
 <script setup>
-import { ref, computed } from "vue";
-import { useRouter, onBeforeRouteLeave } from "vue-router";
-import BoardButton from "./BoardButton.vue";
+import { ref, computed, onMounted } from "vue";
+import { useRouter, useRoute, onBeforeRouteLeave } from "vue-router";
+import { articleStore } from "@/stores/article";
+import BoardButton from "@/components/board/item/BoardButton.vue";
 
-// const route = useRoute();
+const props = defineProps({
+  type: String,
+});
+
+const type = props.type;
+
+const route = useRoute();
 const router = useRouter();
+const store = articleStore();
 
 const article = ref({
   title: "",
   content: "",
+});
+
+const articleno = route.params?.article;
+onMounted(() => {
+  if (articleno) {
+    const get = store.getArticle(articleno);
+    article.value = get;
+  }
 });
 
 const isContentExist = computed(() => {
@@ -16,12 +32,16 @@ const isContentExist = computed(() => {
 });
 
 const cancel = () => {
-  router.push({
-    name: "board-detail",
-    query: {
-      article: 1,
-    },
-  });
+  if (type === "write") {
+    router.push({ name: "board-list" });
+  } else if (type === "modify") {
+    router.push({
+      name: "board-detail",
+      query: {
+        article: 1,
+      },
+    });
+  }
 };
 
 onBeforeRouteLeave(() => {
@@ -39,7 +59,14 @@ onBeforeRouteLeave(() => {
   }
 });
 
-const regist = () => {};
+const regist = () => {
+  if (type === "write") {
+    // 서버로 post api 요청
+  } else if (type === "modify") {
+    // 서버로 put api 요청
+  }
+  // 리스트로 이동
+};
 </script>
 
 <template>

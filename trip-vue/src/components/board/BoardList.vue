@@ -1,10 +1,12 @@
 <script setup>
 import { useRouter } from "vue-router";
-import BoardListItem from "@/components/board/BoardListItem.vue";
-import BoardListPageNavigation from "./BoardListPageNavigation.vue";
-import BoardButton from "./BoardButton.vue";
+import { articleStore } from "@/stores/article";
+import BoardListItem from "@/components/board/item/BoardListItem.vue";
+import BoardListPageNavigation from "@/components/board/item/BoardListPageNavigation.vue";
+import BoardButton from "@/components/board/item/BoardButton.vue";
 
 const router = useRouter();
+const store = articleStore();
 
 const post = () => {
   router.push({ name: "board-write" });
@@ -54,14 +56,7 @@ const post = () => {
         <th class="w-[5rem] text-center">좋아요</th>
       </tr>
     </thead>
-    <BoardListItem />
-    <BoardListItem />
-    <BoardListItem />
-    <BoardListItem />
-    <BoardListItem />
-    <BoardListItem />
-    <BoardListItem />
-    <BoardListItem />
+    <BoardListItem v-for="article in store.articles" :key="article.articleno" :article="article" />
   </table>
   <div class="w-[54rem] flex flex-row items-center justify-end mt-3">
     <BoardButton title="글 등록" color="red" @click="post" />
