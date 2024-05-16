@@ -16,8 +16,12 @@
 
 	<resultMap type="spotResponseDto" id="spotResponse">
 		<result column="tspot_id" property="id"/>
+		<result column="tspot_title" property="title"/>
+		<result column="addr1" property="addr"/>
+		<result column="first_image" property="img"/>
 		<result column="latitude" property="latitude"/>
 		<result column="longitude" property="longitude"/>
+		<result column="tspot_type_name" property="type"/>
 	</resultMap>
 
 
@@ -33,10 +37,15 @@
 	</select>
 
 	<select id="searchSpot" parameterType="map" resultMap="spotResponse">
-		select t.tspot_id, t.latitude, t.longitude
-		from travel_spot t
-		where t.sido_id = #{sidoCode}
-		and t.gugun_id = #{gugunCode}
-		and t.tspot_type_id = #{spotType}
+		select s.tspot_id, s.tspot_title, s.addr1, s.first_image, s.latitude, s.longitude, st.tspot_type_name
+		from travel_spot s, travel_spot_type st
+		where s.sido_id = #{sidoCode}
+		and s.gugun_id = #{gugunCode}
+		and s.tspot_type_id = st.tspot_type_id
+		and st.tspot_type_name in (
+		    <foreach collection="spotType" item="type" separator=",">
+				#{type}
+			</foreach>
+            )
 	</select>
 </mapper>

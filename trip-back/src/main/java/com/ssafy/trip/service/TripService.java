@@ -11,5 +11,5 @@ public interface TripService {
 
     List<GugunResponseDto> searchGugun(int sidoCode) throws Exception;
 
-    List<SpotResponseDto> searchSpot(int sidoCode, int gugunCode, int spotType) throws Exception;
+    List<SpotResponseDto> searchSpot(int sidoCode, int gugunCode, List<String> spotType) throws Exception;
 }
