@@ -3,7 +3,7 @@
 import { onMounted, ref, watch } from "vue";
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
 
-import { getSido, getGugun, getSpot } from "@/api/search";
+import { getSidos, getGuguns, getSpots } from "@/util/search";
 
 import VCheckbox from "@/components/common/item/VCheckbox.vue";
 import VDropdown from "@/components/common/item/VDropdown.vue";
@@ -74,33 +74,18 @@ const showModal = ref(false);
 let selectedSidoCode = 0;
 let selectedGugunCode = 0;
 
-onMounted(() => {
+onMounted(async () => {
   const container = document.querySelector("#container");
   mapWidth.value = container.offsetWidth * 0.95;
   mapHeight.value = container.offsetHeight * 0.95;
   isLoaded.value = true;
 
-  getSido(
-    (response) => {
-      sido.value = response.data;
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
+  sido.value = await getSidos();
 });
 
-const sidoChanged = (sido) => {
+const sidoChanged = async (sido) => {
   selectedSidoCode = sido;
-  getGugun(
-    sido,
-    (response) => {
-      gugun.value = response.data;
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
+  gugun.value = await getGuguns(sido);
 };
 
 const gugunChanged = (gugun) => {
@@ -117,18 +102,7 @@ const getList = async () => {
   radioDatas.value.forEach((x) => {
     if (x.checked) checkedTypes.push(x.name);
   });
-  await getSpot(
-    selectedSidoCode,
-    selectedGugunCode,
-    keyword.value,
-    checkedTypes,
-    (response) => {
-      spots.value = response.data;
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
+  spots.value = await getSpots(selectedSidoCode, selectedGugunCode, keyword.value, checkedTypes);
 };
 
 const showInfo = (spot) => {
