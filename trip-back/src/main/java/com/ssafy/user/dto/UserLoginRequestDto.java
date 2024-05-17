@@ -1,11 +1,11 @@
 package com.ssafy.user.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
-@Getter
+@Data
 public class UserLoginRequestDto {
 
     @Schema(title = "로그인 아이디", example = "ssafy")

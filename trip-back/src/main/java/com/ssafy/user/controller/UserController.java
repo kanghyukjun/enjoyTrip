@@ -1,13 +1,17 @@
 package com.ssafy.user.controller;
 
 import com.ssafy.user.dto.UserJoinRequestDto;
+import com.ssafy.user.dto.UserLoginRequestDto;
 import com.ssafy.user.dto.UserModifyRequestDto;
 import com.ssafy.user.dto.UserResponseDto;
 import com.ssafy.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,11 +21,10 @@ public class UserController {
 
     private final UserService userService;
 
-    //TODO: JWT를 통해 유저를 조회하는 기능 구현(@AuthenticationPrincipal)
     @GetMapping
-    public ResponseEntity<UserResponseDto> getInfo() {
+    public ResponseEntity<UserResponseDto> get() {
         int userId = 1;
-        UserResponseDto user = userService.getUserById(userId);
+        UserResponseDto user = userService.getById(userId);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
@@ -30,7 +33,7 @@ public class UserController {
 
     @GetMapping("/join/{loginId}")
     public ResponseEntity<Boolean> duplicateIdCheck(@PathVariable("loginId") String loginId) {
-        boolean isDuplicate = userService.duplicateIdCheck(loginId);
+        boolean isDuplicate = userService.isDuplicatedId(loginId);
         if (isDuplicate) {
             return ResponseEntity.ok(true);
         } else {
@@ -39,33 +42,46 @@ public class UserController {
     }
 
     @PatchMapping
-    public ResponseEntity<UserResponseDto> modifyUserInfo(@RequestBody UserModifyRequestDto requestDto) {
+    public ResponseEntity<UserResponseDto> update(@RequestBody UserModifyRequestDto requestDto) {
         userService.update(requestDto);
         int userId = 3;
-        return ResponseEntity.ok(userService.getUserById(userId));
+        return ResponseEntity.ok(userService.getById(userId));
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteUserInfo() {
+    public ResponseEntity<Void> delete() {
         int userId = 3;
         userService.delete(userId);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
-    public ResponseEntity<Void> joinUser(@RequestBody UserJoinRequestDto requestDto) {
+    public ResponseEntity<Void> save(@RequestBody UserJoinRequestDto requestDto) {
         log.info(requestDto.toString());
-        return null;
+        return userService.save(requestDto);
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<?> login() {
-        return null;
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody UserLoginRequestDto requestDto) {
+        log.debug("[UserController]: 로그인 요청 정보 - {}", requestDto);
+        return userService.login(requestDto);
     }
 
-    @GetMapping("/logout")
-    public ResponseEntity<?> logout() {
-        return null;
+    @GetMapping("/logout/{loginId}")
+    public ResponseEntity<Map<String, Object>> logout(@PathVariable("loginId") String loginId) {
+        return userService.logout(loginId);
     }
 
+    @GetMapping("/info/{loginId}")
+    public ResponseEntity<Map<String, Object>> getInfo(@PathVariable("loginId") String loginId,
+                                                       HttpServletRequest request) {
+        return userService.getInfo(loginId, request.getHeader("Authorization"));
+
+    }
+
+    @PostMapping("/refresh/{loginId}")
+    public ResponseEntity<Map<String, Object>> refreshToken(@PathVariable("loginId") String loginId,
+                                                            HttpServletRequest request){
+        return userService.refresh(loginId, request.getHeader("refreshToken"));
+    }
 }

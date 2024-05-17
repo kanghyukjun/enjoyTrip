@@ -4,21 +4,23 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
 @Slf4j
+@Component
 public class JWTUtil {
 
     @Value("${jwt.signature-key}")
     private String signatureKey;
 
-    @Value("${jwt.access-token.expiretime")
+    @Value("${jwt.access-token.expiretime}")
     private long accessTokenExpireTime;
 
-    @Value("${jwt.refresh-token.expiretime")
+    @Value("${jwt.refresh-token.expiretime}")
     private long refreshTokenExpireTime;
 
     public String createAccessToken(String userId) {
