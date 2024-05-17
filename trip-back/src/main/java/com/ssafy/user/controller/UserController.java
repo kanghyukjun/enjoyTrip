@@ -21,14 +21,15 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
-    public ResponseEntity<UserResponseDto> get() {
-        int userId = 1;
-        UserResponseDto user = userService.getById(userId);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(user);
+
+    /*Todo: 조회 로직에만 JWT 적용..
+        나머지 로직에도 적용 필요
+    */
+    @GetMapping("/{loginId}")
+    public ResponseEntity<Map<String, Object>> get(@PathVariable("loginId") String loginId,
+                                                   HttpServletRequest request) {
+        return userService.getInfo(loginId, request.getHeader("Authorization"));
+
     }
 
     @GetMapping("/join/{loginId}")
@@ -72,12 +73,6 @@ public class UserController {
         return userService.logout(loginId);
     }
 
-    @GetMapping("/info/{loginId}")
-    public ResponseEntity<Map<String, Object>> getInfo(@PathVariable("loginId") String loginId,
-                                                       HttpServletRequest request) {
-        return userService.getInfo(loginId, request.getHeader("Authorization"));
-
-    }
 
     @PostMapping("/refresh/{loginId}")
     public ResponseEntity<Map<String, Object>> refreshToken(@PathVariable("loginId") String loginId,
