@@ -7,7 +7,7 @@ defineProps({
 
 <template>
   <button
-    class="middle none center rounded-lg bg-red-500 shadow-red-500/20 hover:shadow-red-500/40 text-white py-1 px-2 font-sans text-xs font-bold uppercase shadow-sm transition-all hover:shadow-md focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+    class="middle none center rounded-lg text-white py-1 px-2 font-sans text-xs font-bold uppercase shadow-sm transition-all hover:shadow-md focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
     data-ripple-light="true"
     :class="{
       'bg-red-500': color === 'red',

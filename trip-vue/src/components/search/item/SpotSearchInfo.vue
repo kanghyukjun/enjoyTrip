@@ -14,7 +14,7 @@ const close = () => {
 
 <template>
   <div
-    class="absolute w-[40rem] h-[24rem] bg-zinc-100 rounded-md shadow-2xl top-1/2 opacity-50 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 transition-all hover:opacity-100"
+    class="absolute w-[40rem] h-[24rem] bg-zinc-50 rounded-md shadow-2xl top-1/2 opacity-50 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 transition-all hover:opacity-100"
   >
     <div class="w-[40rem] h-[24rem] flex flex-col items-center justify-start">
       <div class="w-[40rem] h-[4rem] flex flex-row justify-between items-center">
@@ -43,10 +43,15 @@ const close = () => {
         </div>
         <div class="w-[37rem] h-[16rem] flex flex-row items-center justify-between mt-2">
           <!-- 사진 -->
-          <img class="w-[17rem] h-[16rem] rounded-md" :src="spot.img" />
-          <div class="w-[17rem] h-[16rem] flex flex-row">
+          <img
+            class="w-[17rem] h-[16rem] rounded-md"
+            :src="spot.img ? spot.img : '/src/assets/no-image.png'"
+          />
+          <div class="w-[17rem] h-[16rem] flex flex-row justify-center items-center">
             <!-- 설명 -->
-            <p class="font-kor text-xl font-bold text-zinc-700">{{ spot.addr }}</p>
+            <div class="w-[15rem] h-[14rem] flex flex-row justify-start items-start m-2">
+              <p class="font-kor text-xl font-bold text-zinc-700">{{ spot.addr }}</p>
+            </div>
           </div>
         </div>
       </div>

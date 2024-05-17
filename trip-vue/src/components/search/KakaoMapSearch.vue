@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink } from "vue-router";
+// import { RouterLink } from "vue-router";
 import { onMounted, ref, watch } from "vue";
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
 
@@ -8,9 +8,7 @@ import { getSido, getGugun, getSpot } from "@/api/search";
 import VCheckbox from "@/components/common/item/VCheckbox.vue";
 import VDropdown from "@/components/common/item/VDropdown.vue";
 import SpotSearchItem from "@/components/search/item/SpotSearchItem.vue";
-import SpotSearchInfo from "@/components/search/item/SpotSearchInfo.vue";
-// import SpotAddModal from "@/components/search/item/SpotAddModal.vue";
-// import SpotAddModal from "@/components/search/SpotAddModal.vue";
+import SpotAddModal from "@/components/search/item/SpotAddModal.vue";
 
 const coordinate = ref({
   lat: 37.566826,
@@ -70,7 +68,8 @@ const keyword = ref("");
 const spots = ref([]);
 const spotDetail = ref({});
 
-const isSpotInfoShow = ref(false);
+const showSpotInfo = ref(false);
+const showModal = ref(false);
 
 let selectedSidoCode = 0;
 let selectedGugunCode = 0;
@@ -135,19 +134,17 @@ const getList = async () => {
 const showInfo = (spot) => {
   coordinate.value.lat = spot.latitude;
   coordinate.value.lng = spot.longitude;
-  isSpotInfoShow.value = true;
+  showSpotInfo.value = true;
   spotDetail.value = spot;
-};
-
-const hideInfo = () => {
-  isSpotInfoShow.value = false;
 };
 
 watch(
   () => spots.value,
   (newValue) => {
-    coordinate.value.lat = newValue[0].latitude;
-    coordinate.value.lng = newValue[0].longitude;
+    if (newValue.length > 0) {
+      coordinate.value.lat = newValue[0]?.latitude;
+      coordinate.value.lng = newValue[0]?.longitude;
+    }
   }
 );
 </script>
@@ -162,15 +159,15 @@ watch(
           :lat="coordinate.lat"
           :lng="coordinate.lng"
           :draggable="true"
-          @click="hideInfo"
         >
+          <!-- 커스텀 오버레이 -->
+          <!-- <KakaoMapCustomOverlay :lat="37.566826" :lng="126.9786567">
+            <div class="w-[10rem] flex h-[5rem] bg-pink-300">커스텀 오버레이 화면</div>
+          </KakaoMapCustomOverlay> -->
+
+          <!-- 마커 -->
           <template v-for="spot in spots" :key="spot.id">
-            <KakaoMapMarker
-              class="z-20"
-              :lat="spot.latitude"
-              :lng="spot.longitude"
-              @onClickKakaoMapMarker="showInfo(spot)"
-            />
+            <KakaoMapMarker :lat="spot.latitude" :lng="spot.longitude" />
           </template>
         </KakaoMap>
       </template>
@@ -210,8 +207,8 @@ watch(
       </div>
       <div class="w-[20rem] h-[4rem] flex flex-row justify-center items-center mt-2 gap-2">
         <!-- 시도 구군 선택 -->
-        <VDropdown title="시/도 선택" :items="sido" @changed="sidoChanged" />
-        <VDropdown title="구/군 선택" :items="gugun" @changed="gugunChanged" />
+        <VDropdown title="시/도 선택" :items="sido" @changed="sidoChanged" :width="10" />
+        <VDropdown title="구/군 선택" :items="gugun" @changed="gugunChanged" :width="10" />
       </div>
       <div
         class="w-[26rem] h-[6rem] flex flex-row flex-wrap gap-4 justify-center items-center mt-4"
@@ -237,7 +234,9 @@ watch(
           <!-- 검색 결과가 없을 때 -->
           <p class="font-kor text-gray-700 text-xl mt-2">검색 결과가 없어요 :(</p>
           <p class="font-kor text-gray-700 text-sm mt-5">새로운 여행지 등록이 필요한가요?</p>
-          <RouterLink class="font-kor text-trip-color text-md mb-5">여행지 등록하기</RouterLink>
+          <p class="font-kor text-trip-color text-md mb-5 cursor-pointer" @click="showModal = true">
+            여행지 등록하기
+          </p>
           <img class="opacity-60 w-[15rem]" src="/src/assets/no-content.png" />
         </div>
         <div
@@ -255,9 +254,9 @@ watch(
       </div>
     </div>
     <!-- 마커 혹은 정보 클릭 시 정보 창 -->
-    <SpotSearchInfo v-show="isSpotInfoShow" :spot="spotDetail" @close="hideInfo" />
+    <!-- <SpotSearchInfo v-show="isSpotInfoShow" :spot="spotDetail" @close="hideInfo" /> -->
     <!-- 장소 추가 시 창 -->
-    <!-- <SpotAddModal /> -->
+    <SpotAddModal v-if="showModal" @closeModal="showModal = false" />
   </div>
 </template>
 
