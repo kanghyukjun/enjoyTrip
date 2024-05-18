@@ -5,58 +5,15 @@ import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
 
 import { getSidos, getGuguns, getSpots } from "@/util/search";
 
+import { useSpotListStore } from "@/stores/spot-list";
+
 import VCheckbox from "@/components/common/item/VCheckbox.vue";
 import VDropdown from "@/components/common/item/VDropdown.vue";
 import SpotSearchItem from "@/components/search/item/SpotSearchItem.vue";
 import SpotAddModal from "@/components/search/item/SpotAddModal.vue";
+import SpotListBar from "@/components/search/item/SpotListBar.vue";
 
-const coordinate = ref({
-  lat: 37.566826,
-  lng: 126.9786567,
-});
-
-const radioDatas = ref([
-  {
-    id: 12,
-    name: "관광지",
-    checked: true,
-  },
-  {
-    id: 14,
-    name: "문화시설",
-    checked: true,
-  },
-  {
-    id: 15,
-    name: "축제공연행사",
-    checked: true,
-  },
-  {
-    id: 25,
-    name: "여행코스",
-    checked: true,
-  },
-  {
-    id: 28,
-    name: "레포츠",
-    checked: true,
-  },
-  {
-    id: 32,
-    name: "숙박",
-    checked: true,
-  },
-  {
-    id: 38,
-    name: "쇼핑",
-    checked: true,
-  },
-  {
-    id: 39,
-    name: "음식점",
-    checked: true,
-  },
-]);
+const store = useSpotListStore();
 
 const mapWidth = ref(0);
 const mapHeight = ref(0);
@@ -73,6 +30,13 @@ const showModal = ref(false);
 
 let selectedSidoCode = 0;
 let selectedGugunCode = 0;
+
+const coordinate = ref({
+  lat: 37.566826,
+  lng: 126.9786567,
+});
+
+const spotlist = ref(null);
 
 onMounted(async () => {
   const container = document.querySelector("#container");
@@ -93,13 +57,13 @@ const gugunChanged = (gugun) => {
 };
 
 const typeChange = (id) => {
-  let type = radioDatas.value.find((item) => item.id === id);
+  let type = store.radioDatas.find((item) => item.id === id);
   type.checked = !type.checked;
 };
 
 const getList = async () => {
   let checkedTypes = [];
-  radioDatas.value.forEach((x) => {
+  store.radioDatas.forEach((x) => {
     if (x.checked) checkedTypes.push(x.name);
   });
   spots.value = await getSpots(selectedSidoCode, selectedGugunCode, keyword.value, checkedTypes);
@@ -121,11 +85,18 @@ watch(
     }
   }
 );
+
+const addSpotList = (spot) => {
+  spotlist?.value.addSpot(spot);
+};
 </script>
 
 <template>
   <div class="flex flex-row border-none w-full h-full">
-    <div id="container" class="w-full h-full flex justify-center items-center">
+    <div class="absolute w-[18rem] h-full z-10">
+      <SpotListBar ref="spotlist" />
+    </div>
+    <div id="container" class="w-full h-full flex flex-col justify-center items-center">
       <template v-if="isLoaded">
         <KakaoMap
           :width="mapWidth + 'px'"
@@ -189,7 +160,7 @@ watch(
       >
         <!-- 라디오 버튼 -->
         <VCheckbox
-          v-for="radioData in radioDatas"
+          v-for="radioData in store.radioDatas"
           :key="radioData.id"
           :radioData="radioData"
           @typeChanged="typeChange"
@@ -223,6 +194,7 @@ watch(
             :key="spot.id"
             :spot="spot"
             @click="showInfo(spot)"
+            @addSpot="addSpotList(spot)"
           />
         </div>
       </div>

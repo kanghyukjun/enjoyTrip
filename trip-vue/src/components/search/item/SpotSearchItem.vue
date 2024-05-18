@@ -6,6 +6,8 @@ const props = defineProps({
   spot: Object,
 });
 
+const emit = defineEmits(["addSpot"]);
+
 const itemTitle = ref(props.spot.title);
 const itemAddr = ref(props.spot.addr);
 
@@ -22,6 +24,10 @@ onMounted(() => {
     itemAddr.value += "...";
   }
 });
+
+const addSpot = (spot) => {
+  emit("addSpot", spot);
+};
 </script>
 
 <template>
@@ -36,7 +42,7 @@ onMounted(() => {
             <span class="font-kor text-gray-700 text-xs ml-1">{{ spot.type }}</span>
             <p class="font-kor text-gray-600 text-xs">{{ itemAddr }}</p>
           </div>
-          <VButton title="추가" color="sky" />
+          <VButton title="추가" color="sky" @click="addSpot(spot)" />
         </div>
       </div>
       <div class="w-[6.5rem] h-[6rem]">
