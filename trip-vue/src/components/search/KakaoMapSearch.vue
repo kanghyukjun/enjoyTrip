@@ -66,7 +66,12 @@ const getList = async () => {
   store.radioDatas.forEach((x) => {
     if (x.checked) checkedTypes.push(x.name);
   });
-  spots.value = await getSpots(selectedSidoCode, selectedGugunCode, keyword.value, checkedTypes);
+
+  if (checkedTypes.length <= 0 || !selectedSidoCode || !selectedGugunCode) {
+    window.alert("옵션을 선택해주세요");
+  } else {
+    spots.value = await getSpots(selectedSidoCode, selectedGugunCode, keyword.value, checkedTypes);
+  }
 };
 
 const showInfo = (spot) => {

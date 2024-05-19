@@ -1,20 +1,34 @@
 <script setup>
 import { ref } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 
 import UserRegisterFormItem from "@/components/login/UserRegisterFormItem.vue";
-import { getUserIdExists } from "@/api/login.js";
+import { getUserIdExists, userRegister } from "@/api/login.js";
+
+const router = useRouter();
 
 const isPasswordLengthOkay = ref(false);
 const isIdLengthOkay = ref(false);
 const isIdDuplicated = ref(false);
+const isNameLengthOkay = ref(true);
+const isEmailLengthOkay = ref(true);
+
+const userInfo = ref({
+  loginId: "",
+  password: "",
+  name: "",
+  email: "",
+});
 
 const passwordChange = (value) => {
-  isPasswordLengthOkay.value = 5 <= value.length && value.length <= 16;
+  isPasswordLengthOkay.value = 5 <= value.length && value.length <= 20;
+  if (isPasswordLengthOkay.value) {
+    userInfo.value.password = value;
+  }
 };
 
 const idChange = (value) => {
-  if (value.length < 5 || value.length > 16) {
+  if (value.length < 5 || value.length > 20) {
     isIdLengthOkay.value = false;
     isIdDuplicated.value = false;
   } else {
@@ -22,6 +36,51 @@ const idChange = (value) => {
     getUserIdExists(value, (response) => {
       isIdDuplicated.value = response.data;
     });
+    if (!isIdDuplicated.value) {
+      userInfo.value.loginId = value;
+    }
+  }
+};
+
+const nameChange = (value) => {
+  if (value.length > 10) {
+    isNameLengthOkay.value = false;
+  } else {
+    isNameLengthOkay.value = true;
+    userInfo.value.name = value;
+  }
+};
+
+const emailChange = (value) => {
+  if (value.length > 50) {
+    isEmailLengthOkay.value = false;
+  } else {
+    isEmailLengthOkay.value = true;
+    userInfo.value.email = value;
+  }
+};
+
+const register = () => {
+  if (
+    !isPasswordLengthOkay.value ||
+    !isIdLengthOkay.value ||
+    isIdDuplicated.value ||
+    !isNameLengthOkay.value ||
+    !isEmailLengthOkay.value
+  ) {
+    window.alert("올바른 정보를 입력해주세요");
+  } else {
+    userRegister(
+      userInfo.value,
+      () => {
+        window.alert("회원 가입이 완료 되었습니다");
+        router.push({ name: "userlogin" });
+      },
+      (error) => {
+        console.log(error);
+        window.alert("서버 내부 에러");
+      }
+    );
   }
 };
 </script>
@@ -63,14 +122,23 @@ const idChange = (value) => {
             비밀번호는 5자리 이상 16자리 이하가 되어야 합니다
           </p>
         </div>
-        <div class="mb-4 flex flex-col gap-6">
+        <div class="mb-4 flex flex-col gap-1">
           <UserRegisterFormItem label="이름" @InputChangeEvent="nameChange" />
+          <p class="ml-2 text-red-500 font-kor font text-sm" v-show="!isNameLengthOkay">
+            이름은 10자리 이하가 되어야 합니다
+          </p>
+        </div>
+        <div class="mb-4 flex flex-col gap-1">
           <UserRegisterFormItem label="이메일" @InputChangeEvent="emailChange" />
+          <p class="ml-2 text-red-500 font-kor font text-sm" v-show="!isEmailLengthOkay">
+            이메일은 50자리 이하가 되어야 합니다
+          </p>
         </div>
         <button
           class="mt-6 block w-full select-none rounded-lg bg-trip-color py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-trip-color transition-all hover:shadow-lg hover:shadow-trip-color focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           type="button"
           data-ripple-light="true"
+          @click="register"
         >
           회원가입
         </button>

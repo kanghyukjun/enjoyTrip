@@ -12,7 +12,7 @@ const props = defineProps({
 const itemTitle = ref(props.spot.title);
 
 onMounted(() => {
-  const maxTitleLength = 14;
+  const maxTitleLength = 12;
   if (itemTitle.value.length > maxTitleLength) {
     itemTitle.value = itemTitle.value.substr(0, maxTitleLength);
     itemTitle.value += "...";
@@ -36,7 +36,12 @@ const deleteSpot = (spot) => {
         <VButton title="삭제" color="gray" @click="deleteSpot(spot)" />
       </div>
     </div>
-    <div class="w-[6rem] h-[5rem]"></div>
+    <div class="w-[6rem] h-[5rem]">
+      <img
+        :src="spot.img ? spot.img : '/src/assets/no-image.png'"
+        class="w-[6rem] h-[5rem] rounded-md"
+      />
+    </div>
   </div>
 </template>
 

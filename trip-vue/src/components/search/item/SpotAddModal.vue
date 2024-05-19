@@ -3,9 +3,18 @@ import "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
 
 import { getSidos, getGuguns } from "@/util/search";
 import { ref, computed } from "vue";
+
+import { useSpotListStore } from "@/stores/spot-list";
+
 import SpotRegisterFormItem from "@/components/search/item/SpotRegisterFormItem.vue";
 import VDropdown from "@/components/common/item/VDropdown.vue";
 import VButton from "@/components/common/item/VButton.vue";
+import SpotAddModalFileForm from "@/components/search/item/SpotAddModalFileForm.vue";
+
+const emit = defineEmits(["closeModal"]);
+
+const store = useSpotListStore();
+const geoCoder = new kakao.maps.services.Geocoder();
 
 const spotInfo = ref({
   title: "",
@@ -32,46 +41,9 @@ const isValid = computed(() => {
   );
 });
 
-const spotTypes = ref([
-  {
-    id: 12,
-    name: "관광지",
-  },
-  {
-    id: 14,
-    name: "문화시설",
-  },
-  {
-    id: 15,
-    name: "축제공연행사",
-  },
-  {
-    id: 25,
-    name: "여행코스",
-  },
-  {
-    id: 28,
-    name: "레포츠",
-  },
-  {
-    id: 32,
-    name: "숙박",
-  },
-  {
-    id: 38,
-    name: "쇼핑",
-  },
-  {
-    id: 39,
-    name: "음식점",
-  },
-]);
-
 const typeChanged = (value) => {
   spotInfo.value.type = value;
 };
-
-const geoCoder = new kakao.maps.services.Geocoder();
 
 const execDaumPostcode = () => {
   daum.postcode.load(() => {
@@ -132,7 +104,22 @@ const getGugunId = async (address, sidoCode) => {
   return gugunCode;
 };
 
-const emit = defineEmits(["closeModal"]);
+const encodeImageToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      resolve(event.target.result);
+    };
+    reader.onerror = (error) => {
+      reject(error);
+    };
+  });
+};
+
+const fileUpload = (file) => {
+  encodeImageToBase64(file).then((response) => (spotInfo.value.image = response));
+};
 
 const close = () => {
   emit("closeModal");
@@ -140,6 +127,7 @@ const close = () => {
 
 const register = () => {
   if (isValid.value) {
+    // json에 데이터를 담아 axios 비동기 처리를 이용해 서버에 여행지 post 요청을 하면 된다
     window.alert("등록이 완료되었습니다");
     close();
   } else {
@@ -183,9 +171,10 @@ const register = () => {
         <div class="flex-grow border-t border-gray-300"></div>
       </div>
       <div class="w-[40rem] h-[32rem] flex flex-col items-center justify-center">
-        <div class="w-[38rem] h-[30rem] flex flex-row items-center justify-between">
+        <div class="w-[38rem] h-[30rem] flex flex-row items-center justify-center gap-10">
           <div class="w-[17rem] h-[30rem] flex flex-col items-center justify-center">
             <!-- 이미지 받기 -->
+            <SpotAddModalFileForm @fileUploaded="fileUpload" />
           </div>
           <div class="w-[15rem] h-[30rem] flex flex-col items-center justify-center">
             <div class="w-[15rem] h-[9rem] flex flex-col items-center justify-center">
@@ -205,7 +194,7 @@ const register = () => {
               <VDropdown
                 class="mb-5"
                 title="관광지 타입"
-                :items="spotTypes"
+                :items="store.radioDatas"
                 @changed="typeChanged"
                 :width="15"
               />

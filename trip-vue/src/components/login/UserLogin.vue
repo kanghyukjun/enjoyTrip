@@ -1,6 +1,33 @@
 <script setup>
-import { RouterLink } from "vue-router";
+import { ref } from "vue";
+import { RouterLink, useRouter } from "vue-router";
 import UserRegisterFormItem from "@/components/login/UserRegisterFormItem.vue";
+import { useUserStore } from "@/stores/user";
+
+const store = useUserStore();
+const router = useRouter();
+
+const userInfo = ref({
+  loginId: "",
+  password: "",
+});
+
+const idChange = (value) => {
+  userInfo.value.loginId = value;
+};
+
+const passwordChange = (value) => {
+  userInfo.value.password = value;
+};
+
+const login = async () => {
+  const isOkay = await store.login(userInfo.value);
+  if (isOkay) {
+    router.push({ name: "home" });
+  } else {
+    window.alert("올바르지 않은 회원 정보입니다");
+  }
+};
 </script>
 
 <template>
@@ -33,6 +60,7 @@ import UserRegisterFormItem from "@/components/login/UserRegisterFormItem.vue";
           class="mt-6 block w-full select-none rounded-lg bg-trip-color py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-trip-color transition-all hover:shadow-lg hover:shadow-trip-color focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           type="button"
           data-ripple-light="true"
+          @click="login"
         >
           로그인
         </button>

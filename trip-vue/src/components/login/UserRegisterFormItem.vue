@@ -1,15 +1,24 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
-defineProps({
+const props = defineProps({
   label: String,
   type: String,
   readonly: Boolean,
+  value: String,
 });
 
 const emit = defineEmits(["inputChangeEvent"]);
 
-const value = ref("");
+const value = ref(props?.value);
+
+watch(
+  () => props?.value,
+  (newValue) => {
+    value.value = newValue;
+  },
+  { deep: true }
+);
 
 const inputChange = () => {
   emit("inputChangeEvent", value.value);
