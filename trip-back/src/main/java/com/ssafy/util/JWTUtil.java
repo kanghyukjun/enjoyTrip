@@ -65,17 +65,20 @@ public class JWTUtil {
     }
 
     //토큰 검증
-    public boolean checkToken(String token){
+    public boolean checkToken(String loginId, String token){
         try {
             log.debug("[JWTUtil]: Token 검증 중");
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(generateKey()).build().parseClaimsJws(token);
             log.debug("[JWTUtil]: claims - {}", claims);
-            return true;
+            return loginId.equals(claims.getBody().get("userId"));
         }catch (ExpiredJwtException e){
             log.error("[JWTUtil]: 만료된 Token 입니다.");
             return false;
         }catch (Exception e){
+
             log.error("[JWTUtil]:  Token 검증에 실패 했습니다.");
+            log.error(e.getMessage());
+
             return false;
         }
     }

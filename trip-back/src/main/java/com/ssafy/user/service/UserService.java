@@ -13,10 +13,10 @@ public interface UserService {
     UserResponseDto getById(int id);
     boolean isDuplicatedId(String loginId);
 
-    ResponseEntity<Void> save(UserJoinRequestDto requestDto);
-    void update(UserModifyRequestDto requestDto);
+    ResponseEntity<Map<String, Object>> save(UserJoinRequestDto requestDto);
+    ResponseEntity<Map<String, Object>> update(String loginId, UserModifyRequestDto requestDto, String authorization);
 
-    void delete(int userId);
+    ResponseEntity<Map<String, Object>> delete(String loginId, String authorization);
 
     ResponseEntity<Map<String, Object>> login(UserLoginRequestDto requestDto);
 

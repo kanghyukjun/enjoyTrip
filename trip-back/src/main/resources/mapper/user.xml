@@ -50,7 +50,7 @@
 	<update id="update" parameterType="map">
 		update user
 		set user_pwd = #{requestDto.password}, user_name = #{requestDto.name}, user_email=#{requestDto.email}
-		where user_id = #{userId}
+		where user_login_id = #{loginId}
 	</update>
 
 	<update id="saveRefreshToken" parameterType="map">
@@ -62,7 +62,7 @@
 	<delete id="delete" parameterType="int">
 		delete
 		from user
-		where user_id = #{userId}
+		where user_login_id = #{loginId}
 	</delete>
 
 	<update id="deleteRefreshToken" parameterType="string">

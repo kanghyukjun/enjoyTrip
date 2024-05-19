@@ -15,8 +15,8 @@ public interface UserMapper {
 
     String getRefreshTokenByLoginId(String loginId);
     void save(UserJoinRequestDto requestDto);
-    void update(int userId, UserModifyRequestDto requestDto);
-    void delete(int userId);
+    void update(String loginId, UserModifyRequestDto requestDto);
+    void delete(String loginId);
 
     void saveRefreshToken(String loginId, String refreshToken);
 

@@ -21,10 +21,6 @@ public class UserController {
 
     private final UserService userService;
 
-
-    /*Todo: 조회 로직에만 JWT 적용..
-        나머지 로직에도 적용 필요
-    */
     @GetMapping("/{loginId}")
     public ResponseEntity<Map<String, Object>> get(@PathVariable("loginId") String loginId,
                                                    HttpServletRequest request) {
@@ -35,29 +31,24 @@ public class UserController {
     @GetMapping("/join/{loginId}")
     public ResponseEntity<Boolean> duplicateIdCheck(@PathVariable("loginId") String loginId) {
         boolean isDuplicate = userService.isDuplicatedId(loginId);
-        if (isDuplicate) {
-            return ResponseEntity.ok(true);
-        } else {
-            return ResponseEntity.ok(false);
-        }
+        return ResponseEntity.ok(isDuplicate);
     }
 
-    @PatchMapping
-    public ResponseEntity<UserResponseDto> update(@RequestBody UserModifyRequestDto requestDto) {
-        userService.update(requestDto);
-        int userId = 3;
-        return ResponseEntity.ok(userService.getById(userId));
+    @PutMapping("/{loginId}")
+    public ResponseEntity<Map<String, Object>> update(@PathVariable("loginId") String loginId,
+                                                  @RequestBody UserModifyRequestDto requestDto,
+                                                  HttpServletRequest request) {
+        return userService.update(loginId, requestDto, request.getHeader("Authorization"));
+
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> delete() {
-        int userId = 3;
-        userService.delete(userId);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{loginId}")
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable("loginId") String loginId, HttpServletRequest request) {
+        return userService.delete(loginId, request.getHeader("Authorization"));
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody UserJoinRequestDto requestDto) {
+    public ResponseEntity<Map<String, Object>> save(@RequestBody UserJoinRequestDto requestDto) {
         log.info(requestDto.toString());
         return userService.save(requestDto);
     }
