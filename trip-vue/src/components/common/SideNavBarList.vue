@@ -9,14 +9,13 @@ import SideNavBarListItem from "./SideNavBarListItem.vue";
       <SideNavBarListItem name="search" title="여행 경로" imgSrc="/src/assets/icon/search.svg" />
       <SideNavBarListItem name="board" title="여행 게시판" imgSrc="/src/assets/icon/board.svg" />
       <SideNavBarListItem
-        name="userpage"
-        :params="{ id: 1 }"
+        name="userPage"
         title="마이페이지"
         imgSrc="/src/assets/icon/account.svg"
       />
     </div>
     <div class="h-1/6">
-      <SideNavBarListItem name="login" title="로그인" imgSrc="/src/assets/icon/login.svg" />
+      <SideNavBarListItem name="userLogin" title="로그인" imgSrc="/src/assets/icon/login.svg" />
     </div>
   </ul>
 </template>

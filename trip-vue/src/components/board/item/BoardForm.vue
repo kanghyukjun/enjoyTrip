@@ -33,10 +33,10 @@ const isContentExist = computed(() => {
 
 const cancel = () => {
   if (type === "write") {
-    router.push({ name: "board-list" });
+    router.push({ name: "boardList" });
   } else if (type === "modify") {
     router.push({
-      name: "board-detail",
+      name: "boardDetail",
       query: {
         article: 1,
       },

@@ -9,7 +9,7 @@ defineProps({
 
 const moveDetail = (articleno) => {
   router.push({
-    name: "board-detail",
+    name: "boardDetail",
     params: {
       article: articleno,
     },

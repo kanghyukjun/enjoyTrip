@@ -29,7 +29,7 @@ const deleteArticle = () => {
 const moveUpdate = () => {
   // 이동
   router.push({
-    name: "board-update",
+    name: "boardUpdate",
     params: {
       article: articleNo, // 수정 필요
     },
@@ -38,7 +38,7 @@ const moveUpdate = () => {
 
 const moveList = () => {
   router.push({
-    name: "board-list",
+    name: "boardList",
     query: {
       pgno: 1,
       keyword: "",

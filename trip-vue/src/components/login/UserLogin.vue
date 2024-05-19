@@ -76,7 +76,7 @@ const login = async () => {
           <RouterLink
             class="font-semibold text-trip-color transition-colors hover:text-orange-700"
             href="#"
-            :to="{ name: 'register' }"
+            :to="{ name: 'userRegister' }"
           >
             회원가입
           </RouterLink>

@@ -9,7 +9,7 @@ const router = useRouter();
 const store = articleStore();
 
 const post = () => {
-  router.push({ name: "board-write" });
+  router.push({ name: "boardWrite" });
 };
 </script>
 

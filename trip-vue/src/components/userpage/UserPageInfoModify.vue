@@ -46,7 +46,7 @@ const isContentExist = computed(() => {
 const update = async () => {
   // update 쿼리 날려
   await userUpdate(loginId.value, userInfo.value);
-  router.push({ name: "userinfo" });
+  router.push({ name: "userInfo" });
 };
 
 const cancel = () => {
@@ -55,12 +55,12 @@ const cancel = () => {
       "작성중인 내용이 있습니다. 작성중인 내용을 취소하고 이전 페이지로 돌아가시겠습니까?"
     );
     if (confirm) {
-      router.push({ name: "userinfo" });
+      router.push({ name: "userInfo" });
     } else {
       return false;
     }
   } else {
-    router.push({ name: "userinfo" });
+    router.push({ name: "userInfo" });
   }
 };
 </script>

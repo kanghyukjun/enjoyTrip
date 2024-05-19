@@ -8,14 +8,14 @@ import UserPageSideNavBarListItem from "@/components/userpage/navbar/UserPageSid
       <li class="mt-4">
         <p class="font-bold">계정</p>
       </li>
-      <UserPageSideNavBarListItem name="userinfo" title="내 정보" />
-      <UserPageSideNavBarListItem name="usertriplist" title="내 여행 코스" />
+      <UserPageSideNavBarListItem name="userInfo" title="내 정보" />
+      <UserPageSideNavBarListItem name="userTripList" title="내 여행 코스" />
 
       <li class="mt-4">
         <p class="font-bold">게시판 관리</p>
       </li>
-      <UserPageSideNavBarListItem name="userarticle" title="내가 작성한 글" />
-      <UserPageSideNavBarListItem name="userarticle" title="내가 찜한 글" />
+      <UserPageSideNavBarListItem name="userArticle" title="내가 작성한 글" />
+      <UserPageSideNavBarListItem name="userArticle" title="내가 찜한 글" />
     </div>
   </ul>
 </template>

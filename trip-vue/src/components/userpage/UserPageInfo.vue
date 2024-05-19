@@ -16,7 +16,7 @@ const userInfo = ref({
 });
 
 const modify = () => {
-  router.push({ name: "modify" });
+  router.push({ name: "userModify" });
 };
 
 onMounted(async () => {

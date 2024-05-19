@@ -5,7 +5,7 @@ import BoardView from "@/view/BoardView.vue";
 import BoardList from "@/components/board/BoardList.vue";
 import BoardDetail from "@/components/board/BoardDetail.vue";
 import BoardWrite from "@/components/board/BoardWrite.vue";
-import BoardModify from "@/components/board/BoardModify.vue";
+import BoardUpdate from "@/components/board/BoardUpdate.vue";
 
 import TripSearchView from "@/view/TripSearchView.vue";
 import KakaoMapSearch from "@/components/search/KakaoMapSearch.vue";
@@ -32,26 +32,26 @@ const router = createRouter({
       path: "/board",
       name: "board",
       component: BoardView,
-      redirect: { name: "board-list" },
+      redirect: { name: "boardList" },
       children: [
         {
           path: "",
-          name: "board-list",
+          name: "boardList",
           component: BoardList,
         },
         {
           path: "detail/:article",
-          name: "board-detail",
+          name: "boardDetail",
           component: BoardDetail,
         },
         {
           path: "update/:article",
-          name: "board-update",
-          component: BoardModify,
+          name: "boardUpdate",
+          component: BoardUpdate,
         },
         {
           path: "write",
-          name: "board-write",
+          name: "boardWrite",
           component: BoardWrite,
         },
       ],
@@ -60,11 +60,11 @@ const router = createRouter({
       path: "/search",
       name: "search",
       component: TripSearchView,
-      redirect: { name: "map" },
+      redirect: { name: "mapSearch" },
       children: [
         {
           path: "",
-          name: "map",
+          name: "mapSearch",
           component: KakaoMapSearch,
         },
       ],
@@ -73,44 +73,44 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: UserLoginView,
-      redirect: { name: "userlogin" },
+      redirect: { name: "userLogin" },
       children: [
         {
           path: "",
-          name: "userlogin",
+          name: "userLogin",
           component: UserLogin,
         },
         {
           path: "register",
-          name: "register",
+          name: "userRegister",
           component: UserRegister,
         },
       ],
     },
     {
       path: "/userpage",
-      name: "userpage",
+      name: "userPage",
       component: UserPageView,
-      redirect: { name: "userinfo" },
+      redirect: { name: "userInfo" },
       children: [
         {
           path: "",
-          name: "userinfo",
+          name: "userInfo",
           component: UserPageInfo,
         },
         {
           path: "articles",
-          name: "userarticle",
+          name: "userArticle",
           component: UserArticleList,
         },
         {
           path: "triplists",
-          name: "usertriplist",
+          name: "userTripList",
           component: UserTripList,
         },
         {
           path: "modify",
-          name: "modify",
+          name: "userModify",
           component: UserPageInfoModify,
         },
       ],
