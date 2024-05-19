@@ -31,7 +31,7 @@ defineExpose({
 <template>
   <div class="w-[18rem] h-full flex flex-row justify-start items-center">
     <div
-      class="h-full flex flex-row items-center justify-center bg-zinc-100 border border-zinc-200 hover:border-2 hover:border-zinc-300 opacity-50 hover:opacity-100 transition-all"
+      class="h-full flex flex-row items-center justify-center bg-zinc-100 border border-zinc-200 hover:border-2 hover:border-zinc-300 opacity-100 transition-all"
       :class="{ 'w-[0rem]': isClosed, 'w-[16rem]': !isClosed }"
     >
       <div
