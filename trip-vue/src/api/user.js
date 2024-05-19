@@ -20,8 +20,6 @@ export function getUserInfo(loginId) {
 }
 
 export function userUpdate(loginId, userInfo) {
-  console.log(loginId);
-  console.log(userInfo);
   return new Promise((resolve, reject) => {
     local
       .put(`/user/${loginId}`, userInfo, {

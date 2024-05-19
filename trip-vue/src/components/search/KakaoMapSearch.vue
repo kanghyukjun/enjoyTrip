@@ -3,7 +3,7 @@
 import { onMounted, ref, watch } from "vue";
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
 
-import { getSidos, getGuguns, getSpots } from "@/util/search";
+import { getSido, getGugun, getSpot } from "@/api/search";
 
 import { useSpotListStore } from "@/stores/spot-list";
 
@@ -44,12 +44,14 @@ onMounted(async () => {
   mapHeight.value = container.offsetHeight * 0.95;
   isLoaded.value = true;
 
-  sido.value = await getSidos();
+  const sidos = await getSido();
+  sido.value = sidos.data;
 });
 
 const sidoChanged = async (sido) => {
   selectedSidoCode = sido;
-  gugun.value = await getGuguns(sido);
+  const guguns = await getGugun(sido);
+  gugun.value = guguns.data;
 };
 
 const gugunChanged = (gugun) => {
@@ -70,7 +72,8 @@ const getList = async () => {
   if (checkedTypes.length <= 0 || !selectedSidoCode || !selectedGugunCode) {
     window.alert("옵션을 선택해주세요");
   } else {
-    spots.value = await getSpots(selectedSidoCode, selectedGugunCode, keyword.value, checkedTypes);
+    const spot = await getSpot(selectedSidoCode, selectedGugunCode, keyword.value, checkedTypes);
+    spots.value = spot.data;
   }
 };
 

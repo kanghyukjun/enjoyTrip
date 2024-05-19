@@ -1,7 +1,7 @@
 <script setup>
 import "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
 
-import { getSidos, getGuguns } from "@/util/search";
+import { getSido, getGugun } from "@/api/search";
 import { ref, computed } from "vue";
 
 import { useSpotListStore } from "@/stores/spot-list";
@@ -84,7 +84,8 @@ const getAddressCoords = (address) => {
 
 const getSidoId = async (address) => {
   const sidoName = address.split(" ", 1)[0];
-  const result = await getSidos();
+  const sidos = await getSido();
+  const result = sidos.data;
 
   let sidoCode = -1;
   result.forEach((x) => {
@@ -95,7 +96,8 @@ const getSidoId = async (address) => {
 
 const getGugunId = async (address, sidoCode) => {
   const gugunName = address.split(" ", 2)[1];
-  const result = await getGuguns(sidoCode);
+  const guguns = await getGugun(sidoCode);
+  const result = guguns.data;
 
   let gugunCode = -1;
   result.forEach((x) => {
@@ -128,6 +130,7 @@ const close = () => {
 const register = () => {
   if (isValid.value) {
     // json에 데이터를 담아 axios 비동기 처리를 이용해 서버에 여행지 post 요청을 하면 된다
+    console.log(spotInfo.value);
     window.alert("등록이 완료되었습니다");
     close();
   } else {
