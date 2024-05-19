@@ -1,9 +1,9 @@
 <script setup>
-import BoardForm from "@/components/board/item/BoardForm.vue";
+import BoardArticleForm from "@/components/board/item/BoardArticleForm.vue";
 </script>
 
 <template>
-  <BoardForm type="write" />
+  <BoardArticleForm type="write" />
 </template>
 
 <style scoped></style>

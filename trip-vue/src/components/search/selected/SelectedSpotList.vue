@@ -2,7 +2,7 @@
 import draggable from "vuedraggable";
 import { ref } from "vue";
 
-import SpotListBarItem from "@/components/search/item/SpotListBarItem.vue";
+import SelectedSpotListItem from "@/components/search/selected/SelectedSpotListItem.vue";
 import VButton from "@/components/common/item/VButton.vue";
 
 const isClosed = ref(false);
@@ -55,7 +55,7 @@ defineExpose({
           >
             <draggable
               :list="list"
-              tag="SpotListBarItem"
+              tag="SelectedSpotListItem"
               group="people"
               @start="drag = true"
               @end="drag = false"
@@ -65,7 +65,7 @@ defineExpose({
             >
               <template #item="{ element }">
                 <div>
-                  <SpotListBarItem :spot="element" @deleteSpot="deleteSpot" />
+                  <SelectedSpotListItem :spot="element" @deleteSpot="deleteSpot" />
                 </div>
               </template>
             </draggable>

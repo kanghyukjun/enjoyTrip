@@ -9,9 +9,9 @@ import { useSpotListStore } from "@/stores/spot-list";
 
 import VCheckbox from "@/components/common/item/VCheckbox.vue";
 import VDropdown from "@/components/common/item/VDropdown.vue";
-import SpotSearchItem from "@/components/search/item/SpotSearchItem.vue";
-import SpotAddModal from "@/components/search/item/SpotAddModal.vue";
-import SpotListBar from "@/components/search/item/SpotListBar.vue";
+import SearchedSpotListItem from "@/components/search/item/SearchedSpotListItem.vue";
+import TripSpotAddModal from "@/components/search/spot-add-modal/TripSpotAddModal.vue";
+import SelectedSpotList from "@/components/search/selected/SelectedSpotList.vue";
 
 const store = useSpotListStore();
 
@@ -102,7 +102,7 @@ const addSpotList = (spot) => {
 <template>
   <div class="flex flex-row border-none w-full h-full">
     <div class="absolute w-[18rem] h-full z-10">
-      <SpotListBar ref="spotlist" />
+      <SelectedSpotList ref="spotlist" />
     </div>
     <div id="container" class="w-full h-full flex flex-col justify-center items-center">
       <template v-if="isLoaded">
@@ -197,7 +197,7 @@ const addSpotList = (spot) => {
           class="prose w-[20rem] h-[30rem] rounded-md shadow-md overflow-y-auto align-middle"
         >
           <!-- 검색 결과 -->
-          <SpotSearchItem
+          <SearchedSpotListItem
             v-for="spot in spots"
             :key="spot.id"
             :spot="spot"
@@ -210,7 +210,7 @@ const addSpotList = (spot) => {
     <!-- 마커 혹은 정보 클릭 시 정보 창 -->
     <!-- <SpotSearchInfo v-show="isSpotInfoShow" :spot="spotDetail" @close="hideInfo" /> -->
     <!-- 장소 추가 시 창 -->
-    <SpotAddModal v-if="showModal" @closeModal="showModal = false" />
+    <TripSpotAddModal v-if="showModal" @closeModal="showModal = false" />
   </div>
 </template>
 

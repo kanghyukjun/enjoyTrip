@@ -1,6 +1,6 @@
 <script setup>
 import { RouterView } from "vue-router";
-import SideNavBar from "./components/common/SideNavBar.vue";
+import SideNavBar from "./components/common/navbar/SideNavBar.vue";
 </script>
 
 <template>

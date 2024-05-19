@@ -8,17 +8,17 @@ import BoardWrite from "@/components/board/BoardWrite.vue";
 import BoardUpdate from "@/components/board/BoardUpdate.vue";
 
 import TripSearchView from "@/view/TripSearchView.vue";
-import KakaoMapSearch from "@/components/search/KakaoMapSearch.vue";
+import TripSpotSearch from "@/components/search/TripSpotSearch.vue";
 
 import UserLoginView from "@/view/UserLoginView.vue";
 import UserLogin from "@/components/login/UserLogin.vue";
 import UserRegister from "@/components/login/UserRegister.vue";
 
 import UserPageView from "@/view/UserPageView.vue";
-import UserPageInfo from "@/components/userpage/UserPageInfo.vue";
-import UserPageInfoModify from "@/components/userpage/UserPageInfoModify.vue";
-import UserArticleList from "@/components/userpage/UserArticleList.vue";
-import UserTripList from "@/components/userpage/UserTripList.vue";
+import UserPageInfo from "@/components/userpage/info/UserPageInfo.vue";
+import UserInfoModify from "@/components/userpage/info/UserInfoModify.vue";
+import UserArticleList from "@/components/userpage/article/UserArticleList.vue";
+import UserSavedTripList from "@/components/userpage/UserSavedTripList.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,7 +65,7 @@ const router = createRouter({
         {
           path: "",
           name: "mapSearch",
-          component: KakaoMapSearch,
+          component: TripSpotSearch,
         },
       ],
     },
@@ -106,12 +106,12 @@ const router = createRouter({
         {
           path: "triplists",
           name: "userTripList",
-          component: UserTripList,
+          component: UserSavedTripList,
         },
         {
           path: "modify",
           name: "userModify",
-          component: UserPageInfoModify,
+          component: UserInfoModify,
         },
       ],
     },

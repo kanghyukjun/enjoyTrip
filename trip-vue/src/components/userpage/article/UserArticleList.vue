@@ -1,8 +1,8 @@
 <script setup>
-import UserArticleListItem from "./UserArticleListItem.vue";
-import { useUserStore } from '@/stores/user-counter'
+import UserArticleListItem from "@/components/userpage/article/UserArticleListItem.vue";
+import { useUserStore } from "@/stores/user-counter";
 import { storeToRefs } from "pinia";
-const userStore = useUserStore()
+const userStore = useUserStore();
 const { userBoardList } = storeToRefs(userStore);
 console.log(userBoardList);
 </script>
@@ -12,7 +12,11 @@ console.log(userBoardList);
     <h1 class="text-3xl font-bold mb-12">유저가 작성하거나 찜한 글 리스트</h1>
     <!-- 글 리스트 시작 -->
     <div class="flex flex-row justify-center flex-wrap gap-5">
-      <UserArticleListItem v-for="userBoard in userBoardList" :key="userBoard.boardId" :userBoard="userBoard"/>
+      <UserArticleListItem
+        v-for="userBoard in userBoardList"
+        :key="userBoard.boardId"
+        :userBoard="userBoard"
+      />
     </div>
   </div>
 </template>

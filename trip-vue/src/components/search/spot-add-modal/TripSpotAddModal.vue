@@ -6,10 +6,10 @@ import { ref, computed } from "vue";
 
 import { useSpotListStore } from "@/stores/spot-list";
 
-import SpotRegisterFormItem from "@/components/search/item/SpotRegisterFormItem.vue";
+import TripSpotAddModalFormItem from "@/components/search/spot-add-modal/TripSpotAddModalFormItem.vue";
 import VDropdown from "@/components/common/item/VDropdown.vue";
 import VButton from "@/components/common/item/VButton.vue";
-import SpotAddModalFileForm from "@/components/search/item/SpotAddModalFileForm.vue";
+import TripSpotAddModalFileForm from "@/components/search/spot-add-modal/TripSpotAddModalFileForm.vue";
 
 const emit = defineEmits(["closeModal"]);
 
@@ -177,7 +177,7 @@ const register = () => {
         <div class="w-[38rem] h-[30rem] flex flex-row items-center justify-center gap-10">
           <div class="w-[17rem] h-[30rem] flex flex-col items-center justify-center">
             <!-- 이미지 받기 -->
-            <SpotAddModalFileForm @fileUploaded="fileUpload" />
+            <TripSpotAddModalFileForm @fileUploaded="fileUpload" />
           </div>
           <div class="w-[15rem] h-[30rem] flex flex-col items-center justify-center">
             <div class="w-[15rem] h-[9rem] flex flex-col items-center justify-center">
@@ -204,13 +204,13 @@ const register = () => {
             </div>
             <div class="w-[15rem] h-[16rem] flex flex-col items-start justify-center">
               <p class="w-[14rem] h-[1.5rem]">위치 정보</p>
-              <SpotRegisterFormItem
+              <TripSpotAddModalFormItem
                 class="mb-3 mt-3"
                 label="상세 주소"
                 :value="spotInfo?.address"
                 readonly
               />
-              <SpotRegisterFormItem label="우편 번호" :value="spotInfo?.zipcode" readonly />
+              <TripSpotAddModalFormItem label="우편 번호" :value="spotInfo?.zipcode" readonly />
               <button
                 class="mt-6 block w-full select-none rounded-lg bg-trip-color py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-trip-color transition-all hover:shadow-lg hover:shadow-trip-color focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 type="button"
