@@ -1,7 +1,12 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
-import { KakaoMap, KakaoMapMarker, KakaoMapPolyline, KakaoMapCustomOverlay } from "vue3-kakao-maps";
+import {
+  KakaoMap,
+  KakaoMapMarker,
+  KakaoMapMarkerPolyline,
+  KakaoMapCustomOverlay,
+} from "vue3-kakao-maps";
 import draggable from "vuedraggable";
 
 import { addTripPlan } from "@/api/trip";
@@ -140,7 +145,7 @@ const regist = async () => {
             :lng="lng"
             level="7"
           >
-            <KakaoMapPolyline :latLngList="latLngList" />
+            <KakaoMapMarkerPolyline :markerList="latLngList" :endArrow="true" :strokeWeight="6" />
 
             <template v-for="spot in tripPlan" :key="spot.id">
               <KakaoMapMarker :lat="spot.latitude" :lng="spot.longitude" />
