@@ -189,11 +189,12 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<Map<String, Object>> refresh(String loginId, String refreshToken) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
+        refreshToken = refreshToken.replaceAll("Bearer ", "");
         log.debug("[UserService] RefreshToken 검증 시작 - {}", refreshToken);
         if (jwtUtil.checkToken(loginId, refreshToken)) {
-            log.debug("[UserService] RefreshToken 검증 완료 - {}", refreshToken);
-            log.debug("[UserService] AccessToken 재발급 시작");
             if (refreshToken.equals(getRefreshToken(loginId))) {
+                log.debug("[UserService] RefreshToken 검증 완료 - {}", refreshToken);
+                log.debug("[UserService] AccessToken 재발급 시작");
                 String accessToken = jwtUtil.createAccessToken(loginId);
                 log.debug("[UserService] AccessToken 재발급 완료 - {}", accessToken);
                 resultMap.put("access-token", accessToken);

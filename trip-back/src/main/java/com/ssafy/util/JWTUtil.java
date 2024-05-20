@@ -34,7 +34,7 @@ public class JWTUtil {
     }
 
 
-    private String create(String userId, String subject, long expireTime){
+    private String create(String loginId, String subject, long expireTime){
 
         //Claim 설정
         //subject: 토큰제목
@@ -45,7 +45,7 @@ public class JWTUtil {
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expireTime));
 
-        claims.put("userId", userId);
+        claims.put("loginId", loginId);
 
         //jwt 생성
         ///헤더 정보 + claim + 서명 으로 구성
@@ -71,7 +71,7 @@ public class JWTUtil {
             String realToken = token.replaceAll("Bearer ", "");
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(generateKey()).build().parseClaimsJws(realToken);
             log.debug("[JWTUtil]: claims - {}", claims);
-            return loginId.equals(claims.getBody().get("userId"));
+            return loginId.equals(claims.getBody().get("loginId"));
         }catch (ExpiredJwtException e){
             log.error("[JWTUtil]: 만료된 Token 입니다.");
             return false;

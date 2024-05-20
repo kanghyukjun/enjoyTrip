@@ -121,6 +121,6 @@ public class UserController {
     @PostMapping("/refresh/{loginId}")
     public ResponseEntity<Map<String, Object>> refreshToken(@PathVariable("loginId") String loginId,
                                                             HttpServletRequest request){
-        return userService.refresh(loginId, request.getHeader("refreshToken"));
+        return userService.refresh(loginId, request.getHeader("Authorization"));
     }
 }
