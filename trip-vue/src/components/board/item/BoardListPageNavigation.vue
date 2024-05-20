@@ -30,7 +30,7 @@ const move = (pgno) => {
     return false;
   } else {
     router.push({
-      name: "board-list",
+      name: "boardList",
       query: {
         pgno,
         keyword: "",
