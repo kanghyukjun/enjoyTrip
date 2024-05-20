@@ -20,8 +20,8 @@ export const useUserStore = defineStore("user", () => {
             isLogin.value = true;
             isLoginError.value = false;
             isValidToken.value = true;
-            sessionStorage.setItem("accessToken", accessToken);
-            sessionStorage.setItem("refreshToken", refreshToken);
+            sessionStorage.setItem("accessToken", "Bearer " + accessToken);
+            sessionStorage.setItem("refreshToken", "Bearer " + refreshToken);
             sessionStorage.setItem("loginId", userInfo.loginId);
             resolve(true);
           } else {

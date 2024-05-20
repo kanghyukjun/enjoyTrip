@@ -1,7 +1,7 @@
 <script setup>
 import "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
 
-import { getSido, getGugun } from "@/api/search";
+import { getSido, getGugun, addSpot } from "@/api/search";
 import { ref, computed } from "vue";
 
 import { useSpotListStore } from "@/stores/spot-list";
@@ -10,6 +10,7 @@ import TripSpotAddModalFormItem from "@/components/search/spot-add-modal/TripSpo
 import VDropdown from "@/components/common/item/VDropdown.vue";
 import VButton from "@/components/common/item/VButton.vue";
 import TripSpotAddModalFileForm from "@/components/search/spot-add-modal/TripSpotAddModalFileForm.vue";
+import { HttpStatusCode } from "axios";
 
 const emit = defineEmits(["closeModal"]);
 
@@ -21,7 +22,7 @@ const spotInfo = ref({
   address: "",
   zipcode: "",
   image: "",
-  type: 0,
+  typeId: 0,
   sidoId: 0,
   gugunId: 0,
   latitude: 0.0,
@@ -33,7 +34,7 @@ const isValid = computed(() => {
     spotInfo.value.title &&
     spotInfo.value.address &&
     spotInfo.value.zipcode &&
-    spotInfo.value.type &&
+    spotInfo.value.typeId &&
     spotInfo.value.sidoId &&
     spotInfo.value.gugunId &&
     spotInfo.value.latitude &&
@@ -42,7 +43,7 @@ const isValid = computed(() => {
 });
 
 const typeChanged = (value) => {
-  spotInfo.value.type = value;
+  spotInfo.value.typeId = parseInt(value);
 };
 
 const execDaumPostcode = () => {
@@ -56,8 +57,8 @@ const execDaumPostcode = () => {
 
         // 좌표계 찾기
         const coords = await getAddressCoords(spotInfo.value.address);
-        spotInfo.value.latitude = coords.latitude;
-        spotInfo.value.longitude = coords.longitude;
+        spotInfo.value.latitude = parseFloat(coords.latitude);
+        spotInfo.value.longitude = parseFloat(coords.longitude);
 
         // 시도, 구군 코드 찾기
         const sidoId = await getSidoId(spotInfo.value.address);
@@ -73,7 +74,7 @@ const getAddressCoords = (address) => {
   return new Promise((resolve, reject) => {
     geoCoder.addressSearch(address, (result, status) => {
       if (status === kakao.maps.services.Status.OK) {
-        const coords = { latitude: result[0].x, longitude: result[0].y };
+        const coords = { longitude: result[0].x, latitude: result[0].y };
         resolve(coords);
       } else {
         reject(status);
@@ -127,11 +128,11 @@ const close = () => {
   emit("closeModal");
 };
 
-const register = () => {
+const register = async () => {
   if (isValid.value) {
-    // json에 데이터를 담아 axios 비동기 처리를 이용해 서버에 여행지 post 요청을 하면 된다
-    console.log(spotInfo.value);
-    window.alert("등록이 완료되었습니다");
+    const response = await addSpot(spotInfo.value);
+    if (response.status === HttpStatusCode.Created) window.alert("등록이 완료되었습니다");
+    else window.alert("서버 에러");
     close();
   } else {
     window.alert("작성하지 않은 값이 존재합니다");

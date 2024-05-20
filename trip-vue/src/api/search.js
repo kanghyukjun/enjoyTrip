@@ -37,3 +37,16 @@ export function getSpot(sido, gugun, keyword, type) {
       });
   });
 }
+
+export function addSpot(spotInfo) {
+  return new Promise((resolve, reject) => {
+    local
+      .post(`/trip/${sessionStorage.getItem("loginId")}`, spotInfo, {
+        headers: {
+          Authorization: sessionStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
+  });
+}

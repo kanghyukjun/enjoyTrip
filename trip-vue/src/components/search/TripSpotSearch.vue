@@ -1,15 +1,17 @@
 <script setup>
 // import { RouterLink } from "vue-router";
 import { onMounted, ref, watch } from "vue";
-import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
-
+import { KakaoMap, KakaoMapMarker, KakaoMapCustomOverlay } from "vue3-kakao-maps";
 import { getSido, getGugun, getSpot } from "@/api/search";
-
 import { useSpotListStore } from "@/stores/spot-list";
+
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 import VCheckbox from "@/components/common/item/VCheckbox.vue";
 import VDropdown from "@/components/common/item/VDropdown.vue";
 import SearchedSpotListItem from "@/components/search/item/SearchedSpotListItem.vue";
+import SearchedSpotInfo from "@/components/search/item/SearchedSpotInfo.vue";
 import TripSpotAddModal from "@/components/search/spot-add-modal/TripSpotAddModal.vue";
 import SelectedSpotList from "@/components/search/selected/SelectedSpotList.vue";
 
@@ -70,7 +72,7 @@ const getList = async () => {
   });
 
   if (checkedTypes.length <= 0 || !selectedSidoCode || !selectedGugunCode) {
-    window.alert("옵션을 선택해주세요");
+    toast.error("검색 옵션을 선택해주세요");
   } else {
     const spot = await getSpot(selectedSidoCode, selectedGugunCode, keyword.value, checkedTypes);
     spots.value = spot.data;
@@ -95,7 +97,41 @@ watch(
 );
 
 const addSpotList = (spot) => {
-  spotlist?.value.addSpot(spot);
+  const result = spotlist?.value.addSpot(spot);
+  if (result === -1) {
+    toast.error("여행지 추가 갯수는 10개를 넘을 수 없습니다");
+  } else if (result === 0) {
+    toast.error("이미 추가된 여행지 입니다");
+  } else {
+    toast.success("여행지를 목록에 추가했습니다");
+  }
+};
+
+const beforeShowModal = () => {
+  const loginId = sessionStorage.getItem("loginId");
+  if (!loginId) {
+    toast.error("로그인이 필요한 서비스입니다");
+  } else {
+    showModal.value = true;
+  }
+};
+
+const showOverlay = ref(false);
+const overlayLat = ref(0.0);
+const overlayLng = ref(0.0);
+const overlaySpot = ref({});
+const showCustomOverlay = (spot) => {
+  coordinate.value.lat = spot.latitude + 0.001;
+  coordinate.value.lng = spot.longitude;
+
+  // 값 세팅
+  overlayLat.value = spot.latitude;
+  overlayLng.value = spot.longitude;
+  overlaySpot.value = spot;
+  showOverlay.value = true;
+};
+const addSpotFromModal = (spot) => {
+  addSpotList(spot);
 };
 </script>
 
@@ -114,13 +150,24 @@ const addSpotList = (spot) => {
           :draggable="true"
         >
           <!-- 커스텀 오버레이 -->
-          <!-- <KakaoMapCustomOverlay :lat="37.566826" :lng="126.9786567">
-            <div class="w-[10rem] flex h-[5rem] bg-pink-300">커스텀 오버레이 화면</div>
-          </KakaoMapCustomOverlay> -->
+          <KakaoMapCustomOverlay :lat="overlayLat + 0.002" :lng="overlayLng" :yAnchor="1.4">
+            <div v-show="showOverlay">
+              <SearchedSpotInfo
+                :spot="overlaySpot"
+                @close="showOverlay = false"
+                @addSpot="addSpotFromModal"
+              />
+            </div>
+          </KakaoMapCustomOverlay>
 
           <!-- 마커 -->
           <template v-for="spot in spots" :key="spot.id">
-            <KakaoMapMarker :lat="spot.latitude" :lng="spot.longitude" />
+            <KakaoMapMarker
+              :lat="spot.latitude"
+              :lng="spot.longitude"
+              :clickable="true"
+              @onClickKakaoMapMarker="showCustomOverlay(spot)"
+            />
           </template>
         </KakaoMap>
       </template>
@@ -187,7 +234,7 @@ const addSpotList = (spot) => {
           <!-- 검색 결과가 없을 때 -->
           <p class="font-kor text-gray-700 text-xl mt-2">검색 결과가 없어요 :(</p>
           <p class="font-kor text-gray-700 text-sm mt-5">새로운 여행지 등록이 필요한가요?</p>
-          <p class="font-kor text-trip-color text-md mb-5 cursor-pointer" @click="showModal = true">
+          <p class="font-kor text-trip-color text-md mb-5 cursor-pointer" @click="beforeShowModal">
             여행지 등록하기
           </p>
           <img class="opacity-60 w-[15rem]" src="/src/assets/no-content.png" />

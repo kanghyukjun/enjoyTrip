@@ -9,6 +9,7 @@ import BoardUpdate from "@/components/board/BoardUpdate.vue";
 
 import TripSearchView from "@/view/TripSearchView.vue";
 import TripSpotSearch from "@/components/search/TripSpotSearch.vue";
+import TripPlan from "@/components/search/trip-plan/TripPlan.vue";
 
 import UserLoginView from "@/view/UserLoginView.vue";
 import UserLogin from "@/components/login/UserLogin.vue";
@@ -66,6 +67,11 @@ const router = createRouter({
           path: "",
           name: "mapSearch",
           component: TripSpotSearch,
+        },
+        {
+          path: "plan",
+          name: "tripPlan",
+          component: TripPlan,
         },
       ],
     },

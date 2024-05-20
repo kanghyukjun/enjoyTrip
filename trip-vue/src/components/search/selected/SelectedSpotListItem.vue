@@ -14,7 +14,7 @@ const itemTitle = ref(props.spot.title);
 onMounted(() => {
   const maxTitleLength = 12;
   if (itemTitle.value.length > maxTitleLength) {
-    itemTitle.value = itemTitle.value.substr(0, maxTitleLength);
+    itemTitle.value = itemTitle.value.substring(0, maxTitleLength);
     itemTitle.value += "...";
   }
 });

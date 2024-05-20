@@ -1,0 +1,173 @@
+<script setup>
+import { ref, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
+import { KakaoMap, KakaoMapMarker, KakaoMapPolyline, KakaoMapCustomOverlay } from "vue3-kakao-maps";
+import draggable from "vuedraggable";
+
+// import { toast } from "vue3-toastify";
+// import "vue3-toastify/dist/index.css";
+
+import TripPlanListItem from "@/components/search/trip-plan/TripPlanListItem.vue";
+import VInputForm from "@/components/common/item/VInputForm.vue";
+import VDatePicker from "@/components/common/item/VDatePicker.vue";
+import VButton from "@/components/common/item/VButton.vue";
+
+const router = useRouter();
+
+const mapWidth = ref(0);
+const mapHeight = ref(0);
+const lat = ref(0.0);
+const lng = ref(0.0);
+
+const isLoaded = ref(false);
+const tripPlan = ref([]);
+const latLngList = ref([]);
+
+onMounted(() => {
+  tripPlan.value = JSON.parse(sessionStorage.getItem("tripPlan"));
+  const container = document.querySelector("#container");
+  mapWidth.value = container.offsetWidth * 0.95;
+  mapHeight.value = container.offsetHeight * 0.95;
+  let latSum = 0.0;
+  let lngSum = 0.0;
+  tripPlan.value.forEach((x) => {
+    latSum += x.latitude;
+    lngSum += x.longitude;
+  });
+  lat.value = latSum / tripPlan.value.length;
+  lng.value = lngSum / tripPlan.value.length;
+
+  registData.value.loginId = sessionStorage.getItem("loginId");
+
+  isLoaded.value = true;
+});
+
+watch(
+  () => tripPlan.value,
+  (newValue) => {
+    latLngList.value = [];
+    newValue.forEach((x) => {
+      latLngList.value.push({
+        lat: x.latitude,
+        lng: x.longitude,
+      });
+    });
+  },
+  {
+    deep: true,
+  }
+);
+
+const registData = ref({
+  loginId: "",
+  title: "",
+  startDate: "",
+  endDate: "",
+  content: "",
+});
+
+const setTitle = (value) => {
+  registData.value.title = value;
+};
+const setStartDate = (value) => {
+  registData.value.startDate = value;
+};
+const setEndDate = (value) => {
+  registData.value.endDate = value;
+};
+const setContent = (event) => {
+  registData.value.content = event.target.value;
+};
+
+const cancel = () => {
+  router.go(-1);
+};
+
+const regist = () => {
+  console.log(registData.value);
+  window.alert("여행지 등록 완료!");
+  router.push({ name: "home" });
+};
+</script>
+
+<template>
+  <div class="w-full h-full flex flex-col justify-center items-center wrap">
+    <div class="w-4/5 h-4/5 flex flex-row items-center justify-center rounded-md shadow-lg">
+      <div class="w-1/4 h-5/6 flex flex-col items-center justify-center">
+        <div
+          class="w-5/6 h-full flex flex-col items-center justify-start overflow-y-auto rounded-md border border-gray-300"
+        >
+          <draggable
+            :list="tripPlan"
+            tag="TripPlanListItem"
+            group="planList"
+            @start="drag = true"
+            @end="drag = false"
+            item-key="id"
+            animation="150"
+          >
+            <template #item="{ element }">
+              <div>
+                <TripPlanListItem class="mt-3" :spot="element" />
+              </div>
+            </template>
+          </draggable>
+        </div>
+      </div>
+      <div id="container" class="w-2/4 h-5/6 flex flex-row items-center rounded-md justify-center">
+        <template v-if="isLoaded">
+          <KakaoMap
+            :width="mapWidth + 'px'"
+            :height="mapHeight + 'px'"
+            :draggable="true"
+            :lat="lat"
+            :lng="lng"
+            level="7"
+          >
+            <KakaoMapPolyline :latLngList="latLngList" />
+
+            <template v-for="spot in tripPlan" :key="spot.id">
+              <KakaoMapMarker :lat="spot.latitude" :lng="spot.longitude" />
+              <KakaoMapCustomOverlay :lat="spot.latitude + 0.008" :lng="spot.longitude">
+                <div
+                  class="w-auto h-[1.5rem] flex flex-row items-center justify-center bg-zinc-100 rounded-md border-2"
+                >
+                  <p class="text-gray-700">{{ spot.title }}</p>
+                </div>
+              </KakaoMapCustomOverlay>
+            </template>
+          </KakaoMap>
+        </template>
+      </div>
+      <div class="w-1/4 h-5/6 flex flex-row items-center justify-center">
+        <div
+          class="w-11/12 h-full flex flex-col items-center justify-center border border-gray-300 rounded-md gap-4"
+        >
+          <div class="font-kor w-11/12 h-[1rem] text-gray-700 mb-10">
+            <p class="font-bold text-xl ml-2">여행 계획 등록</p>
+          </div>
+          <VInputForm label="아이디" :value="registData.loginId" readonly />
+          <VInputForm label="여행 계획 제목" @input="setTitle" />
+
+          <!-- 날짜 -->
+          <div class="w-5/6 h-auto flex flex-row items-center justify-center gap-3">
+            <VDatePicker label="시작 날짜" @input="setStartDate" />
+            <VDatePicker label="종료 날짜" @input="setEndDate" />
+          </div>
+          <textarea
+            class="description bg-gray-100 mt-10 sec p-3 w-11/12 h-[10rem] bg-zinc-100 text-gray-700 border border-gray-300 outline-none rounded-md transition-all focus:border-2 focus:border-trip-color focus:outline-0"
+            spellcheck="false"
+            placeholder="본문"
+            @input="setContent"
+          ></textarea>
+          <div class="w-11/12 h-[1rem] flex flex-row items-center justify-end gap-3">
+            <VButton color="gray" title="취소" @click="cancel" />
+            <VButton color="sky" title="등록" @click="regist" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped></style>

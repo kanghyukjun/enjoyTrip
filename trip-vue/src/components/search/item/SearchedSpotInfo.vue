@@ -1,14 +1,18 @@
 <script setup>
 import VButton from "@/components/common/item/VButton.vue";
 
-defineProps({
+const props = defineProps({
   spot: Object,
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close", "addSpot"]);
 
 const close = () => {
   emit("close");
+};
+
+const addSpot = () => {
+  emit("addSpot", props.spot);
 };
 </script>
 
@@ -18,7 +22,7 @@ const close = () => {
   >
     <div class="w-[40rem] h-[24rem] flex flex-col items-center justify-start">
       <div class="w-[40rem] h-[4rem] flex flex-row justify-between items-center">
-        <p class="font-kor ml-3 text-2xl font-extrabold text-zinc-700">{{ spot.title }}</p>
+        <p class="font-kor ml-3 text-2xl font-extrabold text-zinc-700">{{ spot?.title }}</p>
         <button
           class="middle none center mr-4 h-8 max-h-[32px] w-8 max-w-[32px] rounded-lg bg-zinc-500 font-sans text-xs font-bold uppercase text-white shadow-sm shadow-zinc-500/20 transition-all hover:shadow-md hover:shadow-zinc-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           @click.prevent="close"
@@ -45,18 +49,25 @@ const close = () => {
           <!-- 사진 -->
           <img
             class="w-[17rem] h-[16rem] rounded-md"
-            :src="spot.img ? spot.img : '/src/assets/no-image.png'"
+            :src="spot?.img ? spot.img : '/src/assets/no-image.png'"
           />
           <div class="w-[17rem] h-[16rem] flex flex-row justify-center items-center">
             <!-- 설명 -->
-            <div class="w-[15rem] h-[14rem] flex flex-row justify-start items-start m-2">
-              <p class="font-kor text-xl font-bold text-zinc-700">{{ spot.addr }}</p>
+            <div class="w-[17rem] h-[14rem] flex flex-col flex-wrap justify-start items-start m-2">
+              <p class="font-kor text-2xl font-extrabold text-zinc-700">주소</p>
+              <p class="font-kor text-md font-bold text-zinc-700">
+                {{ spot?.addr }}
+              </p>
+              <p class="font-kor text-xl font-extrabold text-zinc-700 mt-3">관광지 타입</p>
+              <p class="font-kor text-md font-bold text-zinc-700">
+                {{ spot?.type }}
+              </p>
             </div>
           </div>
         </div>
       </div>
       <div class="w-[37rem] h-[2rem] flex flex-row items-center justify-end">
-        <VButton title="여행지에 추가" color="sky" />
+        <VButton title="여행지에 추가" color="sky" @click="addSpot" />
       </div>
     </div>
   </div>

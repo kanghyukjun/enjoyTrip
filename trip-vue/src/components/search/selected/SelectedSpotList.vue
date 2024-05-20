@@ -1,16 +1,35 @@
 <script setup>
 import draggable from "vuedraggable";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 import SelectedSpotListItem from "@/components/search/selected/SelectedSpotListItem.vue";
 import VButton from "@/components/common/item/VButton.vue";
+
+const router = useRouter();
 
 const isClosed = ref(false);
 
 const list = ref([]);
 
 const addSpot = (spot) => {
-  list.value.push(spot);
+  if (list.value.length >= 10) {
+    // 길이가 기준을 넘었을 때
+    return -1;
+  } else if (isAlreadySelected(spot)) {
+    // 이미 저장된 장소일 때
+    return 0;
+  } else {
+    // 저장 성공
+    list.value.push(spot);
+    return 1;
+  }
+};
+
+const isAlreadySelected = (spot) => {
+  const idx = list.value.findIndex((x) => x.id === spot.id);
+  if (idx === -1) return false;
+  else return true;
 };
 
 const deleteSpot = (spot) => {
@@ -20,6 +39,9 @@ const deleteSpot = (spot) => {
 const makeTravelPlan = () => {
   if (list.value.length <= 0) {
     window.alert("선택한 여행지 목록이 존재하지 않습니다");
+  } else {
+    sessionStorage.setItem("tripPlan", JSON.stringify(list.value));
+    router.push({ name: "tripPlan" });
   }
 };
 
@@ -56,7 +78,7 @@ defineExpose({
             <draggable
               :list="list"
               tag="SelectedSpotListItem"
-              group="people"
+              group="spotList"
               @start="drag = true"
               @end="drag = false"
               item-key="id"
