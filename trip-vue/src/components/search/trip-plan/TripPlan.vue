@@ -4,6 +4,8 @@ import { useRouter } from "vue-router";
 import { KakaoMap, KakaoMapMarker, KakaoMapPolyline, KakaoMapCustomOverlay } from "vue3-kakao-maps";
 import draggable from "vuedraggable";
 
+import { addTripPlan } from "@/api/trip";
+
 // import { toast } from "vue3-toastify";
 // import "vue3-toastify/dist/index.css";
 
@@ -11,6 +13,7 @@ import TripPlanListItem from "@/components/search/trip-plan/TripPlanListItem.vue
 import VInputForm from "@/components/common/item/VInputForm.vue";
 import VDatePicker from "@/components/common/item/VDatePicker.vue";
 import VButton from "@/components/common/item/VButton.vue";
+import { HttpStatusCode } from "axios";
 
 const router = useRouter();
 
@@ -22,6 +25,16 @@ const lng = ref(0.0);
 const isLoaded = ref(false);
 const tripPlan = ref([]);
 const latLngList = ref([]);
+
+const setLatLngList = (arrays) => {
+  latLngList.value = [];
+  arrays.forEach((x) => {
+    latLngList.value.push({
+      lat: x.latitude,
+      lng: x.longitude,
+    });
+  });
+};
 
 onMounted(() => {
   tripPlan.value = JSON.parse(sessionStorage.getItem("tripPlan"));
@@ -37,7 +50,7 @@ onMounted(() => {
   lat.value = latSum / tripPlan.value.length;
   lng.value = lngSum / tripPlan.value.length;
 
-  registData.value.loginId = sessionStorage.getItem("loginId");
+  loginId.value = sessionStorage.getItem("loginId");
 
   isLoaded.value = true;
 });
@@ -45,25 +58,22 @@ onMounted(() => {
 watch(
   () => tripPlan.value,
   (newValue) => {
-    latLngList.value = [];
-    newValue.forEach((x) => {
-      latLngList.value.push({
-        lat: x.latitude,
-        lng: x.longitude,
-      });
-    });
+    setLatLngList(newValue);
+    setSpotIds(newValue);
   },
   {
     deep: true,
   }
 );
 
+const loginId = ref("");
+
 const registData = ref({
-  loginId: "",
   title: "",
   startDate: "",
   endDate: "",
-  content: "",
+  desc: "",
+  spotIds: [],
 });
 
 const setTitle = (value) => {
@@ -75,18 +85,24 @@ const setStartDate = (value) => {
 const setEndDate = (value) => {
   registData.value.endDate = value;
 };
-const setContent = (event) => {
-  registData.value.content = event.target.value;
+const setDesc = (event) => {
+  registData.value.desc = event.target.value;
+};
+const setSpotIds = (arrays) => {
+  registData.value.spotIds = [];
+  arrays.forEach((x) => registData.value.spotIds.push(x.id));
 };
 
 const cancel = () => {
   router.go(-1);
 };
 
-const regist = () => {
-  console.log(registData.value);
-  window.alert("여행지 등록 완료!");
-  router.push({ name: "home" });
+const regist = async () => {
+  const response = await addTripPlan(loginId.value, registData.value);
+  if (response.status == HttpStatusCode.Created) {
+    window.alert("여행지 등록 완료!");
+    router.push({ name: "home" });
+  }
 };
 </script>
 
@@ -146,7 +162,7 @@ const regist = () => {
           <div class="font-kor w-11/12 h-[1rem] text-gray-700 mb-10">
             <p class="font-bold text-xl ml-2">여행 계획 등록</p>
           </div>
-          <VInputForm label="아이디" :value="registData.loginId" readonly />
+          <VInputForm label="아이디" :value="loginId" readonly />
           <VInputForm label="여행 계획 제목" @input="setTitle" />
 
           <!-- 날짜 -->
@@ -158,7 +174,7 @@ const regist = () => {
             class="description bg-gray-100 mt-10 sec p-3 w-11/12 h-[10rem] bg-zinc-100 text-gray-700 border border-gray-300 outline-none rounded-md transition-all focus:border-2 focus:border-trip-color focus:outline-0"
             spellcheck="false"
             placeholder="본문"
-            @input="setContent"
+            @input="setDesc"
           ></textarea>
           <div class="w-11/12 h-[1rem] flex flex-row items-center justify-end gap-3">
             <VButton color="gray" title="취소" @click="cancel" />

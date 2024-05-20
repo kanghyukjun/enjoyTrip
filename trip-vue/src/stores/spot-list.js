@@ -54,17 +54,5 @@ export const useSpotListStore = defineStore("spot-list", () => {
     return false;
   };
 
-  //   const addSpot = (spot) => {
-  //     selectedSpotList.value.push(spot);
-  //   };
-
-  //   const deleteSpot = (spot) => {
-  //     selectedSpotList.value = selectedSpotList.value.filter((x) => x.id !== spot.id);
-  //   };
-
-  //   const setSpotList = (list) => {
-  //     selectedSpotList.value = list;
-  //   };
-
   return { radioDatas, selectedSpotList, isAlreadySelected };
 });
