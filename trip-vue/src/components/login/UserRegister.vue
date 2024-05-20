@@ -2,8 +2,12 @@
 import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+
 import UserRegisterFormItem from "@/components/login/UserRegisterFormItem.vue";
 import { getUserIdExists, userRegister } from "@/api/user";
+import { HttpStatusCode } from "axios";
 
 const router = useRouter();
 
@@ -60,7 +64,7 @@ const emailChange = (value) => {
   }
 };
 
-const register = () => {
+const register = async () => {
   if (
     !isPasswordLengthOkay.value ||
     !isIdLengthOkay.value ||
@@ -70,17 +74,13 @@ const register = () => {
   ) {
     window.alert("올바른 정보를 입력해주세요");
   } else {
-    userRegister(
-      userInfo.value,
-      () => {
-        window.alert("회원 가입이 완료 되었습니다");
-        router.push({ name: "userlogin" });
-      },
-      (error) => {
-        console.log(error);
-        window.alert("서버 내부 에러");
-      }
-    );
+    const response = await userRegister(userInfo.value);
+    if (response.status === HttpStatusCode.NoContent) {
+      window.alert("회원 가입이 완료 되었습니다");
+      router.push({ name: "userLogin" });
+    } else {
+      toast.error("서버 내부 에러");
+    }
   }
 };
 </script>

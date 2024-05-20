@@ -40,8 +40,17 @@ export function getUserIdExists(loginId, success, fail) {
   local.get(`/user/join/${loginId}`).then(success).catch(fail);
 }
 
-export function userRegister(data, success, fail) {
-  local.post(`/user`, data).then(success).catch(fail);
+export function userRegister(data) {
+  return new Promise((resolve, reject) => {
+    local
+      .post(`/user`, data)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
 }
 
 export function userLogin(data) {
