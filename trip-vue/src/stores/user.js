@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { userLogin } from "@/api/login";
+import { userLogin } from "@/api/user";
 import { HttpStatusCode } from "axios";
 
 export const useUserStore = defineStore("user", () => {

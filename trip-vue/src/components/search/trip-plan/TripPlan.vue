@@ -11,8 +11,8 @@ import draggable from "vuedraggable";
 
 import { addTripPlan } from "@/api/trip";
 
-// import { toast } from "vue3-toastify";
-// import "vue3-toastify/dist/index.css";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 import TripPlanListItem from "@/components/search/trip-plan/TripPlanListItem.vue";
 import VInputForm from "@/components/common/item/VInputForm.vue";
@@ -107,6 +107,8 @@ const regist = async () => {
   if (response.status == HttpStatusCode.Created) {
     window.alert("여행지 등록 완료!");
     router.push({ name: "home" });
+  } else {
+    toast.error("에러 발생");
   }
 };
 </script>

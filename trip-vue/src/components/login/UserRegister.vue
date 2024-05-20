@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import UserRegisterFormItem from "@/components/login/UserRegisterFormItem.vue";
-import { getUserIdExists, userRegister } from "@/api/login.js";
+import { getUserIdExists, userRegister } from "@/api/user";
 
 const router = useRouter();
 
