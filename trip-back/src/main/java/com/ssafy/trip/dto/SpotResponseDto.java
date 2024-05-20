@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
+@Schema(title = "여행지 목록 반환 DTO", description = "여행지 정보가 있는 DTO이다.")
 public class SpotResponseDto {
 
     @Schema(title = "관광지 ID", example = "1")

@@ -218,7 +218,7 @@ public class UserServiceImpl implements UserService {
             log.debug("[UserService] RefreshToken 삭제 요청");
             deleteRefreshToken(loginId);
             log.debug("[UserService] RefreshToken 삭제 완료");
-            status = HttpStatus.OK;
+            status = HttpStatus.NO_CONTENT;
         } catch (Exception e) {
             log.error("[UserService] RefreshToken 삭제 실패");
             resultMap.put("message", e.getMessage());

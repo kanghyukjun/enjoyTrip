@@ -68,7 +68,8 @@ public class JWTUtil {
     public boolean checkToken(String loginId, String token){
         try {
             log.debug("[JWTUtil]: Token 검증 중");
-            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(generateKey()).build().parseClaimsJws(token);
+            String realToken = token.replaceAll("Bearer ", "");
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(generateKey()).build().parseClaimsJws(realToken);
             log.debug("[JWTUtil]: claims - {}", claims);
             return loginId.equals(claims.getBody().get("userId"));
         }catch (ExpiredJwtException e){

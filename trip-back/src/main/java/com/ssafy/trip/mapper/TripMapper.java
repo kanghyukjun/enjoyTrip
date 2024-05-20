@@ -2,6 +2,7 @@ package com.ssafy.trip.mapper;
 
 import com.ssafy.trip.dto.GugunResponseDto;
 import com.ssafy.trip.dto.SidoResponseDto;
+import com.ssafy.trip.dto.AddSpotRequestDto;
 import com.ssafy.trip.dto.SpotResponseDto;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,4 +14,5 @@ public interface TripMapper {
     List<SidoResponseDto> searchSido() throws SQLException;
     List<GugunResponseDto> searchGugun(int sidoCode) throws SQLException;
     List<SpotResponseDto> searchSpot(int sidoCode, int gugunCode, List<String> spotType, String word) throws SQLException;
+    void addSpot(AddSpotRequestDto requestDto);
 }

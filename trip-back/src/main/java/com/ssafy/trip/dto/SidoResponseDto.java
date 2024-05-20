@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
+@Schema(title = "시도 목록 반환 DTO", description = "시도 id와 name이 있는 DTO이다.")
 public class SidoResponseDto {
 
     @Schema(title = "시도 ID", example = "1")

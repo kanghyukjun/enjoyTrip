@@ -54,4 +54,9 @@
 		WHEN s.tspot_title LIKE concat('%',#{word}) THEN 3
 		ELSE 4 END, s.tspot_title ASC
 	</select>
+
+	<insert id="addSpot" parameterType="map">
+		insert into travel_spot(tspot_title, addr1, zipcode, first_image, latitude, longitude, sido_id, gugun_id, tspot_type_id)
+		values (#{title}, #{address}, #{zipcode}, #{image},#{latitude}, #{longitude}, #{sidoId}, #{gugunId}, #{typeId})
+	</insert>
 </mapper>
