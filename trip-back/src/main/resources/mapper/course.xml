@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.course.mapper.CourseMapper">
+
+    <!--	<resultMap type="sidoResponseDto" id="sidoResponse">-->
+    <!--		<result column="sido_id" property="id"/>-->
+    <!--		<result column="sido_name" property="name"/>-->
+    <!--	</resultMap>-->
+
+    <insert id="addCourse" parameterType="map">
+        insert into user_course(user_id, course_title, course_start_date, course_end_date, course_desc)
+        values (#{userId}, #{title}, #{startDate}, #{endDate}, #{desc})
+    </insert>
+
+    <select id="getLastIdx" resultType="int">
+        select MAX(course_id)
+        from user_course
+    </select>
+
+    <insert id="addCourseSpots" parameterType="map">
+        insert into user_course_spot(tspot_id, course_id, tspot_order)
+        values
+        <foreach collection="spotIds" item="spotId" index="index" separator=",">
+            (#{spotId}, #{courseId}, #{index})
+        </foreach>
+    </insert>
+</mapper>
