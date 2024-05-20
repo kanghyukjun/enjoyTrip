@@ -17,7 +17,7 @@ import UserRegister from "@/components/login/UserRegister.vue";
 
 import UserPageView from "@/view/UserPageView.vue";
 import UserPageInfo from "@/components/userpage/info/UserPageInfo.vue";
-import UserInfoModify from "@/components/userpage/info/UserInfoModify.vue";
+import UserInfoUpdate from "@/components/userpage/info/UserInfoUpdate.vue";
 import UserArticleList from "@/components/userpage/article/UserArticleList.vue";
 import UserSavedTripList from "@/components/userpage/UserSavedTripList.vue";
 
@@ -117,7 +117,7 @@ const router = createRouter({
         {
           path: "modify",
           name: "userModify",
-          component: UserInfoModify,
+          component: UserInfoUpdate,
         },
       ],
     },
