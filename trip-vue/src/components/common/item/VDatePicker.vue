@@ -15,7 +15,7 @@ const inputChange = (event) => {
     <input
       :id="label"
       type="date"
-      class="w-[2/5] bg-tansparent font-kor text-gray-700 rounded"
+      class="w-[2/5] bg-tansparent font-kor text-gray-700 rounded text-sm"
       @input="inputChange"
     />
   </div>
