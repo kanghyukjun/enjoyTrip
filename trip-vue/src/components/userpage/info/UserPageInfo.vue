@@ -3,10 +3,8 @@ import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import { getUserInfo } from "@/api/user";
-import UserPageInfoItem from "./UserPageInfoItem.vue";
-// import { useUserStore } from "@/stores/user";
+import UserPageInfoItem from "@/components/userpage/info/UserPageInfoItem.vue";
 
-// const store = useUserStore();
 const router = useRouter();
 
 const userInfo = ref({
@@ -20,8 +18,7 @@ const modify = () => {
 };
 
 onMounted(async () => {
-  const loginId = sessionStorage.getItem("loginId");
-  const result = await getUserInfo(loginId);
+  const result = await getUserInfo();
   userInfo.value.loginId = result.data.userInfo.loginId;
   userInfo.value.name = result.data.userInfo.name;
   userInfo.value.email = result.data.userInfo.email;

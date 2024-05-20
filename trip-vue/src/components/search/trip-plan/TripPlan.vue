@@ -103,7 +103,7 @@ const cancel = () => {
 };
 
 const regist = async () => {
-  const response = await addTripPlan(loginId.value, registData.value);
+  const response = await addTripPlan(registData.value);
   if (response.status == HttpStatusCode.Created) {
     window.alert("여행지 등록 완료!");
     router.push({ name: "home" });

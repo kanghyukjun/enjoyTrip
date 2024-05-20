@@ -2,10 +2,10 @@ import { localAxios } from "@/util/http-commons.js";
 
 const local = localAxios();
 
-export function getUserInfo(loginId) {
+export function getUserInfo() {
   return new Promise((resolve, reject) => {
     local
-      .get(`/user/${loginId}`, {
+      .get(`/user/${sessionStorage.getItem("loginId")}`, {
         headers: {
           Authorization: sessionStorage.getItem("accessToken"),
         },
@@ -19,10 +19,10 @@ export function getUserInfo(loginId) {
   });
 }
 
-export function userUpdate(loginId, userInfo) {
+export function userUpdate(userInfo) {
   return new Promise((resolve, reject) => {
     local
-      .put(`/user/${loginId}`, userInfo, {
+      .put(`/user/${sessionStorage.getItem("loginId")}`, userInfo, {
         headers: {
           Authorization: sessionStorage.getItem("accessToken"),
         },

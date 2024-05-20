@@ -8,16 +8,15 @@ import UserRegisterFormItem from "@/components/login/UserRegisterFormItem.vue";
 const router = useRouter();
 
 const userInfo = ref({
+  loginId: "",
   password: "",
   name: "",
   email: "",
 });
 
-const loginId = ref("");
-
 onMounted(async () => {
-  loginId.value = sessionStorage.getItem("loginId");
-  const result = await getUserInfo(loginId.value);
+  const result = await getUserInfo();
+  userInfo.value.loginId = result.data.userInfo.loginId;
   userInfo.value.password = result.data.userInfo.password;
   userInfo.value.name = result.data.userInfo.name;
   userInfo.value.email = result.data.userInfo.email;
@@ -45,7 +44,7 @@ const isContentExist = computed(() => {
 
 const update = async () => {
   // update 쿼리 날려
-  await userUpdate(loginId.value, userInfo.value);
+  await userUpdate(userInfo.value);
   router.push({ name: "userInfo" });
 };
 
@@ -83,7 +82,7 @@ const cancel = () => {
       </div>
       <div class="flex flex-col justify-center items-end w-[40rem] gap-4">
         <div class="flex flex-col w-[30rem] h-[14rem] gap-4">
-          <UserRegisterFormItem label="아이디" type="text" :value="loginId" readonly />
+          <UserRegisterFormItem label="아이디" type="text" :value="userInfo.loginId" readonly />
           <UserRegisterFormItem
             label="비밀번호"
             type="text"
