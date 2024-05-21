@@ -33,11 +33,7 @@
 		where b.course_id = uc.course_id
 		and uc.user_id = u.user_id
 		and b.board_title like concat('%', #{word}, '%')
-		order by b.board_register_time desc,
-		CASE WHEN b.board_title = #{word} THEN 1
-			 WHEN b.board_title LIKE concat(#{word},'%') THEN 2
-			 WHEN b.board_title LIKE concat('%',#{word}) THEN 3
-			 ELSE 4 END, b.board_title
+		order by b.board_register_time desc
 		limit #{start}, #{number}
 	</select>
 

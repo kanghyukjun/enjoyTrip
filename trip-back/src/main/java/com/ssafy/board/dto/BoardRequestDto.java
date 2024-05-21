@@ -3,12 +3,9 @@ package com.ssafy.board.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Data
 @Schema(title = "게시물 생성 요청 DTO", description = "생성할 게시물 정보가 있는 DTO이다.")
-public class BoardCreateRequestDto {
+public class BoardRequestDto {
     @Schema(title = "게시물명", example = "한강 산책")
     private String title;
 
