@@ -1,15 +1,12 @@
 import { localAxios } from "@/util/http-commons.js";
+// import { HttpStatusCode } from "axios";
 
 const local = localAxios();
 
 export function getUserInfo() {
   return new Promise((resolve, reject) => {
     local
-      .get(`/user/${sessionStorage.getItem("loginId")}`, {
-        headers: {
-          Authorization: sessionStorage.getItem("accessToken"),
-        },
-      })
+      .get(`/user/${sessionStorage.getItem("loginId")}`)
       .then((response) => {
         resolve(response);
       })
@@ -22,11 +19,7 @@ export function getUserInfo() {
 export function userUpdate(userInfo) {
   return new Promise((resolve, reject) => {
     local
-      .put(`/user/${sessionStorage.getItem("loginId")}`, userInfo, {
-        headers: {
-          Authorization: sessionStorage.getItem("accessToken"),
-        },
-      })
+      .put(`/user/${sessionStorage.getItem("loginId")}`, userInfo)
       .then((response) => {
         resolve(response);
       })
@@ -53,15 +46,11 @@ export function userRegister(data) {
   });
 }
 
-export function userLogin(data) {
+export function getUserCourse() {
   return new Promise((resolve, reject) => {
     local
-      .post(`/user/login`, data)
-      .then((success) => {
-        resolve(success);
-      })
-      .catch((fail) => {
-        reject(fail);
-      });
+      .get(`/course/${sessionStorage.getItem("loginId")}`)
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
   });
 }

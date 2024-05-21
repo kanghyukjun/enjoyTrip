@@ -121,6 +121,7 @@ const regist = async () => {
           class="w-5/6 h-full flex flex-col items-center justify-start overflow-y-auto rounded-md border border-gray-300"
         >
           <draggable
+            class="w-full h-full"
             :list="tripPlan"
             tag="TripPlanListItem"
             group="planList"
@@ -130,9 +131,7 @@ const regist = async () => {
             animation="150"
           >
             <template #item="{ element }">
-              <div>
-                <TripPlanListItem class="mt-3" :spot="element" />
-              </div>
+              <TripPlanListItem class="mt-3" :spot="element" />
             </template>
           </draggable>
         </div>

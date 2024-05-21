@@ -1,13 +1,14 @@
 <script setup>
 import SideNavBarListItem from "./SideNavBarListItem.vue";
 
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from "@/stores/login";
 
 const store = useUserStore();
 
 const logout = () => {
   // server와 연결해서 token과 session, database 관련 정보 삭제 요청 후 홈으로 이동
   // 현재 store로 판단을 하고 있기 때문에 차이 발생 가능
+  store.logout();
   window.alert("로그아웃 되었습니다");
 };
 </script>
@@ -26,7 +27,7 @@ const logout = () => {
     </div>
     <div class="h-1/6">
       <SideNavBarListItem
-        v-if="!store.isLogin"
+        v-if="!store.isLogined"
         name="userLogin"
         title="로그인"
         imgSrc="/src/assets/icon/login.svg"

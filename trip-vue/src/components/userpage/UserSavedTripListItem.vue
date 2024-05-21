@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+defineProps({
+  course: Object,
+});
+</script>
 
 <template>
   <div
@@ -7,8 +11,8 @@
     <div class="w-full h-5/6 flex flex-row items-start justify-center font-kor text-gray-700">
       <div class="w-8/12 h-full flex flex-col items-start justify-center">
         <p class="font-bold text-xl ml-3">제목</p>
-        <p class="text-md ml-3">유저가 지정한 제목</p>
-        <p class="mt-2 ml-3 text-sm">2024-05-20 ~ 2024-05-26</p>
+        <p class="text-md ml-3">{{ course.title }}</p>
+        <p class="mt-2 ml-3 text-sm">{{ course.startDate }} ~ {{ course.endDate }}</p>
       </div>
       <div class="w-4/12 h-full flex flex-col items-end justify-center">
         <div class="w-[5.5rem] h-[5rem] rounded-md bg-pink-400 mr-3">

@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import UserRegisterFormItem from "@/components/login/UserRegisterFormItem.vue";
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from "@/stores/login";
 
 const store = useUserStore();
 const router = useRouter();
@@ -21,12 +21,14 @@ const passwordChange = (value) => {
 };
 
 const login = async () => {
-  const isOkay = await store.login(userInfo.value);
-  if (isOkay) {
-    router.push({ name: "home" });
-  } else {
-    window.alert("올바르지 않은 회원 정보입니다");
-  }
+  store
+    .login(userInfo.value)
+    .then(() => {
+      router.push({ name: "home" });
+    })
+    .catch(() => {
+      window.alert("올바르지 않은 회원 정보입니다");
+    });
 };
 </script>
 

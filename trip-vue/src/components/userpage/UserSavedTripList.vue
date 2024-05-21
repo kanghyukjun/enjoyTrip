@@ -1,5 +1,15 @@
 <script setup>
 import UserSavedTripListItem from "@/components/userpage/UserSavedTripListItem.vue";
+import { ref, onMounted } from "vue";
+import { getUserCourse } from "@/api/user";
+
+const userCourses = ref([]);
+
+onMounted(async () => {
+  getUserCourse().then((response) => {
+    userCourses.value = response.data.courses;
+  });
+});
 </script>
 
 <template>
@@ -11,14 +21,12 @@ import UserSavedTripListItem from "@/components/userpage/UserSavedTripListItem.v
       <div
         class="w-11/12 h-5/6 flex flex-col items-center justify-start rounded-md overflow-y-auto"
       >
-        <UserSavedTripListItem class="mt-3" />
-        <UserSavedTripListItem class="mt-3" />
-        <UserSavedTripListItem class="mt-3" />
-        <UserSavedTripListItem class="mt-3" />
-        <UserSavedTripListItem class="mt-3" />
-        <UserSavedTripListItem class="mt-3" />
-        <UserSavedTripListItem class="mt-3" />
-        <UserSavedTripListItem class="mt-3" />
+        <UserSavedTripListItem
+          class="mt-3"
+          v-for="course in userCourses"
+          :key="course.id"
+          :course="course"
+        />
       </div>
     </div>
   </div>
