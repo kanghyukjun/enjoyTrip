@@ -1,6 +1,7 @@
 <script setup>
 defineProps({
   label: String,
+  value: String,
 });
 
 const emit = defineEmits(["input"]);
@@ -16,6 +17,7 @@ const inputChange = (event) => {
       :id="label"
       type="date"
       class="w-[2/5] bg-tansparent font-kor text-gray-700 rounded text-sm"
+      :value="value"
       @input="inputChange"
     />
   </div>

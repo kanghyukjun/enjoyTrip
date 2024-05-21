@@ -19,7 +19,17 @@ import UserPageView from "@/view/UserPageView.vue";
 import UserPageInfo from "@/components/userpage/info/UserPageInfo.vue";
 import UserInfoUpdate from "@/components/userpage/info/UserInfoUpdate.vue";
 import UserArticleList from "@/components/userpage/article/UserArticleList.vue";
-import UserSavedTripList from "@/components/userpage/UserSavedTripList.vue";
+import UserSavedTripList from "@/components/userpage/trip-list/UserSavedTripList.vue";
+import UserSavedTripDetail from "@/components/userpage/trip-list/UserSavedTripDetail.vue";
+
+// const requireAuth = () => (to, from, next) => {
+//   // 로그인이 되어있을 때
+//   if (sessionStorage.getItem("loginId")) {
+//     return next();
+//   } else {
+//     next({ name: "login" });
+//   }
+// };
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -105,6 +115,11 @@ const router = createRouter({
           component: UserPageInfo,
         },
         {
+          path: "modify",
+          name: "userModify",
+          component: UserInfoUpdate,
+        },
+        {
           path: "articles",
           name: "userArticle",
           component: UserArticleList,
@@ -115,9 +130,9 @@ const router = createRouter({
           component: UserSavedTripList,
         },
         {
-          path: "modify",
-          name: "userModify",
-          component: UserInfoUpdate,
+          path: "triplistsdetail/:loginId/:courseId",
+          name: "userTripListDetail",
+          component: UserSavedTripDetail,
         },
       ],
     },

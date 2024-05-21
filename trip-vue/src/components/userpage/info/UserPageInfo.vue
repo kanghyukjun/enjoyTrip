@@ -18,10 +18,16 @@ const modify = () => {
 };
 
 onMounted(async () => {
-  const result = await getUserInfo();
-  userInfo.value.loginId = result.data.userInfo.loginId;
-  userInfo.value.name = result.data.userInfo.name;
-  userInfo.value.email = result.data.userInfo.email;
+  getUserInfo()
+    .then((response) => {
+      userInfo.value.loginId = response.data.userInfo.loginId;
+      userInfo.value.name = response.data.userInfo.name;
+      userInfo.value.email = response.data.userInfo.email;
+    })
+    .catch((error) => {
+      console.log(error);
+      router.push({ name: "userLogin" });
+    });
 });
 </script>
 

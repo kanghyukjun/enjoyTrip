@@ -1,7 +1,10 @@
 <script setup>
-import UserSavedTripListItem from "@/components/userpage/UserSavedTripListItem.vue";
+import UserSavedTripListItem from "@/components/userpage/trip-list/UserSavedTripListItem.vue";
 import { ref, onMounted } from "vue";
 import { getUserCourse } from "@/api/user";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const userCourses = ref([]);
 
@@ -10,6 +13,16 @@ onMounted(async () => {
     userCourses.value = response.data.courses;
   });
 });
+
+const moveDetail = (courseId) => {
+  router.push({
+    name: "userTripListDetail",
+    params: {
+      loginId: sessionStorage.getItem("loginId"),
+      courseId,
+    },
+  });
+};
 </script>
 
 <template>
@@ -26,6 +39,7 @@ onMounted(async () => {
           v-for="course in userCourses"
           :key="course.id"
           :course="course"
+          @click="moveDetail(course.id)"
         />
       </div>
     </div>
