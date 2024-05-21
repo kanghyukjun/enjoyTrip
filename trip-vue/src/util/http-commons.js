@@ -58,27 +58,39 @@ const localAxios = () => {
           return Promise.reject(error);
         }
 
-        console.log(`[http-commons] : accessToken을 재발급 합니다`);
-
+        console.log(`[http-commons] : accessToken이 만료 되었습니다`);
         // 토큰 재발급 후 다시 요청
         const originalRequest = config;
         const refreshToken = getRefreshToken();
 
-        const data = await axios.post(
-          `/user/refresh/${getLoginId()}`,
-          {},
-          {
-            baseURL: VITE_PJT_API_URL,
-            headers: { Authorization: refreshToken },
-          }
-        );
+        console.log(`[http-commons] : accessToken을 재발급 합니다`);
+        const response = await axios
+          .post(
+            `/user/refresh/${getLoginId()}`,
+            {},
+            {
+              baseURL: VITE_PJT_API_URL,
+              headers: { Authorization: refreshToken },
+            }
+          )
+          .then((response) => response)
+          .catch((error) => {
+            console.log(`[http-commons] : refreshToken이 만료 되었습니다`);
+            console.log(`[http-commons] : 다시 로그인을 해서 Token을 발급받아 주세요`);
+            return Promise.reject(error);
+          });
 
-        console.log(`[http-commons] : accessToken을 재발급 완료`);
-        sessionStorage.setItem("accessToken", `Bearer ${data.data["access-token"]}`);
-        originalRequest.headers.Authorization = getAccessToken();
+        if (response.status === HttpStatusCode.InternalServerError) {
+          console.log(`[http-commons] : 내부 서버 오류`);
+          return Promise.reject(error);
+        } else {
+          console.log(`[http-commons] : accessToken을 재발급 완료`);
+          sessionStorage.setItem("accessToken", `Bearer ${response.data["access-token"]}`);
+          originalRequest.headers.Authorization = getAccessToken();
 
-        console.log(`[http-commons] : 기존 요청을 다시 보냅니다`);
-        return axios(originalRequest);
+          console.log(`[http-commons] : 기존 요청을 다시 보냅니다`);
+          return axios(originalRequest);
+        }
       } else {
         return Promise.reject(error);
       }
