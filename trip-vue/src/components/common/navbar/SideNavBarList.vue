@@ -18,7 +18,12 @@ const logout = () => {
     <div class="h-5/6 flex flex-col justify-center">
       <SideNavBarListItem name="home" title="홈" imgSrc="/src/assets/icon/home.svg" />
       <SideNavBarListItem name="search" title="여행 경로" imgSrc="/src/assets/icon/search.svg" />
-      <SideNavBarListItem name="board" title="여행 게시판" imgSrc="/src/assets/icon/board.svg" />
+      <SideNavBarListItem
+        name="board"
+        :query="{ pgno: 1, word: '' }"
+        title="여행 게시판"
+        imgSrc="/src/assets/icon/board.svg"
+      />
       <SideNavBarListItem
         name="userPage"
         title="마이페이지"

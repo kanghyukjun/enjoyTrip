@@ -1,22 +1,25 @@
 <script setup>
-import UserArticleListItem from "@/components/userpage/article/UserArticleListItem.vue";
-import { useUserStore } from "@/stores/user-counter";
-import { storeToRefs } from "pinia";
-const userStore = useUserStore();
-const { userBoardList } = storeToRefs(userStore);
-console.log(userBoardList);
+import ArticleListItem from "@/components/userpage/ArticleListItem.vue";
 </script>
 
 <template>
-  <div class="flex flex-col items-center h-full w-full">
-    <h1 class="text-3xl font-bold mb-12">유저가 작성하거나 찜한 글 리스트</h1>
-    <!-- 글 리스트 시작 -->
-    <div class="flex flex-row justify-center flex-wrap gap-5">
-      <UserArticleListItem
-        v-for="userBoard in userBoardList"
-        :key="userBoard.boardId"
-        :userBoard="userBoard"
-      />
+  <div class="w-full h-full flex flex-col items-center justify-center">
+    <div class="w-5/6 h-[3rem] flex flex-row items-center justify-start font-kor">
+      <p class="ml-3 text-gray-700 font-bold text-2xl mt-10">내 여행 코스</p>
+    </div>
+    <div class="w-5/6 h-full flex flex-col items-center justify-center font-kor transition-all">
+      <div
+        class="w-11/12 h-5/6 flex flex-col items-center justify-start rounded-md overflow-y-auto"
+      >
+        <!-- <UserSavedTripListItem
+          class="mt-3"
+          v-for="course in userCourses"
+          :key="course.id"
+          :course="course"
+          @click="moveDetail(course.id)"
+        /> -->
+        <ArticleListItem />
+      </div>
     </div>
   </div>
 </template>

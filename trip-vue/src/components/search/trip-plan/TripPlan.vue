@@ -103,12 +103,24 @@ const cancel = () => {
 };
 
 const regist = async () => {
-  const response = await addTripPlan(registData.value);
-  if (response.status == HttpStatusCode.Created) {
-    window.alert("여행지 등록 완료!");
-    router.push({ name: "home" });
+  if (
+    registData.value.spotIds.length <= 0 ||
+    !registData.value.title ||
+    !registData.value.desc ||
+    !registData.value.startDate ||
+    !registData.value.endDate
+  ) {
+    toast.error("정보를 모두 입력해주세요");
+  } else if (registData.value.startDate > registData.value.endDate) {
+    toast.error("올바른 날짜 정보를 입력해주세요");
   } else {
-    toast.error("에러 발생");
+    const response = await addTripPlan(registData.value);
+    if (response.status == HttpStatusCode.Created) {
+      window.alert("여행지 등록 완료!");
+      router.push({ name: "home" });
+    } else {
+      toast.error("에러 발생");
+    }
   }
 };
 </script>

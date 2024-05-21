@@ -1,31 +1,20 @@
 <script setup>
-import { useRoute, useRouter, onBeforeRouteUpdate } from "vue-router";
-import { onMounted, ref } from "vue";
+const props = defineProps({
+  maxPageLength: Number,
+});
+
+import { useRoute, useRouter } from "vue-router";
+import { ref } from "vue";
 import BoardListPageNavigationItem from "./BoardListPageNavigationItem.vue";
 
-const maxPageLength = 10; // 임시로 지정한 최대 페이지 길이, Floor(boardList 길이 / pageSize)
 const router = useRouter();
 const route = useRoute();
 
-const currentPage = ref(0);
-
-const setList = () => {
-  // page navigation bar에 대한 로직을 처리한다
-  // page가 떴을 때 list를 불러온다
-  currentPage.value = parseInt(route.query?.pgno, 10) || 1;
-};
-
-onMounted(() => {
-  setList();
-});
-
-onBeforeRouteUpdate(() => {
-  setList();
-});
+const currentPage = ref(parseInt(route.query?.pgno, props.maxPageLength) || 1);
+const word = ref(route.query.word);
 
 const move = (pgno) => {
   // 이동할 pgno에 대한 유효성 검사
-  console.log(pgno);
   if (!isValid(pgno)) {
     return false;
   } else {
@@ -33,7 +22,7 @@ const move = (pgno) => {
       name: "boardList",
       query: {
         pgno,
-        keyword: "",
+        word: word.value,
       },
     });
   }
@@ -47,10 +36,8 @@ const moveNext = () => {
 };
 
 const isValid = (pgno) => {
-  return 1 <= pgno && pgno <= maxPageLength;
+  return 1 <= pgno && pgno <= props.maxPageLength;
 };
-
-console.log();
 </script>
 
 <template>

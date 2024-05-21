@@ -4,6 +4,7 @@ import { RouterLink } from "vue-router";
 
 defineProps({
   name: String,
+  query: Object,
   title: String,
   imgSrc: String,
   params: Object,
@@ -21,7 +22,7 @@ const mouseOut = () => {
 </script>
 
 <template>
-  <router-link :to="{ name, params }">
+  <router-link :to="{ name, params, query }">
     <li
       @mouseover="mouseOver"
       @mouseout="mouseOut"
