@@ -1,15 +1,76 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import BoardButton from "@/components/common/item/VButton.vue";
 import { articleStore } from "@/stores/article";
+import { getTripCourseDetail } from "@/api/trip";
+import BoardDetailTripListItem from "@/components/board/BoardDetailTripListItem.vue";
+
+import {
+  KakaoMap,
+  KakaoMapMarker,
+  KakaoMapMarkerPolyline,
+  KakaoMapCustomOverlay,
+} from "vue3-kakao-maps";
+
+import VInputForm from "@/components/common/item/VInputForm.vue";
+import VButton from "@/components/common/item/VButton.vue";
 
 const store = articleStore();
 const route = useRoute();
 const router = useRouter();
 
+const mapWidth = ref(0);
+const mapHeight = ref(0);
+const lat = ref(37.500725285);
+const lng = ref(127.036600396);
+
+const isLoaded = ref(false);
+// const tripPlan = ref([]);
+// const latLngList = ref([]);
+
 const articleNo = route.params.article;
 const article = store.getArticle(articleNo);
+
+onMounted(async () => {
+  // 카카오 지도 크기 구하기
+  const container = document.querySelector("#container");
+  mapWidth.value = container.offsetWidth * 0.95;
+  mapHeight.value = container.offsetHeight * 0.95;
+
+  // loginId와 courseId를 이용한 axios 비동기 처리로 tripPlan 가져오기
+  // latLngList에도 추가해줘서 경로 띄우기
+  // getTripCourseDetail(loginId.value, courseId.value)
+  //   .then((response) => {
+  //     setLatLngList(response.data.spots);
+
+  //     tripPlan.value = response.data.spots;
+  //     let latSum = 0.0;
+  //     let lngSum = 0.0;
+  //     tripPlan.value.forEach((x) => {
+  //       latSum += x.latitude;
+  //       lngSum += x.longitude;
+  //     });
+  //     lat.value = latSum / tripPlan.value.length;
+  //     lng.value = lngSum / tripPlan.value.length;
+
+  //     isLoaded.value = true;
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+  isLoaded.value = true;
+});
+
+// const setLatLngList = (arrays) => {
+//   latLngList.value = [];
+//   arrays.forEach((x) => {
+//     latLngList.value.push({
+//       lat: x.latitude,
+//       lng: x.longitude,
+//     });
+//   });
+// };
 
 const clickLike = () => {
   isLiked.value = !isLiked.value;
@@ -68,8 +129,46 @@ const isLiked = ref(false);
       </div>
     </div>
     <div class="w-[54rem] h-[25rem] flex flex-row bg-white items-center justify-center">
-      <div class="w-[52rem] h-[23rem] flex flex-row items-start justify-start">
-        <p class="mt-3">{{ article.content }}</p>
+      <div class="w-[52rem] h-[23rem] items-center justify-center overflow-y-auto">
+        <!-- <template> -->
+        <div class="w-[52rem] h-[18rem] flex flex-row items-start justify-start mt-3">
+          <div
+            class="w-1/4 h-full flex flex-col items-center justify-center rounded-md border-2 border-gray-300"
+          >
+            <div class="w-full h-full overflow-y-auto">
+              <BoardDetailTripListItem class="mt-1" />
+            </div>
+          </div>
+          <div id="container" class="w-2/4 h-full flex flex-row items-center justify-center">
+            <KakaoMap
+              class="rounded-md"
+              :width="mapWidth + 'px'"
+              :height="mapHeight + 'px'"
+              :draggable="true"
+              :lat="lat"
+              :lng="lng"
+              level="7"
+            >
+              <KakaoMapMarkerPolyline :markerList="latLngList" :endArrow="true" :strokeWeight="6" />
+
+              <template v-for="spot in tripPlan" :key="spot.id">
+                <KakaoMapMarker :lat="spot.latitude" :lng="spot.longitude" />
+                <KakaoMapCustomOverlay :lat="spot.latitude + 0.008" :lng="spot.longitude">
+                  <div
+                    class="w-auto h-[1.5rem] flex flex-row items-center justify-center bg-zinc-100 rounded-md border-2"
+                  >
+                    <p class="text-gray-700">{{ spot.title }}</p>
+                  </div>
+                </KakaoMapCustomOverlay>
+              </template>
+            </KakaoMap>
+          </div>
+          <div class="w-1/4 h-full bg-green-300"></div>
+        </div>
+        <!-- </template> -->
+        <p class="w-[52rem] h-1/2 flex flex-row items-start justify-start mt-3">
+          {{ article.content }}
+        </p>
       </div>
     </div>
     <div class="w-[54rem] h-[2rem] flex flex-row bg-white items-center justify-end">
