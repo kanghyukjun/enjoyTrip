@@ -116,6 +116,7 @@ public class UserController {
     @Parameter(name = "loginId",required = true, description = "로그인 ID", example = "ssafy")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "갱신에 성공했습니다.", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "401", description = "만료된 토큰입니다.", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "500", description = "갱신에 실패했습니다.", content = @Content(mediaType = "application/json")),
     })
     @PostMapping("/refresh/{loginId}")

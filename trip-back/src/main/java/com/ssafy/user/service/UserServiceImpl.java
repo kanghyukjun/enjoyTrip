@@ -63,20 +63,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<Map<String, Object>> getInfo(String loginId, String authorization) {
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
-        if(jwtUtil.checkToken(loginId, authorization)){
+        HttpStatus status = jwtUtil.checkToken(loginId, authorization);
+        if(status == HttpStatus.OK){
             log.debug("[UserService] AccessToken 검증 완료");
-            try {
-                UserResponseDto user = userMapper.getByLoginId(loginId);
-                resultMap.put("userInfo", user);
-                status = HttpStatus.OK;
-            } catch (Exception e) {
-                log.error("[UserService] AccessToken 검증 실패 - 서버 에러");
-                resultMap.put("message", e.getMessage());
-                status = HttpStatus.INTERNAL_SERVER_ERROR;
-            }
+            UserResponseDto user = userMapper.getByLoginId(loginId);
+            resultMap.put("userInfo", user);
         } else{
-            status = HttpStatus.UNAUTHORIZED;
+            log.error("[UserService] AccessToken 검증 실패");
+            resultMap.put("msg", "AccessToken 검증에 실패했습니다.");
         }
         return ResponseEntity.status(status).body(resultMap);
     }
@@ -95,21 +89,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<Map<String, Object>> update(String loginId, UserModifyRequestDto requestDto, String authorization) {
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
-        if(jwtUtil.checkToken(loginId, authorization)){
+        HttpStatus status = jwtUtil.checkToken(loginId, authorization);
+        if(status==HttpStatus.OK){
             log.debug("[UserService] AccessToken 검증 완료");
-            try {
-                userMapper.update(loginId, requestDto);
-                resultMap.put("message", "정상적으로 업데이트되었습니다.");
-                status = HttpStatus.OK;
-            } catch (Exception e) {
-                log.error("[UserService] AccessToken 검증 실패 - 서버 에러");
-                resultMap.put("message", e.getMessage());
-                status = HttpStatus.INTERNAL_SERVER_ERROR;
-            }
+            userMapper.update(loginId, requestDto);
+            status = HttpStatus.ACCEPTED;
+            resultMap.put("message", "정상적으로 업데이트되었습니다.");
         } else{
-            log.error("[UserService] AccessToken 만료");
-            status = HttpStatus.UNAUTHORIZED;
+            log.error("[UserService] AccessToken 검증 실패");
+            resultMap.put("msg", "AccessToken 검증에 실패했습니다.");
         }
         return ResponseEntity.status(status).body(resultMap);
     }
@@ -117,21 +105,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<Map<String, Object>> delete(String loginId, String authorization) {
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
-        if(jwtUtil.checkToken(loginId, authorization)){
+        HttpStatus status = jwtUtil.checkToken(loginId, authorization);
+        if(status==HttpStatus.OK){
             log.debug("[UserService] AccessToken 검증 완료");
-            try {
-                userMapper.delete(loginId);
-                resultMap.put("message", "정상적으로 삭제되었습니다.");
-                status = HttpStatus.NO_CONTENT;
-            } catch (Exception e) {
-                log.error("[UserService] AccessToken 검증 실패 - 서버 에러");
-                resultMap.put("message", e.getMessage());
-                status = HttpStatus.INTERNAL_SERVER_ERROR;
-            }
+            userMapper.delete(loginId);
+            status = HttpStatus.NO_CONTENT;
+            resultMap.put("message", "정상적으로 삭제되었습니다.");
         } else{
-            log.error("[UserService] AccessToken 만료");
-            status = HttpStatus.UNAUTHORIZED;
+            log.error("[UserService] AccessToken 검증 실패");
+            resultMap.put("msg", "AccessToken 검증에 실패했습니다.");
         }
         return ResponseEntity.status(status).body(resultMap);
     }
@@ -188,21 +170,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<Map<String, Object>> refresh(String loginId, String refreshToken) {
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
         refreshToken = refreshToken.replaceAll("Bearer ", "");
         log.debug("[UserService] RefreshToken 검증 시작 - {}", refreshToken);
-        if (jwtUtil.checkToken(loginId, refreshToken)) {
+        HttpStatus status = jwtUtil.checkToken(loginId, refreshToken);
+        if (status==HttpStatus.OK) {
             if (refreshToken.equals(getRefreshToken(loginId))) {
                 log.debug("[UserService] RefreshToken 검증 완료 - {}", refreshToken);
                 log.debug("[UserService] AccessToken 재발급 시작");
                 String accessToken = jwtUtil.createAccessToken(loginId);
                 log.debug("[UserService] AccessToken 재발급 완료 - {}", accessToken);
-                resultMap.put("access-token", accessToken);
                 status = HttpStatus.CREATED;
+                resultMap.put("access-token", accessToken);
+            }else{
+                log.debug("[UserService] RefreshToken - loginId 불일치");
             }
         } else{
-            log.debug("[UserService] RefreshToken 만료");
-            status = HttpStatus.UNAUTHORIZED;
+            log.debug("[UserService] 유효하지 않은 RefreshToken");
         }
         return ResponseEntity.status(status).body(resultMap);
     }
