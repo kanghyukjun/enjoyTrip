@@ -1,6 +1,6 @@
 package com.ssafy.board.service;
 
-import com.ssafy.board.dto.BoardCreateRequestDto;
+import com.ssafy.board.dto.BoardRequestDto;
 import com.ssafy.board.dto.BoardResponseDto;
 import com.ssafy.board.dto.BoardSimpleResponseDto;
 import com.ssafy.board.mapper.BoardMapper;
@@ -28,7 +28,7 @@ public class BoardServiceImpl implements BoardService{
     private final CourseMapper courseMapper;
 
     @Override
-    public ResponseEntity<Map<String, Object>> add(String loginId, BoardCreateRequestDto requestDto, String authorization) {
+    public ResponseEntity<Map<String, Object>> add(String loginId, BoardRequestDto requestDto, String authorization) {
         Map<String, Object> resultMap = new HashMap<>();
         log.debug("[BoardService] AccessToken 검증 시작 - {}", authorization);
         HttpStatus status = jwtUtil.checkToken(loginId, authorization);
@@ -48,7 +48,7 @@ public class BoardServiceImpl implements BoardService{
     public ResponseEntity<Map<String, Object>> get(int pgno, String word) {
         Map<String, Object> resultMap = new HashMap<>();
         log.debug("[BoardService] 게시글 목록 조회");
-        List<BoardSimpleResponseDto> articles = boardMapper.get(pgno-1, 8, word);
+        List<BoardSimpleResponseDto> articles = boardMapper.get((pgno-1)*8, 8, word);
         int count = boardMapper.count(word);
         resultMap.put("articles", articles);
         resultMap.put("count", count);
@@ -67,5 +67,10 @@ public class BoardServiceImpl implements BoardService{
         resultMap.put("course", course);
         resultMap.put("spots", spots);
         return ResponseEntity.ok().body(resultMap);
+    }
+
+    @Override
+    public ResponseEntity<Map<String, Object>> update(String loginId, int boardId, BoardRequestDto requestDto, String authorization) {
+        return null;
     }
 }

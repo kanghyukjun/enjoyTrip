@@ -1,6 +1,6 @@
 package com.ssafy.board.controller;
 
-import com.ssafy.board.dto.BoardCreateRequestDto;
+import com.ssafy.board.dto.BoardRequestDto;
 import com.ssafy.board.service.BoardService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,19 +22,27 @@ public class BoardController {
 
     @PostMapping("/{loginId}")
     public ResponseEntity<Map<String, Object>> add(@PathVariable("loginId") String loginId,
-                                                   @RequestBody BoardCreateRequestDto requestDto,
+                                                   @RequestBody BoardRequestDto requestDto,
                                                    HttpServletRequest request) {
-       return boardService.add(loginId, requestDto, request.getHeader("Authorization"));
+        return boardService.add(loginId, requestDto, request.getHeader("Authorization"));
     }
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> get(@RequestParam("pgno") int pgno,
-                                                   @RequestParam("word") String word){
+                                                   @RequestParam("word") String word) {
         return boardService.get(pgno, word);
     }
 
     @GetMapping("/{boardId}")
-    public ResponseEntity<Map<String, Object>> getDetail(@PathVariable("boardId") int boardId){
+    public ResponseEntity<Map<String, Object>> getDetail(@PathVariable("boardId") int boardId) {
         return boardService.getDetail(boardId);
+    }
+
+    @PutMapping("/{loginId}/{boardId}")
+    public ResponseEntity<Map<String, Object>> update(@PathVariable("loginId") String loginId,
+                                                      @PathVariable("boardId") int boardId,
+                                                      @RequestBody BoardRequestDto requestDto,
+                                                      HttpServletRequest request) {
+        return boardService.update(loginId, boardId, requestDto, request.getHeader("Authorization"));
     }
 }
