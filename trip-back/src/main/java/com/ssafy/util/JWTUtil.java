@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -65,22 +66,24 @@ public class JWTUtil {
     }
 
     //토큰 검증
-    public boolean checkToken(String loginId, String token){
+    public HttpStatus checkToken(String loginId, String token){
         try {
             log.debug("[JWTUtil]: Token 검증 중");
             String realToken = token.replaceAll("Bearer ", "");
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(generateKey()).build().parseClaimsJws(realToken);
             log.debug("[JWTUtil]: claims - {}", claims);
-            return loginId.equals(claims.getBody().get("loginId"));
+            boolean check = loginId.equals(claims.getBody().get("loginId"));
+            if (!check) {
+                return HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+            return HttpStatus.OK;
         }catch (ExpiredJwtException e){
             log.error("[JWTUtil]: 만료된 Token 입니다.");
-            return false;
+            return HttpStatus.UNAUTHORIZED;
         }catch (Exception e){
-
             log.error("[JWTUtil]:  Token 검증에 실패 했습니다.");
             log.error(e.getMessage());
-
-            return false;
+            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }
 }

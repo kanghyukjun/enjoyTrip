@@ -4,12 +4,31 @@
 
 <mapper namespace="com.ssafy.course.mapper.CourseMapper">
 
-    <!--	<resultMap type="sidoResponseDto" id="sidoResponse">-->
-    <!--		<result column="sido_id" property="id"/>-->
-    <!--		<result column="sido_name" property="name"/>-->
-    <!--	</resultMap>-->
+    	<resultMap type="courseSimpleResponseDto" id="courseSimpleResponse">
+    		<result column="course_id" property="id"/>
+    		<result column="course_title" property="title"/>
+    		<result column="course_start_date" property="startDate"/>
+    		<result column="course_end_date" property="endDate"/>
+    	</resultMap>
 
-    <insert id="addCourse" parameterType="map">
+    	<resultMap type="courseResponseDto" id="courseResponse">
+    		<result column="course_title" property="title"/>
+    		<result column="course_desc" property="desc"/>
+    		<result column="course_start_date" property="startDate"/>
+    		<result column="course_end_date" property="endDate"/>
+    	</resultMap>
+
+        <resultMap type="spotResponseDto" id="spotResponse">
+            <result column="tspot_id" property="id"/>
+            <result column="tspot_title" property="title"/>
+            <result column="addr1" property="addr"/>
+            <result column="first_image" property="img"/>
+            <result column="latitude" property="latitude"/>
+            <result column="longitude" property="longitude"/>
+            <result column="tspot_type_name" property="type"/>
+        </resultMap>
+
+    <insert id="add" parameterType="map">
         insert into user_course(user_id, course_title, course_start_date, course_end_date, course_desc)
         values (#{userId}, #{title}, #{startDate}, #{endDate}, #{desc})
     </insert>
@@ -19,11 +38,49 @@
         from user_course
     </select>
 
-    <insert id="addCourseSpots" parameterType="map">
+    <insert id="addSpots" parameterType="map">
         insert into user_course_spot(tspot_id, course_id, tspot_order)
         values
         <foreach collection="spotIds" item="spotId" index="index" separator=",">
             (#{spotId}, #{courseId}, #{index})
         </foreach>
     </insert>
+
+    <delete id="deleteSpots" parameterType="int">
+        delete from user_course_spot
+        where course_id = #{courseId}
+    </delete>
+
+    <select id="get" parameterType="int" resultMap="courseSimpleResponse">
+        select course_id, course_title, course_start_date, course_end_date
+        from user_course
+        where user_id = #{userId}
+    </select>
+
+    <select id="getDetail" parameterType="int" resultMap="courseResponse">
+        select course_title, course_desc, course_start_date, course_end_date
+        from user_course
+        where course_id = #{courseId}
+    </select>
+
+    <select id="getSpots" parameterType="int" resultMap="spotResponse">
+        select ts.tspot_id, ts.tspot_title, ts.addr1, ts.first_image, ts.latitude, ts.longitude, st.tspot_type_name
+        from user_course uc, user_course_spot cs, travel_spot ts, travel_spot_type st
+        where uc.course_id = #{courseId}
+        and uc.course_id = cs.course_id
+        and cs.tspot_id = ts.tspot_id
+        and ts.tspot_type_id = st.tspot_type_id
+        order by cs.tspot_order
+    </select>
+
+    <update id="update" parameterType="map">
+        update user_course
+        set course_title = #{title}, course_desc = #{desc}, course_start_date = #{startDate}, course_end_date = #{endDate}
+        where course_id = #{courseId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from user_course
+        where course_id = #{courseId}
+    </delete>
 </mapper>
