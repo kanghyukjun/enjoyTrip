@@ -1,58 +1,38 @@
 <script setup>
+import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { getArticleList } from "@/api/board";
 import BoardListItem from "@/components/board/item/BoardListItem.vue";
 import BoardListPageNavigation from "@/components/board/item/BoardListPageNavigation.vue";
 import BoardButton from "@/components/common/item/VButton.vue";
-import { onMounted, ref, watch } from "vue";
 
 const router = useRouter();
 const route = useRoute();
-
-const articleList = ref([]);
-
-const pgno = ref(0);
-const word = ref("");
-const maxPageLength = ref(0);
-const numPerPage = 8;
-const searchWord = ref("");
-
-onMounted(() => {
-  pgno.value = parseInt(route.query.pgno);
-  word.value = route.query.word;
-});
-
-watch(
-  () => [route.query.pgno, route.query.word],
-  ([newPgno, newWord]) => {
-    console.log(newPgno);
-    console.log(newWord);
-    pgno.value = newPgno;
-    word.value = newWord;
-    getArticleList(pgno.value, word.value).then((response) => {
-      articleList.value = response.data.articles;
-      maxPageLength.value = (response.data.count + numPerPage - 1) / numPerPage;
-    });
-  },
-  {
-    deep: true,
-    immediate: true,
-  }
-);
 
 const post = () => {
   router.push({ name: "boardWrite" });
 };
 
+const word = ref(route.query.word);
+
 const search = () => {
-  console.log(searchWord.value);
   router.push({
     name: "boardList",
     query: {
       pgno: 1,
-      word: searchWord.value,
+      word: word.value,
     },
   });
+};
+
+// for debuging
+const tmpPgno = ref(0);
+const tmpWord = ref("");
+
+const getArticleList = (pgno, word) => {
+  // page navigation component에서 loaded 이벤트 호출 시
+  // article list를 받아서 사용자에게 뿌려줌
+  tmpPgno.value = pgno;
+  tmpWord.value = word;
 };
 </script>
 
@@ -86,7 +66,7 @@ const search = () => {
         type="text"
         placeholder="Search"
         class="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40 transition-all"
-        v-model="searchWord"
+        v-model="word"
         @keyup.enter.prevent="search"
       />
     </div>
@@ -102,12 +82,18 @@ const search = () => {
       </tr>
     </thead>
     <BoardListItem v-for="article in articleList" :key="article.articleno" :article="article" />
+    {{
+      tmpPgno
+    }}
+    {{
+      tmpWord
+    }}
   </table>
   <div class="w-[54rem] flex flex-row items-center justify-end mt-3">
     <BoardButton title="글 등록" color="red" @click="post" />
   </div>
   <div class="mt-10">
-    <BoardListPageNavigation :maxPageLength="maxPageLength" />
+    <BoardListPageNavigation @loaded="getArticleList" />
   </div>
 </template>
 

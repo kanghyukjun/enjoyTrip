@@ -1,6 +1,6 @@
 <script setup>
 defineProps({
-  pageNo: String,
+  pgno: String,
   selected: Boolean,
   hide: Boolean,
 });
@@ -20,7 +20,7 @@ defineProps({
         'border-trip-color': selected,
       }"
     >
-      {{ pageNo }}
+      {{ pgno }}
     </a>
   </li>
 </template>

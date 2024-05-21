@@ -22,15 +22,6 @@ import UserArticleList from "@/components/userpage/article/UserArticleList.vue";
 import UserSavedTripList from "@/components/userpage/trip-list/UserSavedTripList.vue";
 import UserSavedTripDetail from "@/components/userpage/trip-list/UserSavedTripDetail.vue";
 
-// const requireAuth = () => (to, from, next) => {
-//   // 로그인이 되어있을 때
-//   if (sessionStorage.getItem("loginId")) {
-//     return next();
-//   } else {
-//     next({ name: "login" });
-//   }
-// };
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

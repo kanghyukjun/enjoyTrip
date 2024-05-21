@@ -8,7 +8,7 @@ import { RouterView } from "vue-router";
       <div
         class="w-full h-full flex flex-col bg-zinc-100 justify-center items-center border-lg shadow-md"
       >
-        <RouterView />
+        <RouterView :key="$route.fullPath" />
       </div>
     </div>
   </div>
