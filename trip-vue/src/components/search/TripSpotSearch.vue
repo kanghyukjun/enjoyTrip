@@ -4,6 +4,7 @@ import { onMounted, ref, watch } from "vue";
 import { KakaoMap, KakaoMapMarker, KakaoMapCustomOverlay } from "vue3-kakao-maps";
 import { getSido, getGugun, getSpot } from "@/api/search";
 import { useSpotListStore } from "@/stores/spot-list";
+import { useUserStore } from "@/stores/login";
 
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -16,6 +17,7 @@ import TripSpotAddModal from "@/components/search/spot-add-modal/TripSpotAddModa
 import SelectedSpotList from "@/components/search/selected/SelectedSpotList.vue";
 
 const store = useSpotListStore();
+const userStore = useUserStore();
 
 const mapWidth = ref(0);
 const mapHeight = ref(0);
@@ -108,8 +110,7 @@ const addSpotList = (spot) => {
 };
 
 const beforeShowModal = () => {
-  const loginId = sessionStorage.getItem("loginId");
-  if (!loginId) {
+  if (!userStore.isLogined) {
     toast.error("로그인이 필요한 서비스입니다");
   } else {
     showModal.value = true;

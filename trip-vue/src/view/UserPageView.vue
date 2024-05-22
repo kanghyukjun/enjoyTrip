@@ -1,6 +1,18 @@
 <script setup>
-import { RouterView } from "vue-router";
+import { RouterView, useRouter } from "vue-router";
 import UserPageSideNavBar from "@/components/userpage/navbar/UserPageSideNavBar.vue";
+import { useUserStore } from "@/stores/user-counter";
+import { onMounted } from "vue";
+
+const router = useRouter();
+const store = useUserStore();
+
+onMounted(() => {
+  if (!store.isLogined) {
+    window.alert("로그인이 필요합니다");
+    router.push({ name: "userLogin" });
+  }
+});
 </script>
 
 <template>

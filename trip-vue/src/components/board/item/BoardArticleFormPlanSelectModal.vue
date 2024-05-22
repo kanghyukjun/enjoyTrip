@@ -1,15 +1,16 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import ArticleListItem from "@/components/userpage/ArticleListItem.vue";
-
+import { useUserStore } from "@/stores/login";
 import { getUserCourse } from "@/api/user";
 
+const store = useUserStore();
 const emit = defineEmits(["closeModal", "courseSelected"]);
 
 const userCourses = ref([]);
 
 onMounted(async () => {
-  getUserCourse().then((response) => {
+  getUserCourse(store.loginId).then((response) => {
     userCourses.value = response.data.courses;
   });
 });

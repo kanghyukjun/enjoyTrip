@@ -38,14 +38,10 @@ export function getSpot(sido, gugun, keyword, type) {
   });
 }
 
-export function addSpot(spotInfo) {
+export function addSpot(loginId, spotInfo) {
   return new Promise((resolve, reject) => {
     local
-      .post(`/trip/${sessionStorage.getItem("loginId")}`, spotInfo, {
-        headers: {
-          Authorization: sessionStorage.getItem("accessToken"),
-        },
-      })
+      .post(`/trip/${loginId}`, spotInfo)
       .then((response) => resolve(response))
       .catch((error) => reject(error));
   });

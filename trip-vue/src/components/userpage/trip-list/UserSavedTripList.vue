@@ -3,13 +3,15 @@ import ArticleListItem from "@/components/userpage/ArticleListItem.vue";
 import { ref, onMounted } from "vue";
 import { getUserCourse } from "@/api/user";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/login";
 
 const router = useRouter();
+const store = useUserStore();
 
 const userCourses = ref([]);
 
 onMounted(async () => {
-  getUserCourse().then((response) => {
+  getUserCourse(store.loginId).then((response) => {
     userCourses.value = response.data.courses;
   });
 });
@@ -18,7 +20,7 @@ const moveDetail = (courseId) => {
   router.push({
     name: "userTripListDetail",
     params: {
-      loginId: sessionStorage.getItem("loginId"),
+      loginId: store.loginId,
       courseId,
     },
   });

@@ -1,18 +1,22 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useUserStore } from "@/stores/login";
 import BoardListItem from "@/components/board/item/BoardListItem.vue";
 import BoardListPageNavigation from "@/components/board/item/BoardListPageNavigation.vue";
 import BoardButton from "@/components/common/item/VButton.vue";
+import BoardListThumbnail from "@/components/board/BoardListThumbnail.vue";
 
+const store = useUserStore();
 const router = useRouter();
 const route = useRoute();
 
-const post = () => {
-  router.push({ name: "boardWrite" });
-};
-
 const word = ref(route.query.word);
+const articleList = ref([
+  {
+    id: 0,
+  },
+]);
 
 const search = () => {
   router.push({
@@ -24,19 +28,46 @@ const search = () => {
   });
 };
 
-// for debuging
-const tmpPgno = ref(0);
-const tmpWord = ref("");
+const post = () => {
+  if (store.isLogined) router.push({ name: "boardWrite" });
+  else {
+    window.alert("로그인이 필요한 서비스입니다");
+    router.push({ name: "login" });
+  }
+};
 
-const getArticleList = (pgno, word) => {
-  // page navigation component에서 loaded 이벤트 호출 시
-  // article list를 받아서 사용자에게 뿌려줌
-  tmpPgno.value = pgno;
-  tmpWord.value = word;
+const detail = (event, no) => {
+  router.push({
+    name: "boardDetail",
+    params: {
+      article: no,
+    },
+  });
+};
+
+const getArticleList = (event) => {
+  // page navigation component에서 loaded 이벤트 호출 시 article list를 받아서 사용자에게 뿌려줌
+  articleList.value = event;
+};
+
+const xCoord = ref(0);
+const yCoord = ref(0);
+const isShowThumbnail = ref(false);
+const showImg = ref("");
+const showThumbnail = (event, course) => {
+  if (course.thumbnail) {
+    isShowThumbnail.value = true;
+    xCoord.value = event.pageX;
+    yCoord.value = event.pageY;
+    showImg.value = course.thumbnail;
+  }
 };
 </script>
 
 <template>
+  <div>
+    <BoardListThumbnail :show="isShowThumbnail" :xCoord="xCoord" :yCoord="yCoord" :img="showImg" />
+  </div>
   <div class="w-[54rem] mt-10 mb-5 flex flex-col justify-start">
     <p class="font-bold text-3xl font-kor text-gray-600">게시판</p>
     <p class="font-bold text-lg font-kor text-gray-600">
@@ -81,13 +112,14 @@ const getArticleList = (pgno, word) => {
         <th class="w-[5rem] text-center">좋아요</th>
       </tr>
     </thead>
-    <BoardListItem v-for="article in articleList" :key="article.articleno" :article="article" />
-    {{
-      tmpPgno
-    }}
-    {{
-      tmpWord
-    }}
+    <BoardListItem
+      v-for="article in articleList"
+      :key="article.id"
+      :article="article"
+      @click="detail($event, article.id)"
+      @mouseenter="showThumbnail($event, article)"
+      @mouseout="isShowThumbnail = false"
+    />
   </table>
   <div class="w-[54rem] flex flex-row items-center justify-end mt-3">
     <BoardButton title="글 등록" color="red" @click="post" />

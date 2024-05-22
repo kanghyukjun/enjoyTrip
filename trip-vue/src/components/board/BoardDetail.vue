@@ -2,8 +2,10 @@
 import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import BoardButton from "@/components/common/item/VButton.vue";
-import { articleStore } from "@/stores/article";
-import { getTripCourseDetail } from "@/api/trip";
+import { getArticleDetail } from "@/api/board";
+import { getOtherTripCourse } from "@/api/trip";
+import { useUserStore } from "@/stores/login";
+
 import BoardDetailTripListItem from "@/components/board/BoardDetailTripListItem.vue";
 
 import {
@@ -13,24 +15,40 @@ import {
   KakaoMapCustomOverlay,
 } from "vue3-kakao-maps";
 
-import VInputForm from "@/components/common/item/VInputForm.vue";
-import VButton from "@/components/common/item/VButton.vue";
-
-const store = articleStore();
+const store = useUserStore();
 const route = useRoute();
 const router = useRouter();
 
 const mapWidth = ref(0);
 const mapHeight = ref(0);
-const lat = ref(37.500725285);
-const lng = ref(127.036600396);
+const lat = ref(0.0);
+const lng = ref(0.0);
+
+const boardId = route.params.article;
+const article = ref({
+  title: "",
+  content: "",
+  author: "",
+  authorLoginId: "",
+  createTime: "",
+  hit: 0,
+  thumbnail: "",
+});
+
+const courseDescription = ref({
+  id: 0,
+  title: "",
+  startDate: "",
+  endDate: "",
+});
+
+const spots = ref([]);
 
 const isLoaded = ref(false);
-// const tripPlan = ref([]);
-// const latLngList = ref([]);
-
-const articleNo = route.params.article;
-const article = store.getArticle(articleNo);
+const tripPlan = ref([]);
+const latLngList = ref([]);
+const selectedSpot = ref({});
+const isSelected = ref(false);
 
 onMounted(async () => {
   // 카카오 지도 크기 구하기
@@ -38,39 +56,42 @@ onMounted(async () => {
   mapWidth.value = container.offsetWidth * 0.95;
   mapHeight.value = container.offsetHeight * 0.95;
 
-  // loginId와 courseId를 이용한 axios 비동기 처리로 tripPlan 가져오기
-  // latLngList에도 추가해줘서 경로 띄우기
-  // getTripCourseDetail(loginId.value, courseId.value)
-  //   .then((response) => {
-  //     setLatLngList(response.data.spots);
+  getArticleDetail(boardId).then((response) => {
+    article.value = response.data.article;
+    courseDescription.value = response.data.course;
+    spots.value = response.data.spots;
+    setLatLngList(spots.value);
+    setMiddleCoord(spots.value);
 
-  //     tripPlan.value = response.data.spots;
-  //     let latSum = 0.0;
-  //     let lngSum = 0.0;
-  //     tripPlan.value.forEach((x) => {
-  //       latSum += x.latitude;
-  //       lngSum += x.longitude;
-  //     });
-  //     lat.value = latSum / tripPlan.value.length;
-  //     lng.value = lngSum / tripPlan.value.length;
-
-  //     isLoaded.value = true;
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
-  isLoaded.value = true;
+    isLoaded.value = true;
+  });
 });
 
-// const setLatLngList = (arrays) => {
-//   latLngList.value = [];
-//   arrays.forEach((x) => {
-//     latLngList.value.push({
-//       lat: x.latitude,
-//       lng: x.longitude,
-//     });
-//   });
-// };
+const setLatLngList = (arrays) => {
+  latLngList.value = [];
+  arrays.forEach((x) => {
+    latLngList.value.push({
+      lat: x.latitude,
+      lng: x.longitude,
+    });
+  });
+};
+
+const setMiddleCoord = (arrays) => {
+  lat.value = 0.0;
+  lng.value = 0.0;
+  arrays.forEach((x) => {
+    lat.value += x.latitude;
+    lng.value += x.longitude;
+  });
+  lat.value /= arrays.length;
+  lng.value /= arrays.length;
+};
+
+const selectSpot = (spot) => {
+  isSelected.value = true;
+  selectedSpot.value = spot;
+};
 
 const clickLike = () => {
   isLiked.value = !isLiked.value;
@@ -87,12 +108,27 @@ const deleteArticle = () => {
   }
 };
 
+const getTrip = () => {
+  // 다른 사람의 여행지를 내 코스로 가져오기
+  if (!store.isLogined) {
+    window.alert("로그인이 필요합니다");
+    router.push({ name: "login" });
+  } else {
+    getOtherTripCourse(store.loginId, courseDescription.value.id).then(() => {
+      const confirm = window.confirm("추가 되었습니다. 추가된 코스를 확인하시겠습니까?");
+      if (confirm) {
+        router.push({ name: "userTripList" });
+      }
+    });
+  }
+};
+
 const moveUpdate = () => {
   // 이동
   router.push({
     name: "boardUpdate",
     params: {
-      article: articleNo, // 수정 필요
+      article: boardId,
     },
   });
 };
@@ -102,72 +138,141 @@ const moveList = () => {
     name: "boardList",
     query: {
       pgno: 1,
-      keyword: "",
+      word: "",
     },
   });
 };
+
+const showTripList = ref(true);
 
 const isLiked = ref(false);
 </script>
 
 <template>
   <div
-    class="w-[54rem] h-[35rem] bg-zinc-100 shadow-sm rounded-2xl flex flex-col justify-center items-center font-kor text-gray-800"
+    class="w-[54rem] h-[50rem] bg-zinc-100 shadow-sm rounded-2xl flex flex-col justify-center items-center font-kor text-gray-800"
   >
     <div class="w-[54rem] h-[5rem] bg-trip-color flex flex-row items-center shadow-lg">
-      <p class="font-extrabold text-3xl ml-5 text-gray-100 z-5">{{ article.title }}</p>
+      <p class="font-extrabold text-3xl ml-5 text-gray-100 z-5">{{ article?.title }}</p>
     </div>
     <div
       class="w-[54rem] h-[3rem] flex flex-row shadow-lg bg-white items-center justify-between z-3"
     >
       <div class="ml-5 font-bold">
-        <p>{{ article.user }}</p>
+        <p>{{ article?.author }}</p>
       </div>
       <div class="mr-5 flex flex-row items-center gap-4">
-        <p>조회수 {{ article.hit }}</p>
-        <p>좋아요 {{ article.liked }}</p>
+        <p>조회수 {{ article.hit ? article.hit : 0 }}</p>
+        <p>좋아요 {{ article.liked ? article.liked : 0 }}</p>
       </div>
     </div>
     <div class="w-[54rem] h-[25rem] flex flex-row bg-white items-center justify-center">
       <div class="w-[52rem] h-[23rem] items-center justify-center overflow-y-auto">
-        <!-- <template> -->
-        <div class="w-[52rem] h-[18rem] flex flex-row items-start justify-start mt-3">
+        <div class="w-full h-[1.5rem] flex flex-row items-center justify-end mr-3">
+          <BoardButton
+            v-show="showTripList"
+            color="gray"
+            title="접기"
+            @click="showTripList = false"
+          />
+          <BoardButton
+            v-show="!showTripList"
+            color="gray"
+            title="펼치기"
+            @click="showTripList = true"
+          />
+        </div>
+        <div
+          v-show="showTripList"
+          class="w-[52rem] h-[18rem] flex flex-row items-start justify-start mt-3"
+        >
           <div
             class="w-1/4 h-full flex flex-col items-center justify-center rounded-md border-2 border-gray-300"
           >
             <div class="w-full h-full overflow-y-auto">
-              <BoardDetailTripListItem class="mt-1" />
+              <BoardDetailTripListItem
+                v-for="spot in spots"
+                :key="spot.id"
+                :spot="spot"
+                class="mt-1"
+                @click="selectSpot(spot)"
+              />
             </div>
           </div>
           <div id="container" class="w-2/4 h-full flex flex-row items-center justify-center">
-            <KakaoMap
-              class="rounded-md"
-              :width="mapWidth + 'px'"
-              :height="mapHeight + 'px'"
-              :draggable="true"
-              :lat="lat"
-              :lng="lng"
-              level="7"
-            >
-              <KakaoMapMarkerPolyline :markerList="latLngList" :endArrow="true" :strokeWeight="6" />
+            <template v-if="isLoaded">
+              <KakaoMap
+                class="rounded-md"
+                :width="mapWidth + 'px'"
+                :height="mapHeight + 'px'"
+                :draggable="true"
+                :lat="lat"
+                :lng="lng"
+                level="7"
+              >
+                <KakaoMapMarkerPolyline
+                  :markerList="latLngList"
+                  :endArrow="true"
+                  :strokeWeight="6"
+                />
 
-              <template v-for="spot in tripPlan" :key="spot.id">
-                <KakaoMapMarker :lat="spot.latitude" :lng="spot.longitude" />
-                <KakaoMapCustomOverlay :lat="spot.latitude + 0.008" :lng="spot.longitude">
-                  <div
-                    class="w-auto h-[1.5rem] flex flex-row items-center justify-center bg-zinc-100 rounded-md border-2"
-                  >
-                    <p class="text-gray-700">{{ spot.title }}</p>
-                  </div>
-                </KakaoMapCustomOverlay>
-              </template>
-            </KakaoMap>
+                <template v-for="spot in tripPlan" :key="spot.id">
+                  <KakaoMapMarker :lat="spot.latitude" :lng="spot.longitude" />
+                  <KakaoMapCustomOverlay :lat="spot.latitude + 0.008" :lng="spot.longitude">
+                    <div
+                      class="w-auto h-[1.5rem] flex flex-row items-center justify-center bg-zinc-100 rounded-md border-2"
+                    >
+                      <p class="text-gray-700">{{ spot.title }}</p>
+                    </div>
+                  </KakaoMapCustomOverlay>
+                </template>
+              </KakaoMap>
+            </template>
           </div>
-          <div class="w-1/4 h-full bg-green-300"></div>
+          <div
+            class="w-1/4 h-full flex flex-col items-center justify-center rounded-md border-2 border-gray-300"
+          >
+            <!-- 정보 띄우는 화면 -->
+            <div
+              v-show="isSelected"
+              class="w-full h-full items-center justify-center font-kor text-gray-700 overflow-y-auto"
+            >
+              <div class="w-full h-auto flex flex-col items-start justify-center">
+                <p class="font-bold ml-2">장소</p>
+                <p class="ml-2">{{ selectedSpot.title }}</p>
+              </div>
+              <div class="w-full h-auto flex flex-col items-center justify-center mt-3">
+                <img
+                  :src="selectedSpot.img ? selectedSpot.img : '/src/assets/no-image.png'"
+                  class="rounded-md w-11/12"
+                />
+              </div>
+              <div class="w-full h-auto flex flex-col items-start justify-center mt-3">
+                <p class="font-bold ml-2">위치</p>
+                <p class="ml-2">{{ selectedSpot.addr }}</p>
+              </div>
+              <div class="w-full h-auto flex flex-col items-start justify-center mt-3">
+                <p class="font-bold ml-2">타입</p>
+                <p class="ml-2">{{ selectedSpot.type }}</p>
+              </div>
+            </div>
+            <div
+              v-show="!isSelected"
+              class="w-full h-full flex flex-col items-center justify-center font-kor text-zinc-200"
+            >
+              <p
+                class="w-full h-full flex flex-col items-center justify-center scale-75 hover:scale-100 transition-all"
+              >
+                보고 싶은 장소를 선택해주세요
+              </p>
+            </div>
+          </div>
         </div>
-        <!-- </template> -->
-        <p class="w-[52rem] h-1/2 flex flex-row items-start justify-start mt-3">
-          {{ article.content }}
+        <div class="w-[52rem] flex flex-row items-center justify-center">
+          <img :src="article?.thumbnail" class="w-[48rem] mt-3 rounded-md" />
+        </div>
+        <p class="w-[52rem] h-1/2 flex flex-row items-start justify-start mt-3 whitespace-pre">
+          {{ article?.content }}
         </p>
       </div>
     </div>
@@ -188,8 +293,13 @@ const isLiked = ref(false);
     </div>
     <div class="w-[54rem] h-[3rem] bg-white flex flex-row items-center justify-end">
       <div class="mr-3 flex flex-row items-center justify-end gap-2">
-        <BoardButton color="red" title="삭제" @click="deleteArticle" />
-        <BoardButton color="sky" title="수정" @click="moveUpdate" />
+        <template v-if="article.authorLoginId === store.loginId">
+          <BoardButton color="red" title="삭제" @click="deleteArticle" />
+          <BoardButton color="sky" title="수정" @click="moveUpdate" />
+        </template>
+        <template v-else>
+          <BoardButton color="sky" title="가져오기" @click="getTrip" />
+        </template>
         <BoardButton color="gray" title="목록" @click="moveList" />
       </div>
     </div>

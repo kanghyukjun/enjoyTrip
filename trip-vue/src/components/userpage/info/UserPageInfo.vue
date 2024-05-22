@@ -2,15 +2,18 @@
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
+import { useUserStore } from "@/stores/login";
 import { getUserInfo } from "@/api/user";
 import UserPageInfoItem from "@/components/userpage/info/UserPageInfoItem.vue";
 
 const router = useRouter();
+const store = useUserStore();
 
 const userInfo = ref({
-  loginId: "로그인이 필요합니다",
-  name: "로그인이 필요합니다",
-  email: "로그인이 필요합니다",
+  loginId: "",
+  name: "",
+  email: "",
+  image: "",
 });
 
 const modify = () => {
@@ -18,15 +21,15 @@ const modify = () => {
 };
 
 onMounted(async () => {
-  getUserInfo()
+  getUserInfo(store.loginId)
     .then((response) => {
       userInfo.value.loginId = response.data.userInfo.loginId;
       userInfo.value.name = response.data.userInfo.name;
       userInfo.value.email = response.data.userInfo.email;
+      userInfo.value.image = response.data.userInfo.image;
     })
     .catch((error) => {
       console.log(error);
-      router.push({ name: "userLogin" });
     });
 });
 </script>
@@ -37,8 +40,8 @@ onMounted(async () => {
     <div class="w-full h-full flex flex-row">
       <div class="flex flex-col justify-center items-center w-[10rem]">
         <img
-          class="w-40 rounded-2xl transition-all shadow-sm hover:shadow-md"
-          src="@/assets/no-image.png"
+          class="w-[12rem] h-[10rem] rounded-2xl transition-all shadow-sm hover:shadow-md"
+          :src="userInfo.image ? userInfo.image : '/src/assets/no-image.png'"
         />
       </div>
       <div class="flex flex-col justify-center items-end w-[40rem] gap-4">

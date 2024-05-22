@@ -14,6 +14,8 @@ import { addTripPlan } from "@/api/trip";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+import { useUserStore } from "@/stores/login";
+
 import TripPlanListItem from "@/components/search/trip-plan/TripPlanListItem.vue";
 import VInputForm from "@/components/common/item/VInputForm.vue";
 import VDatePicker from "@/components/common/item/VDatePicker.vue";
@@ -21,6 +23,7 @@ import VButton from "@/components/common/item/VButton.vue";
 import { HttpStatusCode } from "axios";
 
 const router = useRouter();
+const store = useUserStore();
 
 const mapWidth = ref(0);
 const mapHeight = ref(0);
@@ -55,7 +58,7 @@ onMounted(() => {
   lat.value = latSum / tripPlan.value.length;
   lng.value = lngSum / tripPlan.value.length;
 
-  loginId.value = sessionStorage.getItem("loginId");
+  loginId.value = store.loginId;
 
   isLoaded.value = true;
 });
@@ -114,10 +117,10 @@ const regist = async () => {
   } else if (registData.value.startDate > registData.value.endDate) {
     toast.error("올바른 날짜 정보를 입력해주세요");
   } else {
-    const response = await addTripPlan(registData.value);
+    const response = await addTripPlan(store.loginId, registData.value);
     if (response.status == HttpStatusCode.Created) {
       window.alert("여행지 등록 완료!");
-      router.push({ name: "home" });
+      router.push({ name: "mapSearch" });
     } else {
       toast.error("에러 발생");
     }

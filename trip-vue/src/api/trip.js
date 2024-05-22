@@ -2,10 +2,10 @@ import { localAxios } from "@/util/http-commons.js";
 
 const local = localAxios();
 
-export function addTripPlan(data) {
+export function addTripPlan(loginId, data) {
   return new Promise((resolve, reject) => {
     local
-      .post(`/course/${sessionStorage.getItem("loginId")}`, data)
+      .post(`/course/${loginId}`, data)
       .then((response) => {
         resolve(response);
       })
@@ -42,6 +42,15 @@ export function updateTripCourse(loginId, courseId, data) {
       .then((response) => {
         resolve(response);
       })
+      .catch((error) => reject(error));
+  });
+}
+
+export function getOtherTripCourse(loginId, courseId) {
+  return new Promise((resolve, reject) => {
+    local
+      .post(`/board/${courseId}/${loginId}`)
+      .then((response) => resolve(response))
       .catch((error) => reject(error));
   });
 }

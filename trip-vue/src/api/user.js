@@ -3,10 +3,10 @@ import { localAxios } from "@/util/http-commons.js";
 
 const local = localAxios();
 
-export function getUserInfo() {
+export function getUserInfo(loginId) {
   return new Promise((resolve, reject) => {
     local
-      .get(`/user/${sessionStorage.getItem("loginId")}`)
+      .get(`/user/${loginId}`)
       .then((response) => {
         resolve(response);
       })
@@ -16,10 +16,10 @@ export function getUserInfo() {
   });
 }
 
-export function userUpdate(userInfo) {
+export function userUpdate(loginId, userInfo) {
   return new Promise((resolve, reject) => {
     local
-      .put(`/user/${sessionStorage.getItem("loginId")}`, userInfo)
+      .put(`/user/${loginId}`, userInfo)
       .then((response) => {
         resolve(response);
       })
@@ -46,10 +46,10 @@ export function userRegister(data) {
   });
 }
 
-export function getUserCourse() {
+export function getUserCourse(loginId) {
   return new Promise((resolve, reject) => {
     local
-      .get(`/course/${sessionStorage.getItem("loginId")}`)
+      .get(`/course/${loginId}`)
       .then((response) => resolve(response))
       .catch((error) => reject(error));
   });

@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-// import { getArticleList } from "@/api/board";
+import { getArticleList } from "@/api/board";
 
 import { onMounted, ref } from "vue";
 import BoardListPageNavigationItem from "./BoardListPageNavigationItem.vue";
@@ -16,30 +16,20 @@ const maxPageLength = Number(import.meta.env.VITE_BOARD_MAX_PER_PAGE);
 
 const pgno = ref(0);
 const word = ref("");
-// const articles = ref([]);
-const articleListLength = ref(20);
-// const articleListLength = ref(0);
+const articles = ref([]);
+// const articleListLength = ref(20);
+const articleListLength = ref(0);
 
 onMounted(() => {
   pgno.value = Number(route.query.pgno);
   word.value = route.query.word;
 
-  if (!isValid(pgno.value)) {
-    router.push({
-      name: "boardList",
-      query: {
-        pgno: 1,
-        word: "",
-      },
-    });
-  } else {
-    // article List 불러오기
-    // getArticleList(pgno.value, word.value).then((response) => {
-    //   articles.value = response.data.articles;
-    //   articleListLength.value = response.data.count;
-    // });
-    emit("loaded", pgno.value, word.value); // emit 이벤트에 담아 리스트 변경 요청
-  }
+  // article List 불러오기
+  getArticleList(pgno.value, word.value).then((response) => {
+    articles.value = response.data.articles;
+    articleListLength.value = response.data.count;
+    emit("loaded", articles.value); // emit 이벤트에 담아 리스트 변경 요청
+  });
 });
 
 const isValid = (pgno) => {

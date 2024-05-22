@@ -77,6 +77,7 @@ const localAxios = () => {
           .catch((error) => {
             console.log(`[http-commons] : refreshToken이 만료 되었습니다`);
             console.log(`[http-commons] : 다시 로그인을 해서 Token을 발급받아 주세요`);
+            sessionStorage.removeItem("user");
             return Promise.reject(error);
           });
 
@@ -85,7 +86,7 @@ const localAxios = () => {
           return Promise.reject(error);
         } else {
           console.log(`[http-commons] : accessToken을 재발급 완료`);
-          sessionStorage.setItem("accessToken", `Bearer ${response.data["access-token"]}`);
+          setAccessToken(`Bearer ${response.data["access-token"]}`);
           originalRequest.headers.Authorization = getAccessToken();
 
           console.log(`[http-commons] : 기존 요청을 다시 보냅니다`);
@@ -100,16 +101,26 @@ const localAxios = () => {
   return instance;
 };
 
+const getUserSession = () => {
+  return JSON.parse(sessionStorage?.getItem("user"));
+};
+
 const getAccessToken = () => {
-  return sessionStorage.getItem("accessToken");
+  return getUserSession()?.accessToken;
 };
 
 const getRefreshToken = () => {
-  return sessionStorage.getItem("refreshToken");
+  return getUserSession()?.refreshToken;
 };
 
 const getLoginId = () => {
-  return sessionStorage.getItem("loginId");
+  return getUserSession()?.loginId;
+};
+
+const setAccessToken = (accessToken) => {
+  const user = getUserSession();
+  user.accessToken = accessToken;
+  sessionStorage.setItem("user", JSON.stringify(user));
 };
 
 export { localAxios };

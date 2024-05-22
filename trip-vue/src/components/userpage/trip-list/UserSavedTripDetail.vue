@@ -2,6 +2,7 @@
 import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/login";
 import { getTripCourseDetail, deleteTripCourse, updateTripCourse } from "@/api/trip";
 
 import {
@@ -20,8 +21,9 @@ import UserSavedTripDetailListItem from "@/components/userpage/trip-list/UserSav
 
 const route = useRoute();
 const router = useRouter();
+const store = useUserStore();
 const courseId = ref(route.params.courseId);
-const loginId = ref(route.params.loginId);
+const loginId = ref(store.loginId);
 
 const mapWidth = ref(0);
 const mapHeight = ref(0);

@@ -5,15 +5,15 @@ const props = defineProps({
   spot: Object,
 });
 
-const maxTitleLength = 27;
+const maxTitleLength = 10;
 const title = ref("");
 
 onMounted(() => {
-  //   title.value = props.spot.title;
-  //   if (title.value.length > maxTitleLength) {
-  //     title.value = title.value.substring(0, maxTitleLength);
-  //     title.value += "...";
-  //   }
+  title.value = props.spot.title;
+  if (title.value.length > maxTitleLength) {
+    title.value = title.value.substring(0, maxTitleLength);
+    title.value += "...";
+  }
 });
 </script>
 

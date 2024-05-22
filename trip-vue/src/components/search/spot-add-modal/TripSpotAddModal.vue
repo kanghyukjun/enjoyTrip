@@ -5,16 +5,19 @@ import { getSido, getGugun, addSpot } from "@/api/search";
 import { ref, computed } from "vue";
 
 import { useSpotListStore } from "@/stores/spot-list";
+import { useUserStore } from "@/stores/login";
 
 import TripSpotAddModalFormItem from "@/components/search/spot-add-modal/TripSpotAddModalFormItem.vue";
 import VDropdown from "@/components/common/item/VDropdown.vue";
 import VButton from "@/components/common/item/VButton.vue";
 import TripSpotAddModalFileForm from "@/components/search/spot-add-modal/TripSpotAddModalFileForm.vue";
-import { HttpStatusCode } from "axios";
+
+import { encodeImageToBase64 } from "@/util/image";
 
 const emit = defineEmits(["closeModal"]);
 
 const store = useSpotListStore();
+const userStore = useUserStore();
 const geoCoder = new kakao.maps.services.Geocoder();
 
 const spotInfo = ref({
@@ -107,21 +110,27 @@ const getGugunId = async (address, sidoCode) => {
   return gugunCode;
 };
 
-const encodeImageToBase64 = (file) => {
-  return new Promise((resolve, reject) => {
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (event) => {
-      resolve(event.target.result);
-    };
-    reader.onerror = (error) => {
-      reject(error);
-    };
-  });
-};
+// const encodeImageToBase64 = (file) => {
+//   return new Promise((resolve, reject) => {
+//     let reader = new FileReader();
+//     reader.readAsDataURL(file);
+//     reader.onload = (event) => {
+//       resolve(event.target.result);
+//     };
+//     reader.onerror = (error) => {
+//       reject(error);
+//     };
+//   });
+// };
 
-const fileUpload = (file) => {
-  encodeImageToBase64(file).then((response) => (spotInfo.value.image = response));
+// const fileUpload = (file) => {
+//   encodeImageToBase64(file).then((response) => (spotInfo.value.image = response));
+// };
+
+const fileUpload = async (file) => {
+  encodeImageToBase64(file).then((response) => {
+    spotInfo.value.image = response;
+  });
 };
 
 const close = () => {
@@ -130,12 +139,16 @@ const close = () => {
 
 const register = async () => {
   if (isValid.value) {
-    const response = await addSpot(spotInfo.value);
-    if (response.status === HttpStatusCode.Created) window.alert("등록이 완료되었습니다");
-    else window.alert("서버 에러");
-    close();
-  } else {
-    window.alert("작성하지 않은 값이 존재합니다");
+    addSpot(userStore.loginId, spotInfo.value)
+      .then(() => {
+        window.alert("등록이 완료되었습니다");
+      })
+      .catch(() => {
+        window.alert("서버 에러");
+      })
+      .finally(() => {
+        close();
+      });
   }
 };
 </script>
