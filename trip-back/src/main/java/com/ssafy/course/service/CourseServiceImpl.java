@@ -1,11 +1,11 @@
 package com.ssafy.course.service;
 
+import com.ssafy.board.mapper.BoardMapper;
 import com.ssafy.course.dto.CourseRequestDto;
 import com.ssafy.course.dto.CourseResponseDto;
 import com.ssafy.course.dto.CourseSimpleResponseDto;
 import com.ssafy.course.mapper.CourseMapper;
 import com.ssafy.trip.dto.SpotResponseDto;
-import com.ssafy.trip.mapper.TripMapper;
 import com.ssafy.user.mapper.UserMapper;
 import com.ssafy.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class CourseServiceImpl implements CourseService{
     private final JWTUtil jwtUtil;
     private final UserMapper userMapper;
     private final CourseMapper courseMapper;
+    private final BoardMapper boardMapper;
 
     @Override
     public ResponseEntity<Map<String, Object>> add(String loginId, CourseRequestDto requestDto,
@@ -85,6 +87,23 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
+    public CourseRequestDto getDetail(int courseId){
+        CourseRequestDto requestDto = new CourseRequestDto();
+        CourseResponseDto responseDto = courseMapper.getDetail(courseId);
+        requestDto.setTitle(responseDto.getTitle());
+        requestDto.setDesc(responseDto.getDesc());
+        requestDto.setStartDate(responseDto.getStartDate());
+        requestDto.setEndDate(responseDto.getEndDate());
+        List<SpotResponseDto> spots = courseMapper.getSpots(courseId);
+        List<Integer> spotIds = new ArrayList<>();
+        for (SpotResponseDto spot : spots) {
+            spotIds.add(spot.getId());
+        }
+        requestDto.setSpotIds(spotIds);
+        return requestDto;
+    }
+
+    @Override
     public ResponseEntity<Map<String, Object>> update(String loginId, int courseId, CourseRequestDto requestDto, String authorization) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = jwtUtil.checkToken(loginId, authorization);
@@ -112,6 +131,8 @@ public class CourseServiceImpl implements CourseService{
         log.debug("[CourseService] AccessToken 검증 시작 - {}", authorization);
         if (status == HttpStatus.OK) {
             log.debug("[CourseService] AccessToken 검증 완료 - {}", authorization);
+            //코스가 등록된 게시물 삭제
+            boardMapper.deleteByCourseId(courseId);
             //코스에 등록된 여행지 삭제
             courseMapper.deleteSpots(courseId);
             //코스 삭제

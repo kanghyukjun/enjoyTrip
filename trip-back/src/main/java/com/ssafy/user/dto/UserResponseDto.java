@@ -13,4 +13,5 @@ public class UserResponseDto {
     private String email;
     private String loginId;
     private String password;
+    private String image;
 }

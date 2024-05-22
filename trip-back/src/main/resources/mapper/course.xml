@@ -12,6 +12,7 @@
     	</resultMap>
 
     	<resultMap type="courseResponseDto" id="courseResponse">
+            <result column="course_id" property="id"/>
     		<result column="course_title" property="title"/>
     		<result column="course_desc" property="desc"/>
     		<result column="course_start_date" property="startDate"/>
@@ -55,10 +56,12 @@
         select course_id, course_title, course_start_date, course_end_date
         from user_course
         where user_id = #{userId}
+        order by course_start_date
+
     </select>
 
     <select id="getDetail" parameterType="int" resultMap="courseResponse">
-        select course_title, course_desc, course_start_date, course_end_date
+        select course_id, course_title, course_desc, course_start_date, course_end_date
         from user_course
         where course_id = #{courseId}
     </select>

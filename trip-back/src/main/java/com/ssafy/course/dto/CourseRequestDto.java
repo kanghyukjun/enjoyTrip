@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -15,10 +16,10 @@ public class CourseRequestDto {
     @Schema(title = "코스 설명", example = "간단한 한강 산책로 코스입니다.")
     private String desc;
 
-    @Schema(title = "출발일", example = "2024-05-20")
+    @Schema(title = "출발일", example = "2024-05-20 00:00:00")
     private LocalDate startDate;
 
-    @Schema(title = "도착일", example = "2024-05-21")
+    @Schema(title = "도착일", example = "2024-05-21 11:00:00")
     private LocalDate endDate;
 
     @Schema(title = "코스 내 여행지 ID들", example = "[0, 1, 2]")

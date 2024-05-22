@@ -18,4 +18,14 @@ public interface BoardMapper {
     BoardResponseDto getDetail(int boardId);
 
     int getCourseId(int boardId);
+
+    void update(int boardId, BoardRequestDto requestDto);
+
+    void addHit(int boardId);
+
+    void delete(int boardId);
+
+    void deleteByCourseId(int courseId);
+
+    List<BoardSimpleResponseDto> getUserBoard(int userId, int start, int number, String word);
 }

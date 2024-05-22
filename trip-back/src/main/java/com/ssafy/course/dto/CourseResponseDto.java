@@ -11,6 +11,9 @@ import java.util.List;
 @Schema(title = "코스 상세 정보 반환 DTO", description = "등록한 코스 정보가 있는 DTO이다.")
 public class CourseResponseDto {
 
+    @Schema(title = "코스 ID", example = "1")
+    private int id;
+
     @Schema(title = "코스명", example = "한강 산책")
     private String title;
 

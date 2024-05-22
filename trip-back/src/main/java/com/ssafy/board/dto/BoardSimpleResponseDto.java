@@ -24,6 +24,6 @@ public class BoardSimpleResponseDto {
     @Schema(title = "조회수", example = "1")
     private int hit;
 
-    @Schema(title = "썸네일 이미지", example = "2024-05-21")
+    @Schema(title = "썸네일 이미지")
     private String thumbnail;
 }

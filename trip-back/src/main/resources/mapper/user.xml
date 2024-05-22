@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.user.mapper.UserMapper">
@@ -11,6 +11,7 @@
 		<result column="user_pwd" property="password"/>
 		<result column="user_name" property="name"/>
 		<result column="user_email" property="email"/>
+		<result column="user_image" property="image"/>
 	</resultMap>
 
 
@@ -20,19 +21,19 @@
 	</select>
 
 	<select id="getById" parameterType="int" resultMap="userResultMap">
-		select user.user_id, user.user_login_id, user.user_name, user.user_email, user.user_pwd
+		select user.user_id, user.user_login_id, user.user_name, user.user_email, user.user_pwd, user.user_image
 		from user
 		where user.user_id = #{userId}
 	</select>
 
 	<select id="getByLoginId" parameterType="string" resultMap="userResultMap">
-		select user.user_id, user.user_login_id, user.user_name, user.user_email, user.user_pwd
+		select user.user_id, user.user_login_id, user.user_name, user.user_email, user.user_pwd, user.user_image
 		from user
 		where user.user_login_id = #{loginId}
 	</select>
 
 	<select id="getByLoginIdAndPassword" parameterType="map" resultMap="userResultMap">
-		select user.user_id, user.user_login_id, user.user_name, user.user_email, user.user_pwd
+		select user.user_id, user.user_login_id, user.user_name, user.user_email, user.user_pwd, user.user_image
 		from user
 		where user.user_login_id = #{loginId} and user.user_pwd = #{password}
 	</select>
@@ -42,14 +43,14 @@
 		where user.user_login_id = #{loginId}
 	</select>
 
-	<insert id="save" parameterType="userJoinRequestDto">
+	<insert id="save" parameterType="map">
         insert into user(user_login_id, user_pwd, user_name, user_email)
         values (#{loginId}, #{password}, #{name}, #{email})
     </insert>
 
 	<update id="update" parameterType="map">
 		update user
-		set user_pwd = #{requestDto.password}, user_name = #{requestDto.name}, user_email=#{requestDto.email}
+		set user_pwd = #{requestDto.password}, user_name = #{requestDto.name}, user_email=#{requestDto.email}, user_image = #{requestDto.image}
 		where user_login_id = #{loginId}
 	</update>
 

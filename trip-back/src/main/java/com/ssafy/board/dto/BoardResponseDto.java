@@ -21,6 +21,9 @@ public class BoardResponseDto {
     @Schema(title = "작성자", example = "혁준이")
     private String author;
 
+    @Schema(title = "작성자 loginID", example = "ssafy")
+    private String authorLoginId;
+
     @Schema(title = "작성일", example = "2024-05-20")
     private LocalDate createTime;
 
