@@ -15,4 +15,7 @@ public class UserModifyRequestDto {
 
     @Schema(title = "유저 이메일", example = "ssafy@naver.com")
     private String email;
+
+    @Schema(title = "유저 프로필 사진")
+    private String image;
 }

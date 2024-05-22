@@ -30,7 +30,6 @@ public class BoardController {
     @PostMapping("/{courseId}/{loginId}")
     public ResponseEntity<Map<String, Object>> addCourse(@PathVariable("courseId") int courseId,
                                                    @PathVariable("loginId") String loginId,
-                                                   @RequestBody BoardRequestDto requestDto,
                                                    HttpServletRequest request) {
         return boardService.addCourse(courseId, loginId, request.getHeader("Authorization"));
     }
