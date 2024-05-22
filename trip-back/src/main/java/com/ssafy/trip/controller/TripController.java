@@ -18,7 +18,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -82,8 +84,8 @@ public class TripController {
             @ApiResponse(responseCode = "500", description = "조회에 실패했습니다.", content = @Content(mediaType = "application/json")),
     })
     public ResponseEntity<Map<String, Object>> addSpot(@PathVariable("loginId") String loginId,
-                                                          @RequestBody AddSpotRequestDto requestDto,
-                                                          HttpServletRequest request) {
+                                                       @RequestBody AddSpotRequestDto requestDto,
+                                                       HttpServletRequest request) throws IOException {
         return tripService.addSpot(loginId, requestDto, request.getHeader("Authorization"));
     }
 

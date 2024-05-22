@@ -5,7 +5,9 @@ import com.ssafy.trip.dto.SidoResponseDto;
 import com.ssafy.trip.dto.AddSpotRequestDto;
 import com.ssafy.trip.dto.SpotResponseDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -16,5 +18,5 @@ public interface TripService {
 
     List<SpotResponseDto> searchSpot(int sidoCode, int gugunCode, List<String> spotType, String word) throws Exception;
 
-    ResponseEntity<Map<String, Object>> addSpot(String loginId, AddSpotRequestDto requestDto, String authorization);
+    ResponseEntity<Map<String, Object>> addSpot(String loginId, AddSpotRequestDto requestDto, String authorization) throws IOException;
 }

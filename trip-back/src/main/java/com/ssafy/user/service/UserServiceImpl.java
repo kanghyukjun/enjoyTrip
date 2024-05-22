@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
             UserResponseDto user = userMapper.getByLoginIdAndPassword(requestDto);
             if (user!=null) {
                 log.debug("[UserService] 로그인 성공");
-                createTokens(user.getLoginId(), status, resultMap);
+                createTokens(user.getLoginId(), resultMap);
             } else {
                 resultMap.put("message", "아이디 또는 패스워드를 확인해주세요.");
                 status = HttpStatus.UNAUTHORIZED;
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
 
 
     //로그인 성공 시 토큰 생성
-    private void createTokens(String loginId, HttpStatus status, Map<String, Object> resultMap) {
+    private void createTokens(String loginId, Map<String, Object> resultMap) {
         log.debug("[UserService] 토큰 생성 중");
         String accessToken = jwtUtil.createAccessToken(loginId);
         String refreshToken = jwtUtil.createRefreshToken(loginId);
@@ -154,8 +154,6 @@ public class UserServiceImpl implements UserService {
 
         resultMap.put("access-token", accessToken);
         resultMap.put("refresh-token", refreshToken);
-
-        status = HttpStatus.CREATED;
     }
 
     //DB에 RefreshToken 저장
@@ -197,12 +195,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<Map<String, Object>> logout(String loginId) {
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = HttpStatus.ACCEPTED;
+        HttpStatus status = HttpStatus.NO_CONTENT;
         try {
             log.debug("[UserService] RefreshToken 삭제 요청");
             deleteRefreshToken(loginId);
             log.debug("[UserService] RefreshToken 삭제 완료");
-            status = HttpStatus.NO_CONTENT;
         } catch (Exception e) {
             log.error("[UserService] RefreshToken 삭제 실패");
             resultMap.put("message", e.getMessage());

@@ -12,11 +12,13 @@
     		<result column="hit" property="hit"/>
     		<result column="board_thumbnail" property="thumbnail"/>
     	</resultMap>
+
     	<resultMap type="boardResponseDto" id="boardResponse">
     		<result column="board_id" property="id"/>
     		<result column="board_title" property="title"/>
     		<result column="board_content" property="content"/>
     		<result column="user_name" property="author"/>
+    		<result column="user_login_id" property="authorLoginId"/>
     		<result column="board_register_time" property="createTime"/>
     		<result column="hit" property="hit"/>
     		<result column="board_thumbnail" property="thumbnail"/>
@@ -24,7 +26,7 @@
 
     <insert id="add" parameterType="map">
         insert into board(board_title, board_content, board_thumbnail, course_id, board_register_time)
-        values (#{title}, #{content}, #{thumbnail}, #{courseId}, curdate())
+        values (#{title}, #{content}, #{thumbnail}, #{courseId}, now())
     </insert>
 
 	<select id="get" parameterType="map" resultMap="boardSimpleResponse">
@@ -37,6 +39,17 @@
 		limit #{start}, #{number}
 	</select>
 
+	<select id="getUserBoard" parameterType="map" resultMap="boardSimpleResponse">
+		select b.board_id, b.board_title, u.user_name, b.board_register_time, b.hit, b.board_thumbnail
+		from user u, user_course uc, board b
+		where b.course_id = uc.course_id
+		and uc.user_id = u.user_id
+		and u.user_id = #{userId}
+		and b.board_title like concat('%', #{word}, '%')
+		order by b.board_register_time desc
+		limit #{start}, #{number}
+	</select>
+
 	<select id="count" parameterType="string" resultType="int">
 		select count(*)
 		from board
@@ -44,7 +57,7 @@
 	</select>
 
 	<select id="getDetail" parameterType="int" resultMap="boardResponse">
-		select b.board_id, b.board_title, b.board_content, u.user_name, b.board_register_time, b.hit, b.board_thumbnail
+		select b.board_id, b.board_title, b.board_content, u.user_name, u.user_login_id, b.board_register_time, b.hit, b.board_thumbnail
 		from user u, user_course uc, board b
 		where b.course_id = uc.course_id
 		and uc.user_id = u.user_id
@@ -56,38 +69,26 @@
 		from board
 		where board_id = #{boardId}
 	</select>
-<!--    <select id="getLastIdx" resultType="int">-->
-<!--        select MAX(course_id)-->
-<!--        from user_course-->
-<!--    </select>-->
 
-<!--    <insert id="addSpots" parameterType="map">-->
-<!--        insert into user_course_spot(tspot_id, course_id, tspot_order)-->
-<!--        values-->
-<!--        <foreach collection="spotIds" item="spotId" index="index" separator=",">-->
-<!--            (#{spotId}, #{courseId}, #{index})-->
-<!--        </foreach>-->
-<!--    </insert>-->
+	<update id="update" parameterType="map">
+		update board
+		set board_title = #{requestDto.title}, board_content = #{requestDto.content}, board_thumbnail = #{requestDto.thumbnail}, course_id = #{requestDto.courseId}
+		where board_id = #{boardId}
+	</update>
 
-<!--    <delete id="deleteSpots" parameterType="int">-->
-<!--        delete from user_course_spot-->
-<!--        where course_id = #{courseId}-->
-<!--    </delete>-->
+	<update id="addHit" parameterType="int">
+		update board
+		set hit = hit+1
+		where board_id = #{boardId}
+	</update>
 
-<!--    <select id="get" parameterType="int" resultMap="courseResponse">-->
-<!--        select course_id, course_title, course_start_date, course_end_date-->
-<!--        from user_course-->
-<!--        where user_id = #{userId}-->
-<!--    </select>-->
+	<delete id="delete" parameterType="int">
+		delete from board
+		where board_id = #{boardId}
+	</delete>
 
-<!--    <update id="update" parameterType="map">-->
-<!--        update user_course-->
-<!--        set course_title = #{title}, course_desc = #{desc}, course_start_date = #{startDate}, course_end_date = #{endDate}-->
-<!--        where course_id = #{courseId}-->
-<!--    </update>-->
-
-<!--    <delete id="delete" parameterType="int">-->
-<!--        delete from user_course-->
-<!--        where course_id = #{courseId}-->
-<!--    </delete>-->
+	<delete id="deleteByCourseId" parameterType="int">
+		delete from board
+		where course_id = #{courseId}
+	</delete>
 </mapper>
