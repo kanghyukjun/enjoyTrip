@@ -15,7 +15,7 @@ import UserPageSideNavBarListItem from "@/components/userpage/navbar/UserPageSid
         <p class="font-bold">게시판 관리</p>
       </li>
       <UserPageSideNavBarListItem name="userArticle" title="내가 작성한 글" />
-      <UserPageSideNavBarListItem name="userArticle" title="내가 찜한 글" />
+      <!-- <UserPageSideNavBarListItem name="userArticle" title="내가 찜한 글" /> -->
     </div>
   </ul>
 </template>

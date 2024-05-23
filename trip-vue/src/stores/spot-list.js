@@ -6,42 +6,42 @@ export const useSpotListStore = defineStore("spot-list", () => {
     {
       id: 12,
       name: "관광지",
-      checked: true,
+      checked: false,
     },
     {
       id: 14,
       name: "문화시설",
-      checked: true,
+      checked: false,
     },
     {
       id: 15,
       name: "축제공연행사",
-      checked: true,
+      checked: false,
     },
     {
       id: 25,
       name: "여행코스",
-      checked: true,
+      checked: false,
     },
     {
       id: 28,
       name: "레포츠",
-      checked: true,
+      checked: false,
     },
     {
       id: 32,
       name: "숙박",
-      checked: true,
+      checked: false,
     },
     {
       id: 38,
       name: "쇼핑",
-      checked: true,
+      checked: false,
     },
     {
       id: 39,
       name: "음식점",
-      checked: true,
+      checked: false,
     },
   ]);
 

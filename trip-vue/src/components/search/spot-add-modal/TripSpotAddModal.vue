@@ -165,7 +165,7 @@ const register = async () => {
       class="w-[40rem] h-[35rem] flex flex-col items-center justify-center rounded-lg opacity-100 bg-zinc-100 z-30 font-kor"
     >
       <div class="w-[40rem] h-[3rem] flex items-center justify-between">
-        <p class="ml-2 font-bold text-2xl">신규 여행지 등록</p>
+        <p class="ml-2 font-bold text-2xl text-gray-700">신규 여행지 등록</p>
         <button
           class="middle none center mr-4 h-8 max-h-[32px] w-8 max-w-[32px] rounded-lg bg-zinc-500 font-sans text-xs font-bold uppercase text-white shadow-sm shadow-zinc-500/20 transition-all hover:shadow-md hover:shadow-zinc-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           @click.prevent="close"

@@ -9,7 +9,7 @@ const store = useUserStore();
 
 onMounted(() => {
   if (!store.isLogined) {
-    window.alert("로그인이 필요합니다");
+    // window.alert("로그인이 필요합니다");
     router.push({ name: "userLogin" });
   }
 });

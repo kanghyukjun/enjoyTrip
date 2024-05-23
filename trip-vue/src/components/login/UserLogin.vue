@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import UserRegisterFormItem from "@/components/login/UserRegisterFormItem.vue";
 import { useUserStore } from "@/stores/login";
+import UserPasswordModal from "@/components/login/UserPasswordModal.vue";
 
 const store = useUserStore();
 const router = useRouter();
@@ -30,9 +31,12 @@ const login = async () => {
       window.alert("올바르지 않은 회원 정보입니다");
     });
 };
+
+const isShowModal = ref(false);
 </script>
 
 <template>
+  <UserPasswordModal v-show="isShowModal" @close="isShowModal = false" />
   <div
     class="flex h-[38rem] w-[34rem] items-center justify-center rounded shadow-md bg-zinc-100 font-kor"
   >
@@ -58,14 +62,22 @@ const login = async () => {
             @InputChangeEvent="passwordChange"
           />
         </div>
-        <button
-          class="mt-6 block w-full select-none rounded-lg bg-trip-color py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-trip-color transition-all hover:shadow-lg hover:shadow-trip-color focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-          type="button"
-          data-ripple-light="true"
-          @click="login"
-        >
-          로그인
-        </button>
+        <div class="flex flex-col items-center justify-center">
+          <button
+            class="mt-6 block w-full select-none rounded-lg bg-trip-color py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-trip-color transition-all hover:shadow-lg hover:shadow-trip-color focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            type="button"
+            data-ripple-light="true"
+            @click="login"
+          >
+            로그인
+          </button>
+          <div class="flex flex-row items-center justify-center mt-2 text-sm">
+            <p class="font-kor text-gray-700">비밀번호를 잊어버리셨나요?</p>
+            <p class="ml-2 text-trip-color font-kor cursor-pointer" @click="isShowModal = true">
+              비밀번호 찾기
+            </p>
+          </div>
+        </div>
         <div class="relative flex py-5 items-center">
           <div class="flex-grow border-t border-gray-400"></div>
           <span class="flex-shrink mx-4 text-gray-400">OR</span>

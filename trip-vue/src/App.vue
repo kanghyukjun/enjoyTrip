@@ -1,6 +1,7 @@
 <script setup>
 import { RouterView } from "vue-router";
 import SideNavBar from "./components/common/navbar/SideNavBar.vue";
+window.Kakao.init("825ba8eb447bc5dac3843c7ff02c14fa");
 </script>
 
 <template>

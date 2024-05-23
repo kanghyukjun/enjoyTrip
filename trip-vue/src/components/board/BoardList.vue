@@ -12,11 +12,7 @@ const router = useRouter();
 const route = useRoute();
 
 const word = ref(route.query.word);
-const articleList = ref([
-  {
-    id: 0,
-  },
-]);
+const articleList = ref([]);
 
 const search = () => {
   router.push({

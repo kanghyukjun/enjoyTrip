@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import BoardButton from "@/components/common/item/VButton.vue";
 import { getArticleDetail } from "@/api/board";
+import { deleteUserCourse } from "@/api/user";
 import { getOtherTripCourse } from "@/api/trip";
 import { useUserStore } from "@/stores/login";
 
@@ -51,7 +52,7 @@ const selectedSpot = ref({});
 const isSelected = ref(false);
 
 onMounted(async () => {
-  // 카카오 지도 크기 구하기
+  // 카카오 지도 띄우기
   const container = document.querySelector("#container");
   mapWidth.value = container.offsetWidth * 0.95;
   mapHeight.value = container.offsetHeight * 0.95;
@@ -64,6 +65,19 @@ onMounted(async () => {
     setMiddleCoord(spots.value);
 
     isLoaded.value = true;
+
+    // 카카오 공유
+    console.log(article.value.title);
+    Kakao.Share.createCustomButton({
+      container: "#kakaoButton",
+      templateId: 108211,
+      templateArgs: {
+        title: article.value.title,
+        desc: article.value.content,
+        THU: "",
+        url: `board/detail/${boardId}`,
+      },
+    });
   });
 });
 
@@ -101,8 +115,12 @@ const deleteArticle = () => {
   const isDelete = window.confirm("정말 글을 삭제하시겠습니까?");
   if (isDelete) {
     // 삭제
-    window.alert("삭제 되었습니다");
-    moveList();
+    deleteUserCourse(store.loginId, boardId)
+      .then(() => {
+        window.alert("삭제 되었습니다");
+        moveList();
+      })
+      .catch((error) => console.log(error));
   } else {
     return false;
   }
@@ -163,7 +181,6 @@ const isLiked = ref(false);
       </div>
       <div class="mr-5 flex flex-row items-center gap-4">
         <p>조회수 {{ article.hit ? article.hit : 0 }}</p>
-        <p>좋아요 {{ article.liked ? article.liked : 0 }}</p>
       </div>
     </div>
     <div class="w-[54rem] h-[25rem] flex flex-row bg-white items-center justify-center">
@@ -268,14 +285,18 @@ const isLiked = ref(false);
             </div>
           </div>
         </div>
-        <div class="w-[52rem] flex flex-row items-center justify-center">
-          <img :src="article?.thumbnail" class="w-[48rem] mt-3 rounded-md" />
+        <div class="relative flex items-center w-full mt-5">
+          <div class="flex-grow border-t border-gray-300"></div>
+        </div>
+        <div class="w-[52rem] flex flex-row items-center justify-center mt-10">
+          <img :src="article?.thumbnail" class="w-[24rem] mt-3 rounded-md" />
         </div>
         <p class="w-[52rem] h-1/2 flex flex-row items-start justify-start mt-3 whitespace-pre">
           {{ article?.content }}
         </p>
       </div>
     </div>
+
     <div class="w-[54rem] h-[2rem] flex flex-row bg-white items-center justify-end">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -293,6 +314,7 @@ const isLiked = ref(false);
     </div>
     <div class="w-[54rem] h-[3rem] bg-white flex flex-row items-center justify-end">
       <div class="mr-3 flex flex-row items-center justify-end gap-2">
+        <BoardButton id="kakaoButton" color="yellow" title="카카오 공유" />
         <template v-if="article.authorLoginId === store.loginId">
           <BoardButton color="red" title="삭제" @click="deleteArticle" />
           <BoardButton color="sky" title="수정" @click="moveUpdate" />

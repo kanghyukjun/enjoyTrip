@@ -30,6 +30,10 @@ onMounted(async () => {
   userInfo.value.image = result.data.userInfo.image;
 });
 
+const isPasswordValid = computed(() => {
+  return 5 <= userInfo.value.password.length && userInfo.value.password.length <= 16;
+});
+
 const passwordChange = (value) => {
   userInfo.value.password = value;
 };
@@ -114,14 +118,19 @@ const fileInput = (event) => {
         </button>
       </div>
       <div class="flex flex-col justify-center items-end w-[40rem] gap-4">
-        <div class="flex flex-col w-[30rem] h-[14rem] gap-4">
+        <div class="flex flex-col w-[30rem] h-[16rem] gap-4">
           <UserRegisterFormItem label="아이디" type="text" :value="userInfo.loginId" readonly />
-          <UserRegisterFormItem
-            label="비밀번호"
-            type="text"
-            :value="userInfo.password"
-            @inputChangeEvent="passwordChange"
-          />
+          <div class="flex flex-col w-[30rem] h-auto">
+            <UserRegisterFormItem
+              label="비밀번호"
+              type="text"
+              :value="userInfo.password"
+              @inputChangeEvent="passwordChange"
+            />
+            <p class="ml-2 text-red-500 font-kor font text-sm" v-show="!isPasswordValid">
+              비밀번호는 5자리 이상 16자리 이하가 되어야 합니다
+            </p>
+          </div>
           <UserRegisterFormItem
             label="닉네임"
             type="text"

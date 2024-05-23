@@ -230,7 +230,7 @@ const regist = () => {
         <VButton class="ml-2" color="gray" title="코스 선택" @click="isModalSeen = true" />
         <p class="font-kor text-gray-700">
           선택된 코스 제목:
-          {{ selectedCourse.title ? selectedCourse.title : "코스를 선택해주세요" }}
+          {{ selectedCourse.title ? selectedCourse.title : "반드시 코스를 선택해주세요" }}
         </p>
       </div>
     </div>

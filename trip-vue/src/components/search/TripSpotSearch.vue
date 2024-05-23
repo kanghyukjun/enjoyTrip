@@ -10,7 +10,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 import VCheckbox from "@/components/common/item/VCheckbox.vue";
-import VDropdown from "@/components/common/item/VDropdown.vue";
+import SearchDropdown from "@/components/search/item/SearchDropdown.vue";
 import SearchedSpotListItem from "@/components/search/item/SearchedSpotListItem.vue";
 import SearchedSpotInfo from "@/components/search/item/SearchedSpotInfo.vue";
 import TripSpotAddModal from "@/components/search/spot-add-modal/TripSpotAddModal.vue";
@@ -208,8 +208,8 @@ const addSpotFromModal = (spot) => {
       </div>
       <div class="w-[20rem] h-[4rem] flex flex-row justify-center items-center mt-2 gap-2">
         <!-- 시도 구군 선택 -->
-        <VDropdown title="시/도 선택" :items="sido" @changed="sidoChanged" :width="10" />
-        <VDropdown title="구/군 선택" :items="gugun" @changed="gugunChanged" :width="10" />
+        <SearchDropdown title="시/도 선택" :items="sido" @changed="sidoChanged" :width="10" />
+        <SearchDropdown title="구/군 선택" :items="gugun" @changed="gugunChanged" :width="10" />
       </div>
       <div
         class="w-[26rem] h-[6rem] flex flex-row flex-wrap gap-4 justify-center items-center mt-4"

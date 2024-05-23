@@ -19,6 +19,9 @@ defineProps({
       'bg-gray-500': color === 'gray',
       'shadow-gray-500': color === 'gray',
       'hover:shadow-gray-500': color === 'gray',
+      'bg-yellow-500': color === 'yellow',
+      'shadow-yellow-500': color === 'yellow',
+      'hover:shadow-yellow-500': color === 'yellow',
     }"
   >
     {{ title }}

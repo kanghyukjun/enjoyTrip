@@ -8,5 +8,6 @@ module.exports = {
   globals: {
     daum: "readonly", // to solve daum no-undef error
     kakao: "readonly", // to solve kakao no-undef error
+    Kakao: "readonly", // to solve kakao no-undef error
   },
 };

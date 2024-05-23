@@ -1,21 +1,11 @@
 <script setup>
-const props = defineProps({
-  title: String,
-  items: Array,
-  width: Number,
-});
+// const props = defineProps({
+//   title: String,
+//   items: Array,
+//   width: Number,
+// });
 
-const emit = defineEmits(["changed"]);
-const width = "w-[" + props.width + "rem]";
-
-const click = (event) => {
-  const code = event.target.value;
-  emit("changed", code);
-};
-
-// 만약 title=='시/도 선택'이고 onMounted시 queryString에 sido code에 대한 내용이 있고 items가 주어진다면
-// select option의 select value를 해당 index로 바꾸고
-// 이벤트를 emit한다
+// const emit = defineEmits(["changed"]);
 </script>
 
 <template>

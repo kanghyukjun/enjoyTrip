@@ -119,7 +119,9 @@ const moveList = () => {
 };
 
 const deleteList = () => {
-  const confirm = window.confirm("정말 여행지를 삭제하시겠습니까?");
+  const confirm = window.confirm(
+    "정말 여행지를 삭제하시겠습니까?\n여행지를 삭제할 경우 여행지와 관련된 모든 게시판의 글이 함께 삭제됩니다."
+  );
   if (confirm) {
     deleteTripCourse(loginId.value, courseId.value).then(() => {
       window.alert("삭제되었습니다");
