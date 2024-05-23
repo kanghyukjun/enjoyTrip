@@ -40,12 +40,15 @@ public class BoardController {
         return boardService.get(pgno, word);
     }
 
+    @GetMapping("/hit")
+    public ResponseEntity<Map<String, Object>> getHitBoard() {
+        return boardService.getHitBoard();
+    }
+
     @GetMapping("/user/{loginId}")
     public ResponseEntity<Map<String, Object>> getUserBoard(@PathVariable("loginId") String loginId,
-                                                            @RequestParam("pgno") int pgno,
-                                                            @RequestParam("word") String word,
                                                             HttpServletRequest request) {
-        return boardService.getUserBoard(loginId, pgno, word, request);
+        return boardService.getUserBoard(loginId, request);
     }
 
 

@@ -1,9 +1,6 @@
 package com.ssafy.user.mapper;
 
-import com.ssafy.user.dto.UserJoinRequestDto;
-import com.ssafy.user.dto.UserLoginRequestDto;
-import com.ssafy.user.dto.UserModifyRequestDto;
-import com.ssafy.user.dto.UserResponseDto;
+import com.ssafy.user.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -21,4 +18,6 @@ public interface UserMapper {
     void saveRefreshToken(String loginId, String refreshToken);
 
     void deleteRefreshToken(String loginId);
+
+    String getPassword(UserPasswordRequestDto requestDto);
 }

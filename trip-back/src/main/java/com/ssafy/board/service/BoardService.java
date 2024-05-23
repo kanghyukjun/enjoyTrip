@@ -17,7 +17,9 @@ public interface BoardService {
 
     ResponseEntity<Map<String, Object>> delete(String loginId, int boardId, String authorization);
 
-    ResponseEntity<Map<String, Object>> getUserBoard(String loginId, int pgno, String word, HttpServletRequest request);
+    ResponseEntity<Map<String, Object>> getUserBoard(String loginId, HttpServletRequest request);
 
     ResponseEntity<Map<String, Object>> addCourse(int courseId, String loginId, String authorization);
+
+    ResponseEntity<Map<String, Object>> getHitBoard();
 }
