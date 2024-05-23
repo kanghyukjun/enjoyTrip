@@ -1,11 +1,17 @@
 <script setup>
-// const props = defineProps({
-//   title: String,
-//   items: Array,
-//   width: Number,
-// });
+const props = defineProps({
+  title: String,
+  items: Array,
+  width: Number,
+});
 
-// const emit = defineEmits(["changed"]);
+const emit = defineEmits(["changed"]);
+const width = "w-[" + props.width + "rem]";
+
+const click = (event) => {
+  const code = event.target.value;
+  emit("changed", code);
+};
 </script>
 
 <template>
