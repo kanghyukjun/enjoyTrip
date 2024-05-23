@@ -2,11 +2,13 @@
 import draggable from "vuedraggable";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/login";
 
 import SelectedSpotListItem from "@/components/search/selected/SelectedSpotListItem.vue";
 import VButton from "@/components/common/item/VButton.vue";
 
 const router = useRouter();
+const store = useUserStore();
 
 const isClosed = ref(false);
 
@@ -37,7 +39,10 @@ const deleteSpot = (spot) => {
 };
 
 const makeTravelPlan = () => {
-  if (list.value.length <= 0) {
+  if (!store.isLogined) {
+    window.alert("로그인이 필요한 서비스입니다");
+    router.push({ name: "login" });
+  } else if (list.value.length <= 0) {
     window.alert("선택한 여행지 목록이 존재하지 않습니다");
   } else {
     sessionStorage.setItem("tripPlan", JSON.stringify(list.value));
