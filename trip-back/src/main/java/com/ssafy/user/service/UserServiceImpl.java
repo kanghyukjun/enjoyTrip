@@ -1,9 +1,6 @@
 package com.ssafy.user.service;
 
-import com.ssafy.user.dto.UserJoinRequestDto;
-import com.ssafy.user.dto.UserLoginRequestDto;
-import com.ssafy.user.dto.UserModifyRequestDto;
-import com.ssafy.user.dto.UserResponseDto;
+import com.ssafy.user.dto.*;
 import com.ssafy.user.mapper.UserMapper;
 import com.ssafy.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
@@ -202,6 +199,24 @@ public class UserServiceImpl implements UserService {
             log.debug("[UserService] RefreshToken 삭제 완료");
         } catch (Exception e) {
             log.error("[UserService] RefreshToken 삭제 실패");
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return ResponseEntity.status(status).body(resultMap);
+    }
+
+    @Override
+    public ResponseEntity<Map<String, Object>> getPassword(UserPasswordRequestDto requestDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.OK;
+        try {
+            log.debug("[UserService] 비밀번호 조회 요청");
+            String password = userMapper.getPassword(requestDto);
+            if(password==null){
+                status = HttpStatus.BAD_REQUEST;
+            }
+            resultMap.put("password", password);
+        } catch (Exception e) {
             resultMap.put("message", e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }

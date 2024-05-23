@@ -1,10 +1,7 @@
 package com.ssafy.user.controller;
 
 import com.ssafy.trip.dto.SidoResponseDto;
-import com.ssafy.user.dto.UserJoinRequestDto;
-import com.ssafy.user.dto.UserLoginRequestDto;
-import com.ssafy.user.dto.UserModifyRequestDto;
-import com.ssafy.user.dto.UserResponseDto;
+import com.ssafy.user.dto.*;
 import com.ssafy.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Console;
 import java.util.Map;
 
 @RestController
@@ -40,6 +38,17 @@ public class UserController {
                                                    HttpServletRequest request) {
         return userService.getInfo(loginId, request.getHeader("Authorization"));
 
+    }
+
+    @PostMapping("/pwd")
+    @Operation(summary = "비밀번호 찾기", description = "아이디와 이메일을 통해 비밀번호를 찾는다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "찾기에 성공했습니다.", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "찾기에 실패했습니다.", content = @Content(mediaType = "application/json"))
+    })
+    public ResponseEntity<Map<String, Object>> getPassword(@RequestBody UserPasswordRequestDto requestDto) {
+        log.debug("{}", requestDto);
+        return userService.getPassword(requestDto);
     }
 
     @Operation(summary = "아이디 중복 체크", description = "중복되는 아이디인지 체크한다.")

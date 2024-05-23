@@ -28,4 +28,6 @@ public interface BoardMapper {
     void deleteByCourseId(int courseId);
 
     List<BoardSimpleResponseDto> getUserBoard(int userId);
+
+    List<BoardSimpleResponseDto> getHitBoard();
 }

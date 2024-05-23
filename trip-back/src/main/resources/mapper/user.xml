@@ -43,6 +43,13 @@
 		where user.user_login_id = #{loginId}
 	</select>
 
+	<select id="getPassword" parameterType="map" resultType="string">
+		select user.user_pwd
+		from user
+		where user_login_id = #{loginId}
+		and user_email = #{email};
+	</select>
+
 	<insert id="save" parameterType="map">
         insert into user(user_login_id, user_pwd, user_name, user_email)
         values (#{loginId}, #{password}, #{name}, #{email})

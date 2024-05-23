@@ -1,9 +1,6 @@
 package com.ssafy.user.service;
 
-import com.ssafy.user.dto.UserJoinRequestDto;
-import com.ssafy.user.dto.UserLoginRequestDto;
-import com.ssafy.user.dto.UserModifyRequestDto;
-import com.ssafy.user.dto.UserResponseDto;
+import com.ssafy.user.dto.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
@@ -25,4 +22,6 @@ public interface UserService {
     ResponseEntity<Map<String, Object>> refresh(String loginId, String refreshToken);
 
     ResponseEntity<Map<String, Object>> logout(String loginId);
+
+    ResponseEntity<Map<String, Object>> getPassword(UserPasswordRequestDto requestDto);
 }

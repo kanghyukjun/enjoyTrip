@@ -58,7 +58,11 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public ResponseEntity<Map<String, Object>> getHitBoard() {
-        return null;
+        Map<String, Object> resultMap = new HashMap<>();
+        log.debug("[BoardService] 인기 게시글 목록 조회");
+        List<BoardSimpleResponseDto> articles = boardMapper.getHitBoard();
+        resultMap.put("articles", articles);
+        return ResponseEntity.ok().body(resultMap);
     }
 
     @Override
