@@ -34,9 +34,7 @@
 		from user u, user_course uc, board b
 		where b.course_id = uc.course_id
 		and uc.user_id = u.user_id
-		and b.board_title like concat('%', #{word}, '%')
 		order by b.board_register_time desc
-		limit #{start}, #{number}
 	</select>
 
 	<select id="getUserBoard" parameterType="map" resultMap="boardSimpleResponse">

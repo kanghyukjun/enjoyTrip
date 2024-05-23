@@ -57,6 +57,11 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    public ResponseEntity<Map<String, Object>> getHitBoard() {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<Map<String, Object>> get(int pgno, String word) {
         Map<String, Object> resultMap = new HashMap<>();
         log.debug("[BoardService] 게시글 목록 조회");
@@ -68,13 +73,11 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public ResponseEntity<Map<String, Object>> getUserBoard(String loginId, int pgno, String word, HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> getUserBoard(String loginId, HttpServletRequest request) {
         Map<String, Object> resultMap = new HashMap<>();
         log.debug("[BoardService] 유저의 게시글 목록 조회 - {}", loginId);
-        List<BoardSimpleResponseDto> articles = boardMapper.getUserBoard(userMapper.getByLoginId(loginId).getId(), (pgno-1)*8, 8, word);
-        int count = boardMapper.count(word);
+        List<BoardSimpleResponseDto> articles = boardMapper.getUserBoard(userMapper.getByLoginId(loginId).getId());
         resultMap.put("articles", articles);
-        resultMap.put("count", count);
         return ResponseEntity.ok().body(resultMap);
     }
 
