@@ -200,9 +200,19 @@ const regist = () => {
           <VInputForm label="제목" :value="registData.title" @input="setTitle" />
 
           <!-- 날짜 -->
-          <div class="w-full h-auto flex flex-row items-center justify-center gap-3 mt-4">
-            <VDatePicker label="시작 날짜" :value="registData.startDate" @input="setStartDate" />
-            <VDatePicker label="종료 날짜" :value="registData.endDate" @input="setEndDate" />
+          <div class="w-full h-auto flex flex-col items-center justify-center gap-3 mt-4">
+            <VDatePicker
+              class="text-xs"
+              label="시작 날짜"
+              :value="registData.startDate"
+              @input="setStartDate"
+            />
+            <VDatePicker
+              class="text-xs"
+              label="종료 날짜"
+              :value="registData.endDate"
+              @input="setEndDate"
+            />
           </div>
           <textarea
             class="description bg-gray-100 mt-10 sec p-3 w-11/12 h-[10rem] bg-zinc-100 text-gray-700 border border-gray-300 outline-none rounded-md transition-all focus:border-2 focus:border-trip-color focus:outline-0"

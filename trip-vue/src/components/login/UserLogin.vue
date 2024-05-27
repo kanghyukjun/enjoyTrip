@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
-import UserRegisterFormItem from "@/components/login/UserRegisterFormItem.vue";
+import VButtonLarge from "@/components/common/item/VButtonLarge.vue";
+import VInputForm from "@/components/common/item/VInputForm.vue";
 import { useUserStore } from "@/stores/login";
 import UserPasswordModal from "@/components/login/UserPasswordModal.vue";
 
@@ -55,22 +56,11 @@ const isShowModal = ref(false);
       </p>
       <form class="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
         <div class="mb-4 flex flex-col gap-6">
-          <UserRegisterFormItem label="아이디" @InputChangeEvent="idChange" />
-          <UserRegisterFormItem
-            label="비밀번호"
-            type="password"
-            @InputChangeEvent="passwordChange"
-          />
+          <VInputForm label="아이디" @input="idChange" :width="1" />
+          <VInputForm label="비밀번호" type="password" @input="passwordChange" />
+          <VButtonLarge label="로그인" @click="login" color="trip" />
         </div>
         <div class="flex flex-col items-center justify-center">
-          <button
-            class="mt-6 block w-full select-none rounded-lg bg-trip-color py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-trip-color transition-all hover:shadow-lg hover:shadow-trip-color focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            type="button"
-            data-ripple-light="true"
-            @click="login"
-          >
-            로그인
-          </button>
           <div class="flex flex-row items-center justify-center mt-2 text-sm">
             <p class="font-kor text-gray-700">비밀번호를 잊어버리셨나요?</p>
             <p class="ml-2 text-trip-color font-kor cursor-pointer" @click="isShowModal = true">

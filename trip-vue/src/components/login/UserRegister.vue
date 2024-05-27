@@ -5,7 +5,9 @@ import { RouterLink, useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
-import UserRegisterFormItem from "@/components/login/UserRegisterFormItem.vue";
+import VButtonLarge from "@/components/common/item/VButtonLarge.vue";
+import VInputForm from "@/components/common/item/VInputForm.vue";
+import VHorizontalLine from "@/components/common/item/VHorizontalLine.vue";
 import { getUserIdExists, userRegister } from "@/api/user";
 import { HttpStatusCode } from "axios";
 
@@ -104,7 +106,7 @@ const register = async () => {
       </p>
       <form class="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
         <div class="mb-4 flex flex-col gap-1">
-          <UserRegisterFormItem label="아이디" @InputChangeEvent="idChange" />
+          <VInputForm label="아이디" @input="idChange" />
           <p class="ml-2 text-red-500 font-kor font text-sm" v-show="!isIdLengthOkay">
             아이디는 5자리 이상 16자리 이하가 되어야 합니다
           </p>
@@ -113,40 +115,25 @@ const register = async () => {
           </p>
         </div>
         <div class="mb-4 flex flex-col gap-1">
-          <UserRegisterFormItem
-            label="비밀번호"
-            type="password"
-            @InputChangeEvent="passwordChange"
-          />
+          <VInputForm label="비밀번호" type="password" @input="passwordChange" />
           <p class="ml-2 text-red-500 font-kor font text-sm" v-show="!isPasswordLengthOkay">
             비밀번호는 5자리 이상 16자리 이하가 되어야 합니다
           </p>
         </div>
         <div class="mb-4 flex flex-col gap-1">
-          <UserRegisterFormItem label="이름" @InputChangeEvent="nameChange" />
+          <VInputForm label="이름" @input="nameChange" />
           <p class="ml-2 text-red-500 font-kor font text-sm" v-show="!isNameLengthOkay">
             이름은 10자리 이하가 되어야 합니다
           </p>
         </div>
         <div class="mb-4 flex flex-col gap-1">
-          <UserRegisterFormItem label="이메일" @InputChangeEvent="emailChange" />
+          <VInputForm label="이메일" @input="emailChange" />
           <p class="ml-2 text-red-500 font-kor font text-sm" v-show="!isEmailLengthOkay">
             이메일은 50자리 이하가 되어야 합니다
           </p>
         </div>
-        <button
-          class="mt-6 block w-full select-none rounded-lg bg-trip-color py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-trip-color transition-all hover:shadow-lg hover:shadow-trip-color focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-          type="button"
-          data-ripple-light="true"
-          @click="register"
-        >
-          회원가입
-        </button>
-        <div class="relative flex py-5 items-center">
-          <div class="flex-grow border-t border-gray-400"></div>
-          <span class="flex-shrink mx-4 text-gray-400">OR</span>
-          <div class="flex-grow border-t border-gray-400"></div>
-        </div>
+        <VButtonLarge label="회원가입" color="trip" @click="register" />
+        <VHorizontalLine label="OR" />
         <p
           class="mt-4 block text-center font-sans text-base font-normal leading-relaxed text-gray-700 antialiased"
         >
