@@ -10,6 +10,9 @@ defineProps({
     class="middle none center rounded-lg text-white py-1 px-2 font-sans text-xs font-bold uppercase shadow-sm transition-all hover:shadow-md focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
     data-ripple-light="true"
     :class="{
+      'bg-trip-color': color === 'trip',
+      'shadow-trip-color': color === 'trip',
+      'hover:shadow-trip-color': color === 'trip',
       'bg-red-500': color === 'red',
       'shadow-red-500': color === 'red',
       'hover:shadow-red-500': color === 'red',

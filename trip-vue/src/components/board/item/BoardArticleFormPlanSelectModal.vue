@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import ArticleListItem from "@/components/userpage/ArticleListItem.vue";
+import UserSavedTripListItem from "@/components/userpage/trip-list/UserSavedTripListItem.vue";
 import { useUserStore } from "@/stores/login";
 import { getUserCourse } from "@/api/user";
 
@@ -63,7 +63,7 @@ const courseSelected = (course) => {
         <div
           class="w-5/6 h-5/6 flex flex-col items-center justify-start rounded-md border-gray-300 border-2 overflow-y-auto"
         >
-          <ArticleListItem
+          <UserSavedTripListItem
             class="mt-3"
             v-for="course in userCourses"
             :key="course.id"

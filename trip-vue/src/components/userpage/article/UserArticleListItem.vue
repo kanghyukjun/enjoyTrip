@@ -18,6 +18,7 @@ defineProps({
         <div class="w-[5.5rem] h-[5rem] flex flex-col items-center justify-center rounded-md mr-3">
           <!-- div 대신 이미지를 (만약 넣는다면) -->
           <img
+            v-show="article.thumbnail"
             :src="article.thumbnail ? article.thumbnail : '/src/assets/no-image.png'"
             class="w-[5rem] h-[4.5rem] rounded-md"
           />

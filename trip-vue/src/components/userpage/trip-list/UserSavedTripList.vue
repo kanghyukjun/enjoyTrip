@@ -1,5 +1,5 @@
 <script setup>
-import ArticleListItem from "@/components/userpage/ArticleListItem.vue";
+import UserSavedTripListItem from "@/components/userpage/trip-list/UserSavedTripListItem.vue";
 import { ref, onMounted } from "vue";
 import { getUserCourse } from "@/api/user";
 import { useRouter } from "vue-router";
@@ -36,7 +36,7 @@ const moveDetail = (courseId) => {
       <div
         class="w-11/12 h-5/6 flex flex-col items-center justify-start rounded-md overflow-y-auto"
       >
-        <ArticleListItem
+        <UserSavedTripListItem
           class="mt-3"
           v-for="course in userCourses"
           :key="course.id"
