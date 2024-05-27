@@ -211,7 +211,7 @@ const regist = () => {
       <div
         class="w-[50rem] h-[2rem] flex flex-row items-center justify-start rounded-md border gap-2"
       >
-        <VButton class="ml-2" color="gray" title="이미지 선택" @click="triggerInput" />
+        <VButton class="ml-2" color="gray" label="이미지 선택" @click="triggerInput" />
         <input
           type="file"
           id="image"
@@ -227,7 +227,7 @@ const regist = () => {
       <div
         class="w-[50rem] h-[2rem] flex flex-row items-center justify-start rounded-md border gap-2"
       >
-        <VButton class="ml-2" color="gray" title="코스 선택" @click="isModalSeen = true" />
+        <VButton class="ml-2" color="gray" label="코스 선택" @click="isModalSeen = true" />
         <p class="font-kor text-gray-700">
           선택된 코스 제목:
           {{ selectedCourse.title ? selectedCourse.title : "반드시 코스를 선택해주세요" }}
@@ -236,8 +236,8 @@ const regist = () => {
     </div>
     <div class="w-[54rem] h-[3rem] bg-white flex flex-row items-center justify-end">
       <div class="mr-3 flex flex-row items-center justify-end gap-2">
-        <VButton color="red" title="취소" @click="cancel" />
-        <VButton color="sky" title="등록" @click="regist" />
+        <VButton color="red" label="취소" @click="cancel" />
+        <VButton color="sky" label="등록" @click="regist" />
       </div>
     </div>
   </div>

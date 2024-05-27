@@ -42,7 +42,7 @@ const addSpot = (spot) => {
             <span class="font-kor text-gray-700 text-xs ml-1">{{ spot.type }}</span>
             <p class="font-kor text-gray-600 text-xs">{{ itemAddr }}</p>
           </div>
-          <VButton title="추가" color="sky" @click="addSpot(spot)" />
+          <VButton label="추가" color="sky" @click="addSpot(spot)" />
         </div>
       </div>
       <div class="w-[6.5rem] h-[6rem]">

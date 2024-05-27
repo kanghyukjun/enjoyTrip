@@ -5,6 +5,7 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/login";
 import { getUserInfo } from "@/api/user";
 import UserPageInfoItem from "@/components/userpage/info/UserPageInfoItem.vue";
+import VButton from "@/components/common/item/VButton.vue";
 
 const router = useRouter();
 const store = useUserStore();
@@ -48,13 +49,7 @@ onMounted(async () => {
         <UserPageInfoItem title="아이디" :content="userInfo.loginId" />
         <UserPageInfoItem title="닉네임" :content="userInfo.name" />
         <UserPageInfoItem title="이메일" :content="userInfo.email" />
-        <button
-          class="middle none center rounded-lg bg-trip-color py-2 px-4 font-sans text-xs font-bold uppercase text-white shadow-sm shadow-trip-color transition-all hover:shadow-md hover:shadow-trip-color focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-          data-ripple-light="true"
-          @click="modify"
-        >
-          수정
-        </button>
+        <VButton color="trip" label="수정" @click="modify" />
       </div>
     </div>
   </div>

@@ -33,7 +33,7 @@ const deleteSpot = (spot) => {
         {{ itemTitle }}
       </div>
       <div class="w-[6rem] h-[1.5rem] flex flex-row">
-        <VButton title="삭제" color="gray" @click="deleteSpot(spot)" />
+        <VButton label="삭제" color="gray" @click="deleteSpot(spot)" />
       </div>
     </div>
     <div class="w-[6rem] h-[5rem]">

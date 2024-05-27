@@ -118,7 +118,7 @@ const showThumbnail = (event, course) => {
     />
   </table>
   <div class="w-[54rem] flex flex-row items-center justify-end mt-3">
-    <BoardButton title="글 등록" color="red" @click="post" />
+    <BoardButton label="글 등록" color="red" @click="post" />
   </div>
   <div class="mt-10">
     <BoardListPageNavigation @loaded="getArticleList" />

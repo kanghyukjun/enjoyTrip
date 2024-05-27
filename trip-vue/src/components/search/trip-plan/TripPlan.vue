@@ -198,8 +198,8 @@ const regist = async () => {
             @input="setDesc"
           ></textarea>
           <div class="w-11/12 flex flex-row items-center justify-end gap-3 mb-3">
-            <VButton color="gray" title="취소" @click="cancel" />
-            <VButton color="sky" title="등록" @click="regist" />
+            <VButton color="gray" label="취소" @click="cancel" />
+            <VButton color="sky" label="등록" @click="regist" />
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { useUserStore } from "@/stores/login";
 
 import SelectedSpotListItem from "@/components/search/selected/SelectedSpotListItem.vue";
 import VButton from "@/components/common/item/VButton.vue";
+import VHorizontalLine from "@/components/common/item/VHorizontalLine.vue";
 
 const router = useRouter();
 const store = useUserStore();
@@ -69,11 +70,9 @@ defineExpose({
           <p class="ml-3 mt-1 font-bold text-lg">추가한 여행지 리스트</p>
           <p class="ml-3 text-xs">지금까지 추가한 여행지 리스트들을 확인할 수 있습니다</p>
           <div class="w-[15rem] mt-3 flex flex-row items-center justify-end">
-            <VButton class="mr-4" title="여행 계획 생성" color="red" @click="makeTravelPlan" />
+            <VButton class="mr-4" label="여행 계획 생성" color="red" @click="makeTravelPlan" />
           </div>
-          <div class="flex justify-center mt-4 items-center w-[14rem]">
-            <div class="flex-grow border-t border-gray-300"></div>
-          </div>
+          <VHorizontalLine />
         </div>
         <div class="w-[15rem] h-5/6 flex flex-col items-center justify-start gap-3 overflow-y-auto">
           <div

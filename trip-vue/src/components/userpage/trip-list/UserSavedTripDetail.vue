@@ -223,9 +223,9 @@ const regist = () => {
           ></textarea>
         </div>
         <div class="w-11/12 h-[1.5rem] flex flex-row items-center justify-end gap-2 mt-2">
-          <VButton color="red" title="삭제" @click="deleteList" />
-          <VButton color="gray" title="목록" @click="moveList" />
-          <VButton color="sky" title="수정" @click="regist" />
+          <VButton color="red" label="삭제" @click="deleteList" />
+          <VButton color="gray" label="목록" @click="moveList" />
+          <VButton color="sky" label="수정" @click="regist" />
         </div>
       </div>
     </div>

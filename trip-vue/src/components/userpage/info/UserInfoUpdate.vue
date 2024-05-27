@@ -163,8 +163,8 @@ const fileInput = (event) => {
           <VInputForm label="이메일" :value="userInfo.email" @input="emailChange" />
         </div>
         <div class="flex flex-row justify-center items-center gap-2">
-          <VButton title="취소" color="red" @click="cancel" />
-          <VButton title="적용" color="trip" @click="update" />
+          <VButton label="취소" color="red" @click="cancel" />
+          <VButton label="적용" color="trip" @click="update" />
         </div>
       </div>
     </div>

@@ -7,19 +7,20 @@ import { ref, computed } from "vue";
 import { useSpotListStore } from "@/stores/spot-list";
 import { useUserStore } from "@/stores/login";
 
-import TripSpotAddModalFormItem from "@/components/search/spot-add-modal/TripSpotAddModalFormItem.vue";
 import VDropdown from "@/components/common/item/VDropdown.vue";
 import VButton from "@/components/common/item/VButton.vue";
+import VButtonLarge from "@/components/common/item/VButtonLarge.vue";
 import TripSpotAddModalFileForm from "@/components/search/spot-add-modal/TripSpotAddModalFileForm.vue";
+import VInputForm from "@/components/common/item/VInputForm.vue";
+import VHorizontalLine from "@/components/common/item/VHorizontalLine.vue";
 
 import { encodeImageToBase64 } from "@/util/image";
 
 const emit = defineEmits(["closeModal"]);
-
 const store = useSpotListStore();
 const userStore = useUserStore();
-const geoCoder = new kakao.maps.services.Geocoder();
 
+// 여행지 등록 정보
 const spotInfo = ref({
   title: "",
   address: "",
@@ -32,22 +33,22 @@ const spotInfo = ref({
   longitude: 0.0,
 });
 
-const isValid = computed(() => {
-  return (
-    spotInfo.value.title &&
-    spotInfo.value.address &&
-    spotInfo.value.zipcode &&
-    spotInfo.value.typeId &&
-    spotInfo.value.sidoId &&
-    spotInfo.value.gugunId &&
-    spotInfo.value.latitude &&
-    spotInfo.value.longitude
-  );
-});
+const fileUpload = async (file) => {
+  encodeImageToBase64(file).then((response) => {
+    spotInfo.value.image = response;
+  });
+};
+
+const setTitle = (value) => {
+  spotInfo.value.title = value;
+};
 
 const typeChanged = (value) => {
   spotInfo.value.typeId = parseInt(value);
 };
+
+// daum postcode
+const geoCoder = new kakao.maps.services.Geocoder();
 
 const execDaumPostcode = () => {
   daum.postcode.load(() => {
@@ -110,29 +111,21 @@ const getGugunId = async (address, sidoCode) => {
   return gugunCode;
 };
 
-// const encodeImageToBase64 = (file) => {
-//   return new Promise((resolve, reject) => {
-//     let reader = new FileReader();
-//     reader.readAsDataURL(file);
-//     reader.onload = (event) => {
-//       resolve(event.target.result);
-//     };
-//     reader.onerror = (error) => {
-//       reject(error);
-//     };
-//   });
-// };
+// Validation
+const isValid = computed(() => {
+  return (
+    spotInfo.value.title &&
+    spotInfo.value.address &&
+    spotInfo.value.zipcode &&
+    spotInfo.value.typeId &&
+    spotInfo.value.sidoId &&
+    spotInfo.value.gugunId &&
+    spotInfo.value.latitude &&
+    spotInfo.value.longitude
+  );
+});
 
-// const fileUpload = (file) => {
-//   encodeImageToBase64(file).then((response) => (spotInfo.value.image = response));
-// };
-
-const fileUpload = async (file) => {
-  encodeImageToBase64(file).then((response) => {
-    spotInfo.value.image = response;
-  });
-};
-
+// 버튼
 const close = () => {
   emit("closeModal");
 };
@@ -185,7 +178,7 @@ const register = async () => {
         </button>
       </div>
       <div class="relative flex items-center w-[36rem]">
-        <div class="flex-grow border-t border-gray-300"></div>
+        <VHorizontalLine />
       </div>
       <div class="w-[40rem] h-[32rem] flex flex-col items-center justify-center">
         <div class="w-[38rem] h-[30rem] flex flex-row items-center justify-center gap-10">
@@ -197,16 +190,7 @@ const register = async () => {
             <div class="w-[15rem] h-[9rem] flex flex-col items-center justify-center">
               <p class="w-[14rem] h-[1.5rem]">여행지 정보</p>
               <div class="relative h-11 w-full mt-2 mb-3 min-w-[200px]">
-                <input
-                  class="peer h-full w-full rounded-md border border-blue-gray-200 bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-trip-color focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                  placeHolder=" "
-                  v-model="spotInfo.title"
-                />
-                <label
-                  class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.1] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-trip-color peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-trip-color peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-trip-color peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500"
-                >
-                  장소 이름
-                </label>
+                <VInputForm label="장소 이름" @input="setTitle" />
               </div>
               <VDropdown
                 class="mb-5"
@@ -216,27 +200,15 @@ const register = async () => {
                 :width="15"
               />
             </div>
-            <div class="w-[15rem] h-[16rem] flex flex-col items-start justify-center">
+            <div class="w-[15rem] h-[16rem] flex flex-col items-start justify-center gap-4">
               <p class="w-[14rem] h-[1.5rem]">위치 정보</p>
-              <TripSpotAddModalFormItem
-                class="mb-3 mt-3"
-                label="상세 주소"
-                :value="spotInfo?.address"
-                readonly
-              />
-              <TripSpotAddModalFormItem label="우편 번호" :value="spotInfo?.zipcode" readonly />
-              <button
-                class="mt-6 block w-full select-none rounded-lg bg-trip-color py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-trip-color transition-all hover:shadow-lg hover:shadow-trip-color focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                type="button"
-                data-ripple-light="true"
-                @click="execDaumPostcode"
-              >
-                우편번호 찾기
-              </button>
+              <VInputForm label="상세 주소" :value="spotInfo?.address" readonly />
+              <VInputForm label="우편 번호" :value="spotInfo?.zipcode" readonly />
+              <VButtonLarge label="우편번호 찾기" color="trip" @click="execDaumPostcode" />
             </div>
             <div class="w-[15rem] h-[3rem] flex flex-row items-end justify-end gap-2">
-              <VButton title="취소" color="gray" @click="close" />
-              <VButton title="등록" color="red" @click="register" />
+              <VButton label="취소" color="gray" @click="close" />
+              <VButton label="등록" color="red" @click="register" />
             </div>
           </div>
         </div>

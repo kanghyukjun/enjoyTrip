@@ -1,5 +1,6 @@
 <script setup>
 import VButton from "@/components/common/item/VButton.vue";
+import VHorizontalLine from "@/components/common/item/VHorizontalLine.vue";
 
 const props = defineProps({
   spot: Object,
@@ -42,9 +43,10 @@ const addSpot = () => {
         </button>
       </div>
       <div class="w-[37rem] h-[17rem]">
-        <div class="relative flex items-center">
+        <!-- <div class="relative flex items-center">
           <div class="flex-grow border-t border-zinc-300"></div>
-        </div>
+        </div> -->
+        <VHorizontalLine class="py-0 px-0" />
         <div class="w-[37rem] h-[16rem] flex flex-row items-center justify-between mt-2">
           <!-- 사진 -->
           <img
@@ -67,7 +69,7 @@ const addSpot = () => {
         </div>
       </div>
       <div class="w-[37rem] h-[2rem] flex flex-row items-center justify-end">
-        <VButton title="여행지에 추가" color="sky" @click="addSpot" />
+        <VButton label="여행지에 추가" color="sky" @click="addSpot" />
       </div>
     </div>
   </div>

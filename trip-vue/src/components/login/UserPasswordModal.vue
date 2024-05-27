@@ -1,8 +1,11 @@
 <script setup>
 import { ref } from "vue";
 import { getPassword } from "@/api/user";
+
 import VButtonLarge from "@/components/common/item/VButtonLarge.vue";
 import VInputForm from "@/components/common/item/VInputForm.vue";
+import VHorizontalLine from "@/components/common/item/VHorizontalLine.vue";
+
 const emit = defineEmits(["close"]);
 
 const close = () => {
@@ -68,7 +71,8 @@ const setId = (value) => {
         </button>
       </div>
       <div class="relative flex items-center w-[19rem]">
-        <div class="flex-grow border-t border-gray-300"></div>
+        <!-- <div class="flex-grow border-t border-gray-300"></div> -->
+        <VHorizontalLine />
       </div>
       <div class="w-[20rem] h-[18rem] flex flex-col items-center justify-center">
         <div class="relative h-11 w-[18rem] min-w-[200px]">

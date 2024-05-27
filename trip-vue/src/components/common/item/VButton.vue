@@ -1,6 +1,6 @@
 <script setup>
 defineProps({
-  title: String,
+  label: String,
   color: String,
 });
 </script>
@@ -27,7 +27,7 @@ defineProps({
       'hover:shadow-yellow-500': color === 'yellow',
     }"
   >
-    {{ title }}
+    {{ label }}
   </button>
 </template>
 

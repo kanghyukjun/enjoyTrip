@@ -54,7 +54,7 @@ const fileInput = (event) => {
         <VButton
           class="ml-2 wrap whitespace-nowrap"
           color="gray"
-          title="선택"
+          label="선택"
           @click="triggerInputElement"
         />
         <p class="font-kor text-gray-700 text-xs">

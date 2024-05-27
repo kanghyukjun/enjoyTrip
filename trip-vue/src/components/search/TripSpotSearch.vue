@@ -15,6 +15,7 @@ import SearchedSpotListItem from "@/components/search/item/SearchedSpotListItem.
 import SearchedSpotInfo from "@/components/search/item/SearchedSpotInfo.vue";
 import TripSpotAddModal from "@/components/search/spot-add-modal/TripSpotAddModal.vue";
 import SelectedSpotList from "@/components/search/selected/SelectedSpotList.vue";
+import VHorizontalLine from "@/components/common/item/VHorizontalLine.vue";
 
 const store = useSpotListStore();
 const userStore = useUserStore();
@@ -223,9 +224,7 @@ const addSpotFromModal = (spot) => {
         />
       </div>
       <div class="w-[14rem]">
-        <div class="relative flex py-5 items-center">
-          <div class="flex-grow border-t border-gray-300"></div>
-        </div>
+        <VHorizontalLine />
       </div>
       <div class="w-[20rem] h-[30rem] flex flex-col justify-center items-center mt-5">
         <div

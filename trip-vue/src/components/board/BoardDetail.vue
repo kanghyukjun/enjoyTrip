@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import BoardButton from "@/components/common/item/VButton.vue";
+import VButton from "@/components/common/item/VButton.vue";
 import { getArticleDetail } from "@/api/board";
 import { deleteUserCourse } from "@/api/user";
 import { getOtherTripCourse } from "@/api/trip";
@@ -180,16 +180,11 @@ const showTripList = ref(true);
     <div class="w-[54rem] h-[25rem] flex flex-row bg-white items-center justify-center">
       <div class="w-[52rem] h-[23rem] items-center justify-center overflow-y-auto">
         <div class="w-full h-[1.5rem] flex flex-row items-center justify-end mr-3">
-          <BoardButton
-            v-show="showTripList"
-            color="gray"
-            title="접기"
-            @click="showTripList = false"
-          />
-          <BoardButton
+          <VButton v-show="showTripList" color="gray" label="접기" @click="showTripList = false" />
+          <VButton
             v-show="!showTripList"
             color="gray"
-            title="펼치기"
+            label="펼치기"
             @click="showTripList = true"
           />
         </div>
@@ -294,15 +289,15 @@ const showTripList = ref(true);
     </div>
     <div class="w-[54rem] h-[3rem] bg-white flex flex-row items-center justify-end">
       <div class="mr-3 flex flex-row items-center justify-end gap-2">
-        <BoardButton id="kakaoButton" color="yellow" title="카카오 공유" />
+        <VButton id="kakaoButton" color="yellow" label="공유" />
         <template v-if="article.authorLoginId === store.loginId">
-          <BoardButton color="red" title="삭제" @click="deleteArticle" />
-          <BoardButton color="sky" title="수정" @click="moveUpdate" />
+          <VButton color="red" label="삭제" @click="deleteArticle" />
+          <VButton color="sky" label="수정" @click="moveUpdate" />
         </template>
         <template v-else>
-          <BoardButton color="sky" title="가져오기" @click="getTrip" />
+          <VButton color="sky" label="가져오기" @click="getTrip" />
         </template>
-        <BoardButton color="gray" title="목록" @click="moveList" />
+        <VButton color="gray" label="목록" @click="moveList" />
       </div>
     </div>
   </div>
