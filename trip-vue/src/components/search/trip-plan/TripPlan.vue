@@ -16,7 +16,7 @@ import "vue3-toastify/dist/index.css";
 
 import { useUserStore } from "@/stores/login";
 
-import TripPlanListItem from "@/components/search/trip-plan/TripPlanListItem.vue";
+import VSpotListItem from "@/components/common/item/VSpotListItem.vue";
 import VInputForm from "@/components/common/item/VInputForm.vue";
 import VDatePicker from "@/components/common/item/VDatePicker.vue";
 import VButton from "@/components/common/item/VButton.vue";
@@ -138,7 +138,7 @@ const regist = async () => {
           <draggable
             class="w-full h-full"
             :list="tripPlan"
-            tag="TripPlanListItem"
+            tag="VSpotListItem"
             group="planList"
             @start="drag = true"
             @end="drag = false"
@@ -146,7 +146,7 @@ const regist = async () => {
             animation="150"
           >
             <template #item="{ element }">
-              <TripPlanListItem class="mt-3" :spot="element" />
+              <VSpotListItem height="1/6" :maxTitleLength="27" class="mt-3" :spot="element" />
             </template>
           </draggable>
         </div>

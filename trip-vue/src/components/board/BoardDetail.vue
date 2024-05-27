@@ -7,7 +7,7 @@ import { deleteUserCourse } from "@/api/user";
 import { getOtherTripCourse } from "@/api/trip";
 import { useUserStore } from "@/stores/login";
 
-import BoardDetailTripListItem from "@/components/board/BoardDetailTripListItem.vue";
+import VSpotListItem from "@/components/common/item/VSpotListItem.vue";
 
 import {
   KakaoMap,
@@ -201,11 +201,13 @@ const showTripList = ref(true);
             class="w-1/4 h-full flex flex-col items-center justify-center rounded-md border-2 border-gray-300"
           >
             <div class="w-full h-full overflow-y-auto">
-              <BoardDetailTripListItem
+              <VSpotListItem
                 v-for="spot in spots"
                 :key="spot.id"
                 :spot="spot"
                 class="mt-1"
+                :maxTitleLength="10"
+                height="1/3"
                 @click="selectSpot(spot)"
               />
             </div>

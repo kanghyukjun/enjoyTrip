@@ -17,7 +17,8 @@ import draggable from "vuedraggable";
 import VDatePicker from "@/components/common/item/VDatePicker.vue";
 import VInputForm from "@/components/common/item/VInputForm.vue";
 import VButton from "@/components/common/item/VButton.vue";
-import UserSavedTripDetailListItem from "@/components/userpage/trip-list/UserSavedTripDetailListItem.vue";
+// import UserSavedTripDetailListItem from "@/components/userpage/trip-list/UserSavedTripDetailListItem.vue";
+import VSpotListItem from "@/components/common/item/VSpotListItem.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -149,7 +150,7 @@ const regist = () => {
           <draggable
             class="w-full h-full"
             :list="tripPlan"
-            tag="TripPlanListItem"
+            tag="VSpotListItem"
             group="planList"
             @start="drag = true"
             @end="drag = false"
@@ -157,7 +158,7 @@ const regist = () => {
             animation="150"
           >
             <template #item="{ element }">
-              <UserSavedTripDetailListItem class="mt-1" :spot="element" />
+              <VSpotListItem height="1/4" class="mt-1" :spot="element" :maxTitleLength="10" />
             </template>
           </draggable>
         </div>
