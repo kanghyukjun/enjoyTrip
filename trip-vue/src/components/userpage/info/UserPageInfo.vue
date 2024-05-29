@@ -1,25 +1,15 @@
 <script setup>
+import UserPageInfoItem from "@/components/userpage/info/UserPageInfoItem.vue";
+import VButton from "@/components/common/item/VButton.vue";
+
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import { useUserStore } from "@/stores/login";
 import { getUserInfo } from "@/api/user";
-import UserPageInfoItem from "@/components/userpage/info/UserPageInfoItem.vue";
-import VButton from "@/components/common/item/VButton.vue";
 
 const router = useRouter();
 const store = useUserStore();
-
-const userInfo = ref({
-  loginId: "",
-  name: "",
-  email: "",
-  image: "",
-});
-
-const modify = () => {
-  router.push({ name: "userModify" });
-};
 
 onMounted(async () => {
   getUserInfo(store.loginId)
@@ -33,6 +23,17 @@ onMounted(async () => {
       console.log(error);
     });
 });
+
+const userInfo = ref({
+  loginId: "",
+  name: "",
+  email: "",
+  image: "",
+});
+
+const modify = () => {
+  router.push({ name: "userModify" });
+};
 </script>
 
 <template>

@@ -1,19 +1,24 @@
 <script setup>
-import { ref } from "vue";
-import { RouterLink, useRouter } from "vue-router";
 import VButtonLarge from "@/components/common/item/VButtonLarge.vue";
 import VInputForm from "@/components/common/item/VInputForm.vue";
-import { useUserStore } from "@/stores/login";
 import UserPasswordModal from "@/components/login/UserPasswordModal.vue";
+
+import { ref } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+
+import { useUserStore } from "@/stores/login";
 
 const store = useUserStore();
 const router = useRouter();
+
+const isShowModal = ref(false);
 
 const userInfo = ref({
   loginId: "",
   password: "",
 });
 
+// event
 const idChange = (value) => {
   userInfo.value.loginId = value;
 };
@@ -22,6 +27,7 @@ const passwordChange = (value) => {
   userInfo.value.password = value;
 };
 
+// button
 const login = async () => {
   store
     .login(userInfo.value)
@@ -32,8 +38,6 @@ const login = async () => {
       window.alert("올바르지 않은 회원 정보입니다");
     });
 };
-
-const isShowModal = ref(false);
 </script>
 
 <template>

@@ -1,14 +1,4 @@
 <script setup>
-// import { RouterLink } from "vue-router";
-import { onMounted, ref, watch } from "vue";
-import { KakaoMap, KakaoMapMarker, KakaoMapCustomOverlay } from "vue3-kakao-maps";
-import { getSido, getGugun, getSpot } from "@/api/search";
-import { useSpotListStore } from "@/stores/spot-list";
-import { useUserStore } from "@/stores/login";
-
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
-
 import VCheckbox from "@/components/common/item/VCheckbox.vue";
 import SearchDropdown from "@/components/search/item/SearchDropdown.vue";
 import SearchedSpotListItem from "@/components/search/item/SearchedSpotListItem.vue";
@@ -16,6 +6,15 @@ import SearchedSpotInfo from "@/components/search/item/SearchedSpotInfo.vue";
 import TripSpotAddModal from "@/components/search/spot-add-modal/TripSpotAddModal.vue";
 import SelectedSpotList from "@/components/search/selected/SelectedSpotList.vue";
 import VHorizontalLine from "@/components/common/item/VHorizontalLine.vue";
+
+import { onMounted, ref, watch } from "vue";
+import { KakaoMap, KakaoMapMarker, KakaoMapCustomOverlay } from "vue3-kakao-maps";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+
+import { getSido, getGugun, getSpot } from "@/api/search";
+import { useSpotListStore } from "@/stores/spot-list";
+import { useUserStore } from "@/stores/login";
 
 const store = useSpotListStore();
 const userStore = useUserStore();
@@ -26,22 +25,6 @@ const isLoaded = ref(false);
 
 const sido = ref([]);
 const gugun = ref([]);
-const keyword = ref("");
-const spots = ref([]);
-const spotDetail = ref({});
-
-const showSpotInfo = ref(false);
-const showModal = ref(false);
-
-let selectedSidoCode = 0;
-let selectedGugunCode = 0;
-
-const coordinate = ref({
-  lat: 37.566826,
-  lng: 126.9786567,
-});
-
-const spotlist = ref(null);
 
 onMounted(async () => {
   const container = document.querySelector("#container");
@@ -53,20 +36,29 @@ onMounted(async () => {
   sido.value = sidos.data;
 });
 
+// change event
+let selectedSidoCode = 0;
+
 const sidoChanged = async (sido) => {
   selectedSidoCode = sido;
   const guguns = await getGugun(sido);
   gugun.value = guguns.data;
 };
 
+let selectedGugunCode = 0;
+
 const gugunChanged = (gugun) => {
   selectedGugunCode = gugun;
 };
 
-const typeChange = (id) => {
+const typeChanged = (id) => {
   let type = store.radioDatas.find((item) => item.id === id);
   type.checked = !type.checked;
 };
+
+// 검색
+const keyword = ref("");
+const spots = ref([]);
 
 const getList = async () => {
   let checkedTypes = [];
@@ -82,12 +74,10 @@ const getList = async () => {
   }
 };
 
-const showInfo = (spot) => {
-  coordinate.value.lat = spot.latitude;
-  coordinate.value.lng = spot.longitude;
-  showSpotInfo.value = true;
-  spotDetail.value = spot;
-};
+const coordinate = ref({
+  lat: 37.566826,
+  lng: 126.9786567,
+});
 
 watch(
   () => spots.value,
@@ -98,6 +88,18 @@ watch(
     }
   }
 );
+
+const showSpotInfo = ref(false);
+const spotDetail = ref({});
+
+const showInfo = (spot) => {
+  coordinate.value.lat = spot.latitude;
+  coordinate.value.lng = spot.longitude;
+  showSpotInfo.value = true;
+  spotDetail.value = spot;
+};
+
+const spotlist = ref(null);
 
 const addSpotList = (spot) => {
   const result = spotlist?.value.addSpot(spot);
@@ -110,6 +112,8 @@ const addSpotList = (spot) => {
   }
 };
 
+const showModal = ref(false);
+
 const beforeShowModal = () => {
   if (!userStore.isLogined) {
     toast.error("로그인이 필요한 서비스입니다");
@@ -118,6 +122,7 @@ const beforeShowModal = () => {
   }
 };
 
+// custom overlay
 const showOverlay = ref(false);
 const overlayLat = ref(0.0);
 const overlayLng = ref(0.0);
@@ -132,6 +137,7 @@ const showCustomOverlay = (spot) => {
   overlaySpot.value = spot;
   showOverlay.value = true;
 };
+
 const addSpotFromModal = (spot) => {
   addSpotList(spot);
 };
@@ -220,7 +226,7 @@ const addSpotFromModal = (spot) => {
           v-for="radioData in store.radioDatas"
           :key="radioData.id"
           :radioData="radioData"
-          @typeChanged="typeChange"
+          @typeChanged="typeChanged"
         />
       </div>
       <div class="w-[14rem]">

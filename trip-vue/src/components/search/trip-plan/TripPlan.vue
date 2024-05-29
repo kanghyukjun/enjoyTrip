@@ -1,4 +1,9 @@
 <script setup>
+import VSpotListItem from "@/components/common/item/VSpotListItem.vue";
+import VInputForm from "@/components/common/item/VInputForm.vue";
+import VDatePicker from "@/components/common/item/VDatePicker.vue";
+import VButton from "@/components/common/item/VButton.vue";
+
 import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import {
@@ -8,19 +13,12 @@ import {
   KakaoMapCustomOverlay,
 } from "vue3-kakao-maps";
 import draggable from "vuedraggable";
-
-import { addTripPlan } from "@/api/trip";
-
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
-import { useUserStore } from "@/stores/login";
-
-import VSpotListItem from "@/components/common/item/VSpotListItem.vue";
-import VInputForm from "@/components/common/item/VInputForm.vue";
-import VDatePicker from "@/components/common/item/VDatePicker.vue";
-import VButton from "@/components/common/item/VButton.vue";
 import { HttpStatusCode } from "axios";
+
+import { addTripPlan } from "@/api/trip";
+import { useUserStore } from "@/stores/login";
 
 const router = useRouter();
 const store = useUserStore();
@@ -32,17 +30,6 @@ const lng = ref(0.0);
 
 const isLoaded = ref(false);
 const tripPlan = ref([]);
-const latLngList = ref([]);
-
-const setLatLngList = (arrays) => {
-  latLngList.value = [];
-  arrays.forEach((x) => {
-    latLngList.value.push({
-      lat: x.latitude,
-      lng: x.longitude,
-    });
-  });
-};
 
 onMounted(() => {
   tripPlan.value = JSON.parse(sessionStorage.getItem("tripPlan"));
@@ -74,6 +61,23 @@ watch(
   }
 );
 
+const latLngList = ref([]);
+
+const setLatLngList = (arrays) => {
+  latLngList.value = [];
+  arrays.forEach((x) => {
+    latLngList.value.push({
+      lat: x.latitude,
+      lng: x.longitude,
+    });
+  });
+};
+
+const setSpotIds = (arrays) => {
+  registData.value.spotIds = [];
+  arrays.forEach((x) => registData.value.spotIds.push(x.id));
+};
+
 const loginId = ref("");
 
 const registData = ref({
@@ -84,6 +88,7 @@ const registData = ref({
   spotIds: [],
 });
 
+// event
 const setTitle = (value) => {
   registData.value.title = value;
 };
@@ -96,11 +101,8 @@ const setEndDate = (value) => {
 const setDesc = (event) => {
   registData.value.desc = event.target.value;
 };
-const setSpotIds = (arrays) => {
-  registData.value.spotIds = [];
-  arrays.forEach((x) => registData.value.spotIds.push(x.id));
-};
 
+// button
 const cancel = () => {
   router.go(-1);
 };

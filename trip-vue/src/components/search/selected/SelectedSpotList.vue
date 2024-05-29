@@ -1,12 +1,13 @@
 <script setup>
-import draggable from "vuedraggable";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { useUserStore } from "@/stores/login";
-
 import SelectedSpotListItem from "@/components/search/selected/SelectedSpotListItem.vue";
 import VButton from "@/components/common/item/VButton.vue";
 import VHorizontalLine from "@/components/common/item/VHorizontalLine.vue";
+
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import draggable from "vuedraggable";
+
+import { useUserStore } from "@/stores/login";
 
 const router = useRouter();
 const store = useUserStore();
@@ -29,12 +30,14 @@ const addSpot = (spot) => {
   }
 };
 
+// validation
 const isAlreadySelected = (spot) => {
   const idx = list.value.findIndex((x) => x.id === spot.id);
   if (idx === -1) return false;
   else return true;
 };
 
+// button
 const deleteSpot = (spot) => {
   list.value = list.value.filter((x) => x.id !== spot.id);
 };
@@ -51,6 +54,7 @@ const makeTravelPlan = () => {
   }
 };
 
+// 다른 component에서 addSpot 함수를 사용할 수 있게 하기 위함
 defineExpose({
   addSpot,
 });

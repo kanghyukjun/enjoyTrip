@@ -1,13 +1,13 @@
 <script setup>
-import { ref } from "vue";
-import { RouterLink, useRouter } from "vue-router";
-
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
-
 import VButtonLarge from "@/components/common/item/VButtonLarge.vue";
 import VInputForm from "@/components/common/item/VInputForm.vue";
 import VHorizontalLine from "@/components/common/item/VHorizontalLine.vue";
+
+import { ref } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+
 import { getUserIdExists, userRegister } from "@/api/user";
 import { HttpStatusCode } from "axios";
 
@@ -26,6 +26,7 @@ const userInfo = ref({
   email: "",
 });
 
+// event
 const passwordChange = (value) => {
   isPasswordLengthOkay.value = 5 <= value.length && value.length <= 20;
   if (isPasswordLengthOkay.value) {
@@ -66,6 +67,7 @@ const emailChange = (value) => {
   }
 };
 
+// button
 const register = async () => {
   if (
     !isPasswordLengthOkay.value ||

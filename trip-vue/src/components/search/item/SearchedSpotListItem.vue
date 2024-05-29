@@ -1,6 +1,7 @@
 <script setup>
-import { onMounted, ref } from "vue";
 import VButton from "@/components/common/item/VButton.vue";
+
+import { onMounted, ref } from "vue";
 
 const props = defineProps({
   spot: Object,
@@ -25,6 +26,7 @@ onMounted(() => {
   }
 });
 
+// button
 const addSpot = (spot) => {
   emit("addSpot", spot);
 };

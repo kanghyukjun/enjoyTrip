@@ -1,22 +1,28 @@
 <script setup>
-import { ref } from "vue";
-import { getPassword } from "@/api/user";
-
 import VButtonLarge from "@/components/common/item/VButtonLarge.vue";
 import VInputForm from "@/components/common/item/VInputForm.vue";
 import VHorizontalLine from "@/components/common/item/VHorizontalLine.vue";
 
-const emit = defineEmits(["close"]);
+import { ref } from "vue";
+import { getPassword } from "@/api/user";
 
-const close = () => {
-  emit("close");
-};
+const emit = defineEmits(["close"]);
 
 const data = ref({
   loginId: "",
   email: "",
 });
 
+// event
+const setEmail = (value) => {
+  data.value.email = value;
+};
+
+const setId = (value) => {
+  data.value.loginId = value;
+};
+
+// button
 const findPassword = () => {
   getPassword(data.value)
     .then((response) => {
@@ -30,12 +36,8 @@ const findPassword = () => {
     });
 };
 
-const setEmail = (value) => {
-  data.value.email = value;
-};
-
-const setId = (value) => {
-  data.value.loginId = value;
+const close = () => {
+  emit("close");
 };
 </script>
 

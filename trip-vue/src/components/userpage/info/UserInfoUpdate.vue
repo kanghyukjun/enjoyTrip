@@ -1,27 +1,19 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { getUserInfo, userUpdate } from "@/api/user";
-import { useUserStore } from "@/stores/login";
-import { getFileDataFromInput, isFileSizeOk, encodeImageToBase64 } from "@/util/image";
-
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
-
 import VInputForm from "@/components/common/item/VInputForm.vue";
 import VButton from "@/components/common/item/VButton.vue";
 import VButtonLarge from "@/components/common/item/VButtonLarge.vue";
 
+import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+
+import { getUserInfo, userUpdate } from "@/api/user";
+import { useUserStore } from "@/stores/login";
+import { getFileDataFromInput, isFileSizeOk, encodeImageToBase64 } from "@/util/image";
+
 const router = useRouter();
 const store = useUserStore();
-
-const userInfo = ref({
-  loginId: "",
-  password: "",
-  name: "",
-  email: "",
-  image: "",
-});
 
 // Axios 비동기 처리
 onMounted(async () => {
@@ -33,7 +25,15 @@ onMounted(async () => {
   userInfo.value.image = result.data.userInfo.image;
 });
 
-// Input 변경
+const userInfo = ref({
+  loginId: "",
+  password: "",
+  name: "",
+  email: "",
+  image: "",
+});
+
+// event
 const passwordChange = (value) => {
   userInfo.value.password = value;
 };

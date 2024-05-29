@@ -1,11 +1,13 @@
 <script setup>
-import { ref } from "vue";
-import { isFileSizeOk, getFileDataFromInput } from "@/util/image";
 import VButton from "@/components/common/item/VButton.vue";
-const filePath = ref("");
+
+import { ref } from "vue";
+
+import { isFileSizeOk, getFileDataFromInput } from "@/util/image";
 
 const emit = defineEmits(["fileUploaded"]);
 
+const filePath = ref("");
 const imgName = ref("");
 
 const triggerInputElement = () => {

@@ -1,14 +1,9 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRouter, useRoute } from "vue-router";
 import VButton from "@/components/common/item/VButton.vue";
-import { getArticleDetail } from "@/api/board";
-import { deleteUserCourse } from "@/api/user";
-import { getOtherTripCourse } from "@/api/trip";
-import { useUserStore } from "@/stores/login";
-
 import VSpotListItem from "@/components/common/item/VSpotListItem.vue";
 
+import { ref, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import {
   KakaoMap,
   KakaoMapMarker,
@@ -16,16 +11,23 @@ import {
   KakaoMapCustomOverlay,
 } from "vue3-kakao-maps";
 
+import { getArticleDetail } from "@/api/board";
+import { deleteUserCourse } from "@/api/user";
+import { getOtherTripCourse } from "@/api/trip";
+import { useUserStore } from "@/stores/login";
+
 const store = useUserStore();
 const route = useRoute();
 const router = useRouter();
 
-const mapWidth = ref(0);
-const mapHeight = ref(0);
-const lat = ref(0.0);
-const lng = ref(0.0);
+// modal
+const showTripList = ref(true);
 
-const boardId = route.params.article;
+// kakao map
+const isLoaded = ref(false);
+const tripPlan = ref([]);
+const latLngList = ref([]);
+
 const article = ref({
   title: "",
   content: "",
@@ -36,6 +38,7 @@ const article = ref({
   thumbnail: "",
 });
 
+const spots = ref([]);
 const courseDescription = ref({
   id: 0,
   title: "",
@@ -43,13 +46,9 @@ const courseDescription = ref({
   endDate: "",
 });
 
-const spots = ref([]);
-
-const isLoaded = ref(false);
-const tripPlan = ref([]);
-const latLngList = ref([]);
-const selectedSpot = ref({});
-const isSelected = ref(false);
+const boardId = route.params.article;
+const mapWidth = ref(0);
+const mapHeight = ref(0);
 
 onMounted(async () => {
   // 카카오 지도 띄우기
@@ -61,7 +60,7 @@ onMounted(async () => {
     article.value = response.data.article;
     courseDescription.value = response.data.course;
     spots.value = response.data.spots;
-    setLatLngList(spots.value);
+    latLngList.value = getLatLngList(response.data.spots);
     setMiddleCoord(spots.value);
 
     isLoaded.value = true;
@@ -81,14 +80,18 @@ onMounted(async () => {
   });
 });
 
-const setLatLngList = (arrays) => {
-  latLngList.value = [];
+const lat = ref(0.0);
+const lng = ref(0.0);
+
+const getLatLngList = (arrays) => {
+  const tmp = [];
   arrays.forEach((x) => {
-    latLngList.value.push({
+    tmp.push({
       lat: x.latitude,
       lng: x.longitude,
     });
   });
+  return tmp;
 };
 
 const setMiddleCoord = (arrays) => {
@@ -102,11 +105,15 @@ const setMiddleCoord = (arrays) => {
   lng.value /= arrays.length;
 };
 
+const selectedSpot = ref({});
+const isSelected = ref(false);
+
 const selectSpot = (spot) => {
   isSelected.value = true;
   selectedSpot.value = spot;
 };
 
+// button
 const deleteArticle = () => {
   const isDelete = window.confirm("정말 글을 삭제하시겠습니까?");
   if (isDelete) {
@@ -156,8 +163,6 @@ const moveList = () => {
     },
   });
 };
-
-const showTripList = ref(true);
 </script>
 
 <template>

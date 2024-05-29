@@ -1,28 +1,26 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
-import { useRoute } from "vue-router";
-import { useRouter } from "vue-router";
-import { useUserStore } from "@/stores/login";
-import { getTripCourseDetail, deleteTripCourse, updateTripCourse } from "@/api/trip";
+import VDatePicker from "@/components/common/item/VDatePicker.vue";
+import VInputForm from "@/components/common/item/VInputForm.vue";
+import VButton from "@/components/common/item/VButton.vue";
+import VSpotListItem from "@/components/common/item/VSpotListItem.vue";
 
+import { onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import {
   KakaoMap,
   KakaoMapMarker,
   KakaoMapMarkerPolyline,
   KakaoMapCustomOverlay,
 } from "vue3-kakao-maps";
-
 import draggable from "vuedraggable";
 
-import VDatePicker from "@/components/common/item/VDatePicker.vue";
-import VInputForm from "@/components/common/item/VInputForm.vue";
-import VButton from "@/components/common/item/VButton.vue";
-// import UserSavedTripDetailListItem from "@/components/userpage/trip-list/UserSavedTripDetailListItem.vue";
-import VSpotListItem from "@/components/common/item/VSpotListItem.vue";
+import { useUserStore } from "@/stores/login";
+import { getTripCourseDetail, deleteTripCourse, updateTripCourse } from "@/api/trip";
 
 const route = useRoute();
 const router = useRouter();
 const store = useUserStore();
+
 const courseId = ref(route.params.courseId);
 const loginId = ref(store.loginId);
 
@@ -33,43 +31,8 @@ const lng = ref(0.0);
 
 const isLoaded = ref(false);
 const tripPlan = ref([]);
-const latLngList = ref([]);
 
-const registData = ref({
-  title: "",
-  startDate: "",
-  endDate: "",
-  desc: "",
-  spotIds: [],
-});
-
-const setLatLngList = (arrays) => {
-  latLngList.value = [];
-  arrays.forEach((x) => {
-    latLngList.value.push({
-      lat: x.latitude,
-      lng: x.longitude,
-    });
-  });
-};
-
-const setTitle = (value) => {
-  registData.value.title = value;
-};
-const setStartDate = (value) => {
-  registData.value.startDate = value;
-};
-const setEndDate = (value) => {
-  registData.value.endDate = value;
-};
-const setDesc = (event) => {
-  registData.value.desc = event.target.value;
-};
-const setSpotIds = (arrays) => {
-  registData.value.spotIds = [];
-  arrays.forEach((x) => registData.value.spotIds.push(x.id));
-};
-
+// 카카오 맵을 띄운 후 경로를 출력하기 위한 좌표 값 생성
 onMounted(async () => {
   // 카카오 지도 크기 구하기
   const container = document.querySelector("#container");
@@ -77,7 +40,6 @@ onMounted(async () => {
   mapHeight.value = container.offsetHeight * 0.95;
 
   // loginId와 courseId를 이용한 axios 비동기 처리로 tripPlan 가져오기
-  // latLngList에도 추가해줘서 경로 띄우기
   getTripCourseDetail(loginId.value, courseId.value)
     .then((response) => {
       registData.value.title = response.data.course.title;
@@ -85,7 +47,7 @@ onMounted(async () => {
       registData.value.startDate = response.data.course.startDate;
       registData.value.endDate = response.data.course.endDate;
 
-      setLatLngList(response.data.spots);
+      latLngList.value = getLatLngList(response.data.spots);
 
       tripPlan.value = response.data.spots;
       let latSum = 0.0;
@@ -104,10 +66,24 @@ onMounted(async () => {
     });
 });
 
+const latLngList = ref([]);
+
+const getLatLngList = (arrays) => {
+  const tmp = [];
+  arrays.forEach((x) => {
+    tmp.push({
+      lat: x.latitude,
+      lng: x.longitude,
+    });
+  });
+  return tmp;
+};
+
+// Trip Plan의 값이 변경될 때마다 기존의 latLngList와 spotId 변경
 watch(
   () => tripPlan.value,
   (newValue) => {
-    setLatLngList(newValue);
+    latLngList.value = getLatLngList(newValue);
     setSpotIds(newValue);
   },
   {
@@ -115,6 +91,34 @@ watch(
   }
 );
 
+// Trip Plan을 등록하기 위한 data
+const registData = ref({
+  title: "",
+  startDate: "",
+  endDate: "",
+  desc: "",
+  spotIds: [],
+});
+
+// event
+const setTitle = (value) => {
+  registData.value.title = value;
+};
+const setStartDate = (value) => {
+  registData.value.startDate = value;
+};
+const setEndDate = (value) => {
+  registData.value.endDate = value;
+};
+const setDesc = (event) => {
+  registData.value.desc = event.target.value;
+};
+const setSpotIds = (arrays) => {
+  registData.value.spotIds = [];
+  arrays.forEach((x) => registData.value.spotIds.push(x.id));
+};
+
+// 버튼
 const moveList = () => {
   router.push({ name: "userTripList" });
 };

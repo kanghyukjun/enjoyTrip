@@ -1,18 +1,40 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import { useUserStore } from "@/stores/login";
 import BoardListItem from "@/components/board/item/BoardListItem.vue";
 import BoardListPageNavigation from "@/components/board/item/BoardListPageNavigation.vue";
 import BoardButton from "@/components/common/item/VButton.vue";
 import BoardListThumbnail from "@/components/board/BoardListThumbnail.vue";
 
+import { ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { useUserStore } from "@/stores/login";
+
 const store = useUserStore();
 const router = useRouter();
 const route = useRoute();
 
-const word = ref(route.query.word);
 const articleList = ref([]);
+
+const getArticleList = (event) => {
+  // page navigation component에서 loaded 이벤트 호출 시 article list를 받아서 사용자에게 뿌려줌
+  articleList.value = event;
+};
+
+// thumbnail info
+const xCoord = ref(0);
+const yCoord = ref(0);
+const isShowThumbnail = ref(false);
+const showImg = ref("");
+const showThumbnail = (event, course) => {
+  if (course.thumbnail) {
+    isShowThumbnail.value = true;
+    xCoord.value = event.pageX;
+    yCoord.value = event.pageY;
+    showImg.value = course.thumbnail;
+  }
+};
+
+// button
+const word = ref(route.query.word);
 
 const search = () => {
   router.push({
@@ -39,24 +61,6 @@ const detail = (event, no) => {
       article: no,
     },
   });
-};
-
-const getArticleList = (event) => {
-  // page navigation component에서 loaded 이벤트 호출 시 article list를 받아서 사용자에게 뿌려줌
-  articleList.value = event;
-};
-
-const xCoord = ref(0);
-const yCoord = ref(0);
-const isShowThumbnail = ref(false);
-const showImg = ref("");
-const showThumbnail = (event, course) => {
-  if (course.thumbnail) {
-    isShowThumbnail.value = true;
-    xCoord.value = event.pageX;
-    yCoord.value = event.pageY;
-    showImg.value = course.thumbnail;
-  }
 };
 </script>
 

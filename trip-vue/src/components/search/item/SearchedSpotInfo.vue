@@ -8,6 +8,7 @@ const props = defineProps({
 
 const emit = defineEmits(["close", "addSpot"]);
 
+// button
 const close = () => {
   emit("close");
 };

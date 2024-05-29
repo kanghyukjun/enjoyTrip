@@ -1,19 +1,22 @@
 <script setup>
-import { getUserArticle } from "@/api/user";
+import UserArticleListItem from "@/components/userpage/article/UserArticleListItem.vue";
+
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+
+import { getUserArticle } from "@/api/user";
 import { useUserStore } from "@/stores/login";
-import UserArticleListItem from "@/components/userpage/article/UserArticleListItem.vue";
 
 const router = useRouter();
 const store = useUserStore();
-const articles = ref([]);
 
 onMounted(() => {
   getUserArticle(store.loginId).then((response) => {
     articles.value = response.data.articles;
   });
 });
+
+const articles = ref([]);
 
 const goDetail = (boardId) => {
   router.push({

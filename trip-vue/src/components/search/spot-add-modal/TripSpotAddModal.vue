@@ -1,12 +1,4 @@
 <script setup>
-import "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
-
-import { getSido, getGugun, addSpot } from "@/api/search";
-import { ref, computed } from "vue";
-
-import { useSpotListStore } from "@/stores/spot-list";
-import { useUserStore } from "@/stores/login";
-
 import VDropdown from "@/components/common/item/VDropdown.vue";
 import VButton from "@/components/common/item/VButton.vue";
 import VButtonLarge from "@/components/common/item/VButtonLarge.vue";
@@ -14,6 +6,12 @@ import TripSpotAddModalFileForm from "@/components/search/spot-add-modal/TripSpo
 import VInputForm from "@/components/common/item/VInputForm.vue";
 import VHorizontalLine from "@/components/common/item/VHorizontalLine.vue";
 
+import { ref, computed } from "vue";
+import "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+
+import { getSido, getGugun, addSpot } from "@/api/search";
+import { useSpotListStore } from "@/stores/spot-list";
+import { useUserStore } from "@/stores/login";
 import { encodeImageToBase64 } from "@/util/image";
 
 const emit = defineEmits(["closeModal"]);

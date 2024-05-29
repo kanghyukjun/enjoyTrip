@@ -1,20 +1,22 @@
 <script setup>
 import UserSavedTripListItem from "@/components/userpage/trip-list/UserSavedTripListItem.vue";
+
 import { ref, onMounted } from "vue";
-import { getUserCourse } from "@/api/user";
 import { useRouter } from "vue-router";
+
+import { getUserCourse } from "@/api/user";
 import { useUserStore } from "@/stores/login";
 
 const router = useRouter();
 const store = useUserStore();
-
-const userCourses = ref([]);
 
 onMounted(async () => {
   getUserCourse(store.loginId).then((response) => {
     userCourses.value = response.data.courses;
   });
 });
+
+const userCourses = ref([]);
 
 const moveDetail = (courseId) => {
   router.push({

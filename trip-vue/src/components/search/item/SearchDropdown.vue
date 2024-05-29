@@ -9,9 +9,9 @@ const props = defineProps({
 });
 
 const route = useRoute();
-
 const emit = defineEmits(["changed"]);
-const width = "w-[" + props.width + "rem]";
+
+const width = "w-[" + props.width + "rem]"; // 수정 필요
 
 const click = (event) => {
   const code = event.target.value;

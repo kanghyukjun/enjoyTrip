@@ -1,14 +1,15 @@
 <script setup>
-import { useUserStore } from "@/stores/login";
-import { getUserInfo } from "@/api/user";
 import UserPageSideNavBarList from "@/components/userpage/navbar/UserPageSideNavBarList.vue";
-import { onMounted, ref, watch } from "vue";
 
+import { useUserStore } from "@/stores/login";
+import { onMounted, ref, watch } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+import { getUserInfo } from "@/api/user";
+
 const store = useUserStore();
-const user = ref({});
+
 onMounted(() => {
   getUserInfo(store.loginId)
     .then((response) => {
@@ -18,6 +19,8 @@ onMounted(() => {
       toast.error("오류");
     });
 });
+
+const user = ref({});
 
 watch(
   () => user.value.image,
