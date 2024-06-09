@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import VButton from "@/components/common/item/VButton.vue";
 import VSpotListItem from "@/components/common/item/VSpotListItem.vue";
 
